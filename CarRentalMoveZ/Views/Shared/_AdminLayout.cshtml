@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CarRentalMoveZ-Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/AdminPanel.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="~/Img/Logo.PNG" alt="Logo" />
+            
+        </div>
+        <ul class="sidebar-menu">
+            <li><a asp-controller="Admin" asp-action="Dashboard" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a asp-controller="Admin" asp-action="ManageCar" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageCar" ? "active" : "")"><i class="fas fa-car"></i> Manage Cars</a></li>
+            <li><a asp-controller="Admin" asp-action="ManageBookings" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageBookings" ? "active" : "")"><i class="fas fa-calendar-alt"></i> Manage Bookings</a></li>
+            <li><a asp-controller="Admin" asp-action="ManageCustomer" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageCustomer" ? "active" : "")"><i class="fas fa-users"></i> Manage Customers</a></li>
+            <li><a asp-controller="Admin" asp-action="ManagePayment" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManagePayment" ? "active" : "")"><i class="fas fa-credit-card"></i> Manage Payments</a></li>
+            <li><a asp-controller="Admin" asp-action="ManageStaff" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageStaff" ? "active" : "")"><i class="fas fa-user-tie"></i> Manage Staff</a></li>
+            <li><a asp-controller="Admin" asp-action="CreateStaffUser" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Setting" ? "active" : "")"><i class="fas fa-chart-line"></i> Setting</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <span>@Context.Session.GetString("UserName")</span>
+            <a asp-controller="Home" asp-action="Index"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="admin-header">
+            <h2>@ViewData["Title"]</h2>
+        </header>
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

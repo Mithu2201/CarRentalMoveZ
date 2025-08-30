@@ -1,0 +1,28 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: url('../Img/loginbanner.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+
+.account-container {
+    min-height: 100vh;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.account-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 3);
+    max-width: 500px;
+    width: 100%;
+    opacity: .9;
+}
+
+

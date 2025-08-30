@@ -1,0 +1,145 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Top bar */
+.top-bar {
+    background-color: #1E56A0 !important; /* blue background */
+    color: #fff !important; /* white text */
+    padding: 6px 20px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .top-bar span {
+        color: #fff; /* ensures email text is white */
+    }
+
+    .top-bar a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+        .top-bar a:hover {
+            color: #dcdcdc; /* light gray hover */
+        }
+/* Navbar */
+nav {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFD500;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    text-decoration: none;
+}
+
+    .logo img {
+        height: 80px;
+    }
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    align-items: center;
+}
+
+    .nav-links li a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+        .nav-links li a:hover {
+            color: #FFD500;
+        }
+
+.nav-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+    .nav-right a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+    }
+
+.book-btn {
+    background-color: #1E56A0;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.2;
+    border: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+    /* Hover/focus to match nav links (white text on #1E56A0) */
+    .book-btn:hover,
+    .book-btn:focus {
+        background-color: #D6E4F0;
+        color: black !important;
+        border-color: #1E56A0;
+        text-decoration: none;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+}
+
+/* Navigation link styles */
+.navbar-nav .nav-link {
+    padding: 6px 14px; /* smaller vertical padding */
+    border-radius: 50px; /* keeps oval shape */
+    transition: all 0.3s ease;
+    color: #000;
+    font-weight: 500;
+    margin: 0 6px; /* space between menu items */
+    line-height: 1.2;
+}
+
+    /* Hover effect */
+    .navbar-nav .nav-link:hover {
+        background-color: #1E56A0;
+        color: #fff !important;
+    }
+
+    /* Active/selected link */
+    .navbar-nav .nav-link.active,
+    .navbar-nav .nav-link:focus {
+        background-color: #1E56A0;
+        color: #fff !important;
+        border-radius: 50px;
+    }
+
+
+
