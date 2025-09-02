@@ -1,5 +1,215 @@
-﻿@{
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.CarDTO>
+@using CarRentalMoveZ.Enums
+
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+
+@{
+    ViewData["Title"] = "Manage Cars";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<p>Hi i'm ManageCar-List, add, edit, delete cars</p>
+<div class="container-fluid py-3">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>Car Management</h3>
+        <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+            <!-- Search -->
+            <div class="input-group" style="max-width: 250px; flex-grow: 1;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search car name, brand, model..." />
+            </div>
+
+            <!-- Filter -->
+            <select id="statusFilter" class="form-select" style="max-width: 150px;">
+                <option value="">All Status</option>
+                @foreach (var status in Enum.GetValues(typeof(CarStatus)).Cast<CarStatus>())
+                {
+                    var member = status.GetType().GetMember(status.ToString()).FirstOrDefault();
+                    var displayAttr = member?.GetCustomAttribute<DisplayAttribute>();
+                    string displayName = displayAttr?.Name ?? status.ToString();
+
+                    <option value="@status">@displayName</option>
+                }
+            </select>
+
+            <!-- Add Button -->
+            <a class="btn btn d-flex align-items-center" style="height: 38px; background-color: #1E56A0; color: white;" asp-action="AddCar">
+                <i class="bi bi-plus me-2"></i> Add New Car
+            </a>
+        </div>
+    </div>
+
+    <!-- Car Details -->
+    <div id="carDetails" class="card p-3 mb-3 d-none">
+        <h5 class="fw-semibold mb-2">Car Details</h5>
+        <div id="detailsContent"></div>
+    </div>
+
+    <!-- Car List -->
+    <div class="table-responsive mt-3">
+        <table class="table align-middle table-hover" id="carsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Car ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Price/Day</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+                @foreach (var car in Model)
+                {
+                    string badgeClass = car.Status switch
+                    {
+                        "Available" => "pill-returned",
+                        "Booked" => "pill-ongoing",
+                        "Maintenance" => "pill-pending",
+                        _ => "pill-default"
+                    };
+
+                    string GetDisplayName(string status)
+                    {
+                        var statusEnum = Enum.TryParse(typeof(CarStatus), status, out var parsedStatus)
+                        ? parsedStatus.ToString() : status;
+                        var member = statusEnum.GetType().GetMember(statusEnum).FirstOrDefault();
+                        var displayAttr = member?.GetCustomAttribute<DisplayAttribute>();
+                        return displayAttr?.Name ?? statusEnum.ToString();
+                    }
+
+                    <tr>
+                        <td>@car.CarId</td>
+                        <td>
+                            <img src="@car.ImgURL" alt="@car.CarName" class="rounded" style="width:60px; height:auto;" />
+                        </td>
+                        <td>@car.CarName</td>
+                        <td>@car.Brand</td>
+                        <td>@car.Model</td>
+                        <td>@car.Year</td>
+                        <td>$@car.PricePerDay</td>
+                        <td data-status="@car.Status">
+                            <span class="pill @badgeClass">
+                                @GetDisplayName(car.Status)
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-controller="Admin" asp-action="EditCar" asp-route-id="@car.CarId" class="btn btn-sm btn-warning text-black">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <button type="button"
+                                    class="btn btn-sm btn-danger text-black"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-id="@car.CarId"
+                                    data-model="@car.Model">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete <b id="carName"></b>?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="deleteForm" method="post">
+                            <input type="hidden" name="id" id="carId" />
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedRow = null;
+
+        // Expand details
+        document.querySelectorAll("#carsTable tbody tr").forEach(row => {
+            row.addEventListener("click", function (e) {
+                if (e.target.closest("a, button")) return;
+
+                const detailsCard = document.getElementById("carDetails");
+                const detailsContent = document.getElementById("detailsContent");
+
+                if (selectedRow === this) {
+                    detailsCard.classList.add("d-none");
+                    selectedRow = null;
+                } else {
+                    const cells = this.querySelectorAll("td");
+                    const imgSrc = cells[1].querySelector("img").src;
+                    const carName = cells[2].innerText;
+
+                    detailsContent.innerHTML = `
+                        <div class="d-flex gap-3 align-items-start">
+                            <img src="${imgSrc}" alt="${carName}" class="rounded border" style="width:500px; height:auto;" />
+                            <div>
+                                <p><strong>Car ID:</strong> ${cells[0].innerText}</p>
+                                <p><strong>Name:</strong> ${carName}</p>
+                                <p><strong>Brand:</strong> ${cells[3].innerText}</p>
+                                <p><strong>Model:</strong> ${cells[4].innerText}</p>
+                                <p><strong>Year:</strong> ${cells[5].innerText}</p>
+                                <p><strong>Price/Day:</strong> ${cells[6].innerText}</p>
+                                <p><strong>Status:</strong> ${cells[7].innerText}</p>
+                            </div>
+                        </div>
+                    `;
+                    detailsCard.classList.remove("d-none");
+                    selectedRow = this;
+                }
+            });
+        });
+
+        // Delete modal
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var carId = button.getAttribute('data-id');
+            var carModel = button.getAttribute('data-model');
+
+            document.getElementById('carName').textContent = carModel;
+            document.getElementById('carId').value = carId;
+            document.getElementById('deleteForm').action = '/Admin/DeleteCar';
+        });
+
+        // Search & Filter
+        document.getElementById("searchInput").addEventListener("input", filterTable);
+        document.getElementById("statusFilter").addEventListener("change", filterTable);
+
+        function filterTable() {
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+            const statusValue = document.getElementById("statusFilter").value;
+
+            document.querySelectorAll("#carsTable tbody tr").forEach(row => {
+                const name = row.cells[2].innerText.toLowerCase();
+                const brand = row.cells[3].innerText.toLowerCase();
+                const model = row.cells[4].innerText.toLowerCase();
+                const status = row.cells[7].getAttribute("data-status");
+
+                const matchesSearch = name.includes(searchValue) || brand.includes(searchValue) || model.includes(searchValue);
+                const matchesStatus = !statusValue || status === statusValue;
+
+                row.style.display = (matchesSearch && matchesStatus) ? "" : "none";
+            });
+        }
+    </script>
+}
