@@ -58,6 +58,7 @@ namespace CarRentalMoveZ.Controllers
             {
                 HttpContext.Session.SetString("UserName", name);  // ✅ Store Name instead of Email
                 HttpContext.Session.SetString("Role", isAdmin ? "Admin" : "Customer");
+                HttpContext.Session.SetInt32("UserId", userId);
 
                 if (isAdmin)
                 {

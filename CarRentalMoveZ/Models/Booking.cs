@@ -13,9 +13,9 @@ namespace CarRentalMoveZ.Models
         public Car Car { get; set; }
 
         [Required]
-        public int CustomerId { get; set; }
-        [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public Customer User { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }

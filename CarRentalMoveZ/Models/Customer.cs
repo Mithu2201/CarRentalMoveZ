@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarRentalMoveZ.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRentalMoveZ.Models
@@ -9,17 +10,24 @@ namespace CarRentalMoveZ.Models
         public int CustomerId { get; set; }
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string PhoneNumber { get; set; }
+
+        [Required, EmailAddress]
+        public string Email { get; set; }
+
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; }
+
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         [Required]
         public string Gender { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public User User { get; set; }
-
-        // Navigation property
-        public ICollection<Booking> Bookings { get; set; }
+        [Required]
+        public string Role { get; set; } = "Customer";
     }
 }
