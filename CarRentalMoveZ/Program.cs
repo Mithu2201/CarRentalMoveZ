@@ -27,6 +27,7 @@ namespace CarRentalMoveZ
             // ?? Register Services
             builder.Services.AddScoped<IRegisterService, RegisterService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
 
             builder.Services.AddSession();

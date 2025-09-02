@@ -28,5 +28,10 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.Users.Update(user);
             _context.SaveChanges();
         }
+
+        public User GetById(int id)  // 🔹 new method
+        {
+            return _context.Users.FirstOrDefault(u => u.UserId == id);
+        }
     }
 }

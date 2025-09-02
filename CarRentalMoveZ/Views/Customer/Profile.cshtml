@@ -1,6 +1,85 @@
 ﻿@{
+    ViewData["Title"] = "Customer Profile";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Customer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/HomePanel.css" asp-append-version="true" />
+</head>
+    <body>
 
-<h1>Hi i'am User (manage profile info)</h1>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="profile-card">
+                    <h2 class="text-center mb-4 profile-header">My Profile</h2>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="profile-label">Full Name</label>
+                            <p class="profile-value">@Model.Name</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label">Email</label>
+                            <p class="profile-value">@Model.Email</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label">Phone Number</label>
+                            <p class="profile-value">@Model.PhoneNumber</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label">Date of Birth</label>
+                            <p class="profile-value">@Model.DateOfBirth?.ToString("yyyy-MM-dd")</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label">Gender</label>
+                            <p class="profile-value">@Model.Gender</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="profile-label">Do you change Password..?</label>
+                            <a asp-controller="Account" asp-action="VerifyEmail" class="btn edit-btn">
+                                Change Password
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        
+                        <a asp-controller="Customer" asp-action="EditProfile" class="btn edit-btn">
+                            ✏️ Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - CarRentalFrontEnd - <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @section Scripts {
+        <script>
+            console.log("Profile page script running");
+        </script>
+    }
+
+    </body>
+</html>
+
