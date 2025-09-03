@@ -1,6 +1,7 @@
 ﻿using CarRentalMoveZ.Data;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalMoveZ.Repository.Implementations
 {
@@ -12,11 +13,35 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context = context;
         }
 
-        
-    public void Add(Staff staff)
+
+        public void Add(Staff staff)
         {
             _context.Staffs.Add(staff);
             _context.SaveChanges();
         }
+
+        public IEnumerable<Staff> GetAll()
+        {
+            return _context.Staffs.Include(s => s.User).ToList();
+        }
+
+
+        public Staff GetById(int id)
+        {
+            return _context.Staffs
+                           .Include(s => s.User)  // Include the related User entity
+                           .FirstOrDefault(s => s.StaffId == id);  // Fetch by StaffId
+        }
+
+
+
+        public void Update(User user, Staff staff)
+        {
+            _context.Users.Update(user);
+            _context.Staffs.Update(staff);
+            _context.SaveChanges();
+        }
+
+
     }
 }

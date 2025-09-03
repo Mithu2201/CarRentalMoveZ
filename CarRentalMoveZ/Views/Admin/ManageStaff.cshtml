@@ -1,6 +1,141 @@
-﻿@{
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.StaffDTO>
+
+@{
+    ViewData["Title"] = "Manage Staff";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="container-fluid py-3">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>Staff Management</h3>
+        <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+            <!-- Search -->
+            <div class="input-group" style="max-width: 250px; flex-grow: 1;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search name, email..." />
+            </div>
 
-<p>Hi i'm ManageStaff-Manage staff accounts (create, assign role, deactivate)</p>
+            <!-- Role Filter -->
+            <select id="roleFilter" class="form-select" style="max-width: 150px;">
+                <option value="">All Roles</option>
+                <option value="Admin">Admin</option>
+                <option value="Staff">Staff</option>
+            </select>
+
+            <!-- Add Button -->
+            <a class="btn  d-flex align-items-center text-white" style="height: 38px; background-color: #1E56A0;" asp-action="AddStaff">
+                <i class="bi bi-plus me-2"></i> Add New Staff
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Staff List -->
+    <div class="table-responsive mt-3">
+        <table class="table align-middle table-hover" id="staffTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Staff ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var staff in Model)
+                    {
+                        <tr>
+                            <td>@staff.StaffId</td>
+                            <td>@staff.Name</td>
+                            <td>@staff.Email</td>
+                            <td>@staff.Role</td>
+                            <td>@staff.PhoneNumber</td>
+                            <td>
+                                <a asp-action="EditStaff" asp-route-id="@staff.StaffId" class="btn btn-sm btn-warning text-black">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button type="button"
+                                        class="btn btn-sm btn-danger text-black"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        data-id="@staff.StaffId"
+                                        data-name="@staff.Name">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No staff found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete <b id="staffName"></b>?
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="post">
+                        <input type="hidden" name="id" id="staffId" />
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Delete modal
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var staffId = button.getAttribute('data-id');
+            var staffName = button.getAttribute('data-name');
+
+            document.getElementById('staffName').textContent = staffName;
+            document.getElementById('staffId').value = staffId;
+            document.getElementById('deleteForm').action = '/Staff/Delete';
+        });
+
+        // Search & Filter
+        document.getElementById("searchInput").addEventListener("input", filterTable);
+        document.getElementById("roleFilter").addEventListener("change", filterTable);
+
+        function filterTable() {
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+            const roleValue = document.getElementById("roleFilter").value;
+
+            document.querySelectorAll("#staffTable tbody tr").forEach(row => {
+                const name = row.cells[1].innerText.toLowerCase();
+                const email = row.cells[2].innerText.toLowerCase();
+                const role = row.cells[3].innerText;
+
+                const matchesSearch = name.includes(searchValue) || email.includes(searchValue);
+                const matchesRole = !roleValue || role === roleValue;
+
+                row.style.display = (matchesSearch && matchesRole) ? "" : "none";
+            });
+        }
+    </script>
+}
