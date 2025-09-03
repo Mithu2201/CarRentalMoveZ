@@ -23,10 +23,18 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+            builder.Services.AddScoped<ICarRepository, CarRepository>();
+            builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+
 
             // ?? Register Services
             builder.Services.AddScoped<IRegisterService, RegisterService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ICarService, CarService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IStaffService, StaffService>();
+
+
 
 
             builder.Services.AddSession();

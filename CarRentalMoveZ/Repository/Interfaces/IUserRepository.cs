@@ -7,5 +7,6 @@ namespace CarRentalMoveZ.Repository.Interfaces
         void Add(User user);
         User GetByEmail(string email);
         void Update(User user);
+        User GetById(int id);
     }
 }

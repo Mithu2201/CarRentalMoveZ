@@ -19,6 +19,20 @@ namespace CarRentalMoveZ.Mappings
 
                 Role = "Customer"
             };
-        }  
+        }
+
+        public static Customer ToCustomerEntity(RegisterViewModel model, int userId)
+        {
+            return new Customer
+            {
+                Name = model.Name,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                DateOfBirth = model.DateOfBirth,
+                Gender = model.Gender,
+                UserId = userId
+
+            };
+        }
     }
 }
