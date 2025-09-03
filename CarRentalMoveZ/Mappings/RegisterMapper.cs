@@ -21,18 +21,17 @@ namespace CarRentalMoveZ.Mappings
             };
         }
 
-        public static Customer ToCustomerEntity(RegisterViewModel model, string hashedPassword)
+        public static Customer ToCustomerEntity(RegisterViewModel model, int userId)
         {
             return new Customer
             {
                 Name = model.Name,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                Password = hashedPassword,
                 DateOfBirth = model.DateOfBirth,
                 Gender = model.Gender,
+                UserId = userId
 
-                Role = "Customer"
             };
         }
     }
