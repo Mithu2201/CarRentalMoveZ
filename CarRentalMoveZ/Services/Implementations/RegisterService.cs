@@ -29,13 +29,12 @@ namespace CarRentalMoveZ.Services.Implementations
         public void Register(RegisterViewModel model)
         {
             var user = RegisterMapper.ToUserEntity(model, null);
-            var customer = RegisterMapper.ToCustomerEntity(model, null);
 
             // Hash password with Identity PasswordHasher
             user.Password = _passwordHasher.HashPassword(user, model.Password);
-            customer.Password = _passwordHasher.HashPassword(user, model.Password);
-
             _userRepo.Add(user);
+
+            var customer = RegisterMapper.ToCustomerEntity(model, user.UserId);
             _customerRepo.Add(customer);
 
         }

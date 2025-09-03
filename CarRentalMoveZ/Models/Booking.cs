@@ -9,13 +9,13 @@ namespace CarRentalMoveZ.Models
 
         [Required]
         public int CarId { get; set; }
-        [ForeignKey("CarId")]
         public Car Car { get; set; }
 
         [Required]
-        public int UserId { get; set; }
-        [ForeignKey("UserId")]
-        public Customer User { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+
+        public String Location { get; set; }
 
         [Required]
         public DateTime StartDate { get; set; }
@@ -23,11 +23,10 @@ namespace CarRentalMoveZ.Models
         [Required]
         public DateTime EndDate { get; set; }
 
-        public string Status { get; set; }   // Pending, Confirmed, Cancelled
+        public int Days { get; set; }
 
-        public String Location { get; set; }
+        public string Status { get; set; } = "Pending"; // Pending, Confirmed, Cancelled, Completed
 
-        // Navigation
-        public decimal Payment { get; set; }
+        public decimal Amount { get; set; }
     }
 }
