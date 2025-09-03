@@ -22,15 +22,19 @@ namespace CarRentalMoveZ.Services.Implementations
             userId = 0;
             isAdmin = false;
             name = string.Empty;
+          
 
             // 🔹 Hardcoded admin credentials
-            if (model.Email == "admin@movez.com" && model.Password == "Admin@123")
+            if (model.Email == "" +
+                "admin@movez.com" && model.Password == "Admin@123")
             {
                 isAdmin = true;
                 userId = -1; // fake Id for admin
                 name = "Admin";
+             
                 return true;
             }
+
 
             // get user by email
             var user = _userRepo.GetByEmail(model.Email);
@@ -38,14 +42,35 @@ namespace CarRentalMoveZ.Services.Implementations
 
             // verify password
             var result = _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password);
-            if (result == PasswordVerificationResult.Success)
+            if (result == PasswordVerificationResult.Success && user.Role == "Admin")
             {
                 userId = user.UserId;
                 name = user.Name;
+                isAdmin = true;
+          
+                return true;
+            }
+            else if (result == PasswordVerificationResult.Success && user.Role == "Customer")
+            {
+                userId = user.UserId;
+                name = user.Name;
+                isAdmin = false;
+            
+                return true;
+            }
+            else if (result == PasswordVerificationResult.Success && user.Role == "Staff")
+            {
+                userId = user.UserId;
+                name = user.Name;
+                isAdmin = true;
+              
                 return true;
             }
 
             return false;
+
+
+
         }
 
         public bool VerifyEmail(string email)
