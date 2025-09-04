@@ -15,19 +15,25 @@
 
     <div class="col-md-6">
         <form asp-action="NewBooking" asp-controller="Customer" method="post">
+            @* Hidden fields for binding *@
             <input type="hidden" asp-for="CarId" />
             <input type="hidden" asp-for="CustomerId" />
+            <input type="hidden" asp-for="CarName" />
+            <input type="hidden" asp-for="ImgURL" />
+            <input type="hidden" asp-for="PricePerDay" />
+            <input type="hidden" asp-for="CustomerName" />
+            <input type="hidden" asp-for="PhoneNumber" />
             <input type="hidden" asp-for="Days" id="days" />
             <input type="hidden" asp-for="Amount" id="amount" />
 
             <div class="mb-3">
                 <label>Customer</label>
-                <input type="text" value="@Model.CustomerName" class="form-control" disabled />
+                <input class="form-control" value="@Model.CustomerName" readonly />
             </div>
 
             <div class="mb-3">
                 <label>Contact No</label>
-                <input type="text" value="@Model.PhoneNumber" class="form-control" disabled />
+                <input class="form-control" value="@Model.PhoneNumber" readonly />
             </div>
 
             <div class="mb-3">
@@ -61,39 +67,38 @@
 </div>
 
 @section Scripts {
-<script>
-    function calculateBooking() {
-        const start = document.getElementById("startDate").value;
-        const end = document.getElementById("endDate").value;
-        const price = parseFloat("@Model.PricePerDay");
+    <script>
+        function calculateBooking() {
+            const start = document.getElementById("startDate").value;
+            const end = document.getElementById("endDate").value;
+            const price = parseFloat("@Model.PricePerDay");
 
-        if (start && end) {
-            const startDate = new Date(start);
-            const endDate = new Date(end);
+            if (start && end) {
+                const startDate = new Date(start);
+                const endDate = new Date(end);
 
-            if (endDate >= startDate) {
-                const diffTime = endDate - startDate;
-                const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // inclusive
-                const amount = days * price;
+                if (endDate >= startDate) {
+                    const diffTime = endDate - startDate;
+                    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // inclusive
+                    const amount = days * price;
 
-                document.getElementById("daysDisplay").value = days;
-                document.getElementById("amountDisplay").value = "$" + amount.toFixed(2);
+                    document.getElementById("daysDisplay").value = days;
+                    document.getElementById("amountDisplay").value = "$" + amount.toFixed(2);
 
-                document.getElementById("days").value = days;
-                document.getElementById("amount").value = amount.toFixed(2);
-            } else {
-                document.getElementById("daysDisplay").value = "";
-                document.getElementById("amountDisplay").value = "";
-                document.getElementById("days").value = "";
-                document.getElementById("amount").value = "";
+                    document.getElementById("days").value = days;
+                    document.getElementById("amount").value = amount.toFixed(2);
+                } else {
+                    document.getElementById("daysDisplay").value = "";
+                    document.getElementById("amountDisplay").value = "";
+                    document.getElementById("days").value = "";
+                    document.getElementById("amount").value = "";
+                }
             }
         }
-    }
 
-    document.getElementById("startDate").addEventListener("change", calculateBooking);
-    document.getElementById("endDate").addEventListener("change", calculateBooking);
+        document.getElementById("startDate").addEventListener("change", calculateBooking);
+        document.getElementById("endDate").addEventListener("change", calculateBooking);
 
-    // Calculate initial values if pre-filled
-    calculateBooking();
-</script>
+        calculateBooking(); // Recalculate on page load if values are pre-filled
+    </script>
 }

@@ -15,13 +15,15 @@ namespace CarRentalMoveZ.Controllers
         private readonly ICarService _carService;
         private readonly IBookingService _bookingService;
         private readonly ICustomerService _customerService;
+        private readonly IPaymentService _paymentService;
 
-        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService)
+        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService)
         {
             _userService = userService;
             _carService = carService;
             _bookingService = bookingService;
             _customerService = customerService;
+            _paymentService = paymentService;
         }
 
         [HttpGet]
@@ -57,9 +59,13 @@ namespace CarRentalMoveZ.Controllers
         {
             if (ModelState.IsValid)
             {
-                _bookingService.CreateBooking(model); // Mapper handles conversion
+                var bid=_bookingService.CreateBooking(model); // Mapper handles conversion
+               
+                TempData["BookingId"]= bid;
+                TempData.Keep("BookingId"); // keep it alive for next request
+                TempData["Amount"] = model.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-                return RedirectToAction("Car", "Customer");
+                return RedirectToAction("Payment", "Customer");
             }
 
             return View(model);
@@ -147,13 +153,57 @@ namespace CarRentalMoveZ.Controllers
             return RedirectToAction("Profile");
         }
 
-
+        [HttpGet]
         public IActionResult Payment()
         {
-            return View();
+            if (TempData["BookingId"] == null || TempData["Amount"] == null)
+            {
+                // Optional: handle missing TempData (e.g., redirect to error or booking page)
+                return RedirectToAction("NewBooking", "Customer");
+            }
+
+            // Convert TempData values safely
+            int bookingId = Convert.ToInt32(TempData["BookingId"]);
+            decimal amount = Convert.ToDecimal(TempData["Amount"]);
+
+            // Keep TempData alive for the next request (e.g., POST)
+            TempData.Keep("BookingId");
+            TempData.Keep("Amount");
+
+            // Pass to ViewModel
+            var model = new PaymentViewModel
+            {
+                BookingId = bookingId,
+                Amount = amount
+            };
+
+            return View(model);
         }
 
-        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Payment(PaymentViewModel model)
+        {
+            if (TempData["BookingId"] == null || TempData["Amount"] == null)
+            {
+                return RedirectToAction("NewBooking", "Customer");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.BookingID = TempData["BookingId"].ToString();
+                TempData.Keep("BookingId");
+                TempData.Keep("Amount");
+                return View(model);
+            }
+            // Process payment (mock)
+            // In real scenario, integrate with payment gateway here
+            // Update booking status to Confirmed
+            _paymentService.addPayment(model);
+            return RedirectToAction("Car");
+        }
+
+
         public IActionResult PaymentDetails()
         {
             return View();
