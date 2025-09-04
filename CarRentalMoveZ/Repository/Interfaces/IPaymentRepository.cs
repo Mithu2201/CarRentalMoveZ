@@ -2,9 +2,8 @@
 
 namespace CarRentalMoveZ.Repository.Interfaces
 {
-    public interface IBookingRepository
+    public interface IPaymentRepository
     {
-        int Add(Booking booking);
-      
+        void AddPayment(Payment payment);
     }
 }

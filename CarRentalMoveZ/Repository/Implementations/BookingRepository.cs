@@ -13,12 +13,12 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context = context;
         }
 
-        public void Add(Booking booking)
+        public int Add(Booking booking)
         {
             _context.Bookings.Add(booking);
             _context.SaveChanges();
 
-
+            return booking.BookingId; // This now contains the generated ID
         }
     }
 }

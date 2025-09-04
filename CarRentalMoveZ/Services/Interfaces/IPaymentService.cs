@@ -2,9 +2,8 @@
 
 namespace CarRentalMoveZ.Services.Interfaces
 {
-    public interface IBookingService
+    public interface IPaymentService
     {
-        int CreateBooking(BookingViewModel model);
-
+        void addPayment(PaymentViewModel paymentViewModel);
     }
 }

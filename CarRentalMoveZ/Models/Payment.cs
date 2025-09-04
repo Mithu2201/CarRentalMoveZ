@@ -15,7 +15,7 @@ namespace CarRentalMoveZ.Models
         [Required]
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
-        public string PaymentMethod { get; set; }   // Card, Cash, Online
+        public string PaymentMethod { get; set; } = "Paid"; // Card, Cash, Online
         public string Status { get; set; }          // Paid, Pending, Failed
     }
 }

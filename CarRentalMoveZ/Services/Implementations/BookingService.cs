@@ -15,13 +15,14 @@ namespace CarRentalMoveZ.Services.Implementations
             _bookingRepo = bookingRepo;
         }
 
-        public void CreateBooking(BookingViewModel model)
+        public int CreateBooking(BookingViewModel model)
         {
             // Map ViewModel → Entity using Mapper
             Booking booking = BookingMapper.ToEntity(model);
 
             // Save to repository
-            _bookingRepo.Add(booking);
+            var id=_bookingRepo.Add(booking);
+            return id;
         }
     }
 }
