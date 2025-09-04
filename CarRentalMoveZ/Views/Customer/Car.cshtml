@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.CarDTO>
+
+@{
+    ViewData["Title"] = "Car List";
+}
+
+<h2 class="mb-4">Available Cars</h2>
+
+<div class="row">
+    @foreach (var car in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg">
+                <img src="@car.ImgURL" class="card-img-top" alt="@car.CarName" style="height:200px; object-fit:cover;" />
+                <div class="card-body bg-dark text-white">
+                    <h4 class="card-title">@car.CarName</h4>
+                    <p class="card-text">
+                        <strong>Brand:</strong> @car.Brand <br />
+                        <strong>Model:</strong> @car.Model <br />
+                        <strong>Price/Day:</strong> $@car.PricePerDay <br />
+                        <strong>Status:</strong> @car.Status
+                    </p>
+                    <a asp-controller="Customer" asp-action="NewBooking" asp-route-carId="@car.CarId" class="btn btn-warning w-100">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -25,6 +25,8 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IStaffRepository, StaffRepository>();
             builder.Services.AddScoped<ICarRepository, CarRepository>();
             builder.Services.AddScoped<IStaffRepository, StaffRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
 
 
             // ?? Register Services
@@ -34,6 +36,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
 
 
 

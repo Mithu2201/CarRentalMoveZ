@@ -24,5 +24,19 @@ namespace CarRentalMoveZ.Repository.Implementations
         {
             return _context.Customers.Include(c => c.User).ToList();
         }
+
+        public Customer GetById(int id)
+        {
+            return _context.Customers
+                .Include(c => c.User)
+                .FirstOrDefault(c => c.CustomerId == id);
+        }
+
+        public Customer GetByUserId(int userId)
+        {
+            return _context.Customers
+                .Include(c => c.User)
+                .FirstOrDefault(c => c.UserId == userId);
+        }
     }
 }

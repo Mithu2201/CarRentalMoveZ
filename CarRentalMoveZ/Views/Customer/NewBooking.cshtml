@@ -1,96 +1,99 @@
-﻿@{
+﻿@model CarRentalMoveZ.ViewModels.BookingViewModel
+
+@{
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewData["Title"] = "New Booking";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CarRentalMoveZ-Home</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Customer.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/HomePanel.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CarRentalFrontEnd.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-<body>
+<h2>Booking for @Model.CarName</h2>
 
+<div class="row">
+    <div class="col-md-6">
+        <img src="@Model.ImgURL" class="img-fluid rounded" />
+        <p><strong>Price Per Day:</strong> $@Model.PricePerDay</p>
+    </div>
 
-<div class="booking-form-container">
-    <h2 class="page-title">Create Booking</h2>
+    <div class="col-md-6">
+        <form asp-action="NewBooking" asp-controller="Customer" method="post">
+            <input type="hidden" asp-for="CarId" />
+            <input type="hidden" asp-for="CustomerId" />
+            <input type="hidden" asp-for="Days" id="days" />
+            <input type="hidden" asp-for="Amount" id="amount" />
 
-    <form method="post" class="booking-form">
-        <div class="form-group">
-            <label class="form-label">Car</label>
-            <!-- Commented out model binding -->
-            @* <select asp-for="CarId" class="form-control" asp-items="Model.CarList"> *@
-            <select name="CarId" class="form-control">
-                <option value="">-- Select Car --</option>
-                <option value="1">Toyota Corolla</option>
-                <option value="2">Honda Civic</option>
-                <option value="3">Nissan Sunny</option>
-            </select>
-            @* <span asp-validation-for="CarId" class="text-danger"></span> *@
-        </div>
+            <div class="mb-3">
+                <label>Customer</label>
+                <input type="text" value="@Model.CustomerName" class="form-control" disabled />
+            </div>
 
-        <div class="form-group">
-            <label class="form-label">Customer</label>
-            <!-- Commented out model binding -->
-            @* <select asp-for="UserId" class="form-control" asp-items="Model.UserList"> *@
-            <select name="UserId" class="form-control">
-                <option value="">-- Select Customer --</option>
-                <option value="1">John Doe</option>
-                <option value="2">Jane Smith</option>
-                <option value="3">Michael Lee</option>
-            </select>
-            @* <span asp-validation-for="UserId" class="text-danger"></span> *@
-        </div>
+            <div class="mb-3">
+                <label>Contact No</label>
+                <input type="text" value="@Model.PhoneNumber" class="form-control" disabled />
+            </div>
 
-        <div class="form-group">
-            <label class="form-label">Start Date</label>
-            <!-- Hard-coded default -->
-            <input name="StartDate" type="date" value="2025-09-05" class="form-control" />
-        </div>
+            <div class="mb-3">
+                <label asp-for="Location">Pick Up Location</label>
+                <input asp-for="Location" class="form-control" required />
+            </div>
 
-        <div class="form-group">
-            <label class="form-label">End Date</label>
-            <!-- Hard-coded default -->
-            <input name="EndDate" type="date" value="2025-09-10" class="form-control" />
-        </div>
+            <div class="mb-3">
+                <label asp-for="StartDate">Start Date</label>
+                <input asp-for="StartDate" type="date" class="form-control" id="startDate" required />
+            </div>
 
-        <div class="form-group">
-            <label class="form-label">Status</label>
-            <select name="Status" class="form-control">
-                <option>Pending</option>
-                <option selected>Confirmed</option>
-                <option>Cancelled</option>
-            </select>
-        </div>
+            <div class="mb-3">
+                <label asp-for="EndDate">End Date</label>
+                <input asp-for="EndDate" type="date" class="form-control" id="endDate" required />
+            </div>
 
-        <div class="form-group">
-            <label class="form-label">Location</label>
-            <input name="Location" class="form-control" value="Colombo Airport" />
-        </div>
+            <div class="mb-3">
+                <label>Number of Days</label>
+                <input type="text" id="daysDisplay" class="form-control" readonly />
+            </div>
 
-        <div class="form-group">
-            <label class="form-label">Payment</label>
-            <input name="Payment" type="number" step="0.01" value="1500.00" class="form-control" />
-        </div>
+            <div class="mb-3">
+                <label>Total Amount</label>
+                <input type="text" id="amountDisplay" class="form-control" readonly />
+            </div>
 
-        <button type="submit" class="btn-primary-custom">Create Booking</button>
-    </form>
+            <button type="submit" class="btn btn-success w-100">Confirm Booking</button>
+        </form>
+    </div>
 </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @section Scripts {
-        <script>
-            console.log("Profile page script running");
-        </script>
+@section Scripts {
+<script>
+    function calculateBooking() {
+        const start = document.getElementById("startDate").value;
+        const end = document.getElementById("endDate").value;
+        const price = parseFloat("@Model.PricePerDay");
+
+        if (start && end) {
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+
+            if (endDate >= startDate) {
+                const diffTime = endDate - startDate;
+                const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // inclusive
+                const amount = days * price;
+
+                document.getElementById("daysDisplay").value = days;
+                document.getElementById("amountDisplay").value = "$" + amount.toFixed(2);
+
+                document.getElementById("days").value = days;
+                document.getElementById("amount").value = amount.toFixed(2);
+            } else {
+                document.getElementById("daysDisplay").value = "";
+                document.getElementById("amountDisplay").value = "";
+                document.getElementById("days").value = "";
+                document.getElementById("amount").value = "";
+            }
+        }
     }
 
-</body>
-</html>
+    document.getElementById("startDate").addEventListener("change", calculateBooking);
+    document.getElementById("endDate").addEventListener("change", calculateBooking);
+
+    // Calculate initial values if pre-filled
+    calculateBooking();
+</script>
+}

@@ -22,5 +22,19 @@ namespace CarRentalMoveZ.Mappings
                 });
         }
 
+        public static CustomerDTO ToDTO(Customer customer)
+        {
+            if (customer == null) return null;
+
+            return new CustomerDTO
+            {
+                CustomerId = customer.CustomerId,
+                Name = customer.Name,
+                Email = customer.Email,
+                PhoneNumber = customer.PhoneNumber,
+                
+            };
+        }
+
     }
 }

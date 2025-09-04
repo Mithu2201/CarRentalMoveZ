@@ -7,5 +7,8 @@ namespace CarRentalMoveZ.Repository.Interfaces
         void Add(Customer customer);
 
         IEnumerable<Customer> GetAll();
+        Customer GetById(int id);
+
+        Customer GetByUserId(int userId);
     }
 }

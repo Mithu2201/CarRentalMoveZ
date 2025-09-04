@@ -1,0 +1,27 @@
+﻿using CarRentalMoveZ.Mappings;
+using CarRentalMoveZ.Models;
+using CarRentalMoveZ.Repository.Interfaces;
+using CarRentalMoveZ.Services.Interfaces;
+using CarRentalMoveZ.ViewModels;
+
+namespace CarRentalMoveZ.Services.Implementations
+{
+    public class BookingService : IBookingService
+    {
+        private readonly IBookingRepository _bookingRepo;
+       
+        public BookingService(IBookingRepository bookingRepo)
+        {
+            _bookingRepo = bookingRepo;
+        }
+
+        public void CreateBooking(BookingViewModel model)
+        {
+            // Map ViewModel → Entity using Mapper
+            Booking booking = BookingMapper.ToEntity(model);
+
+            // Save to repository
+            _bookingRepo.Add(booking);
+        }
+    }
+}

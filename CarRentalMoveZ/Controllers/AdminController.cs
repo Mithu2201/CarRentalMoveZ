@@ -120,7 +120,6 @@ namespace CarRentalMoveZ.Controllers
         public IActionResult ManageCustomer() => View(_customerService.GetAllCustomer());
 
 
-
         public IActionResult CustomerDetails()
         {
             return View();
