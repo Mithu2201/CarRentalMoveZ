@@ -33,6 +33,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IStaffService, StaffService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 
 
