@@ -51,12 +51,12 @@
                             class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Profile">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Customer" ? "active" : "")"
-                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="MyBooking">My Book</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Booking" ? "active" : "")"
+                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="BookingDetails">My Book</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Payment" ? "active" : "")"
-                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Payment">Payment</a>
+                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="PaymentDetails">Payment</a>
                         </li>
                     </ul>
                 </div>

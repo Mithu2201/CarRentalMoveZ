@@ -96,12 +96,6 @@ namespace CarRentalMoveZ.Controllers
         }
 
         
-        public IActionResult MyBooking()
-        {
-            return View();
-        }
-
-        
         public IActionResult Profile()
         {
             int? userId = HttpContext.Session.GetInt32("UserId");

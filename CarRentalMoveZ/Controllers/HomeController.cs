@@ -26,17 +26,7 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        public IActionResult Booking()
-        {
-            return View();
-        }
-
         public IActionResult BrowseCar()
-        {
-            return View();
-        }
-
-        public IActionResult CarDetails()
         {
             return View();
         }
