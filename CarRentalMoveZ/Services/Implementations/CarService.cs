@@ -25,6 +25,13 @@ namespace CarRentalMoveZ.Services.Implementations
             return CarMapper.ToDtoList(cars);
         }
 
+        public IEnumerable<CarDTO> GetAllAvailable()
+        {
+            var availablecars = _carRepository.GetAllAvailable();
+            return CarMapper.ToDtoList(availablecars);
+
+        }
+
         public CarViewModel GetCarById(int id)
         {
             var car = _carRepository.GetCarById(id);

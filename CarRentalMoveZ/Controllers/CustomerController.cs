@@ -86,7 +86,7 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult Car()
         {
-            return View(_carService.GetAll());
+            return View(_carService.GetAllAvailable());
         }
 
 

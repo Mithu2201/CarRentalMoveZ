@@ -1,6 +1,7 @@
 ﻿using CarRentalMoveZ.Data;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalMoveZ.Repository.Implementations
 {
@@ -20,5 +21,14 @@ namespace CarRentalMoveZ.Repository.Implementations
 
             return booking.BookingId; // This now contains the generated ID
         }
+
+        public IEnumerable<Booking> GetAllBookings()
+        {
+            return _context.Bookings
+                           .Include(b => b.Car)
+                           .Include(b => b.Customer)
+                           .ToList();
+        }
+
     }
 }

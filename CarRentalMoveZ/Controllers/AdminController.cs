@@ -15,13 +15,17 @@ namespace CarRentalMoveZ.Controllers
         private readonly IStaffService _staffService;
         private readonly IRegisterService _registerService;
         private readonly ICustomerService _customerService;
+        private readonly IBookingService _bookingService;
+        private readonly IPaymentService _paymentService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService)
         {
             _carService = carService;
             _staffService = staffService;
             _registerService = registerService;
             _customerService = customerService;
+            _bookingService = bookingService;
+            _paymentService = paymentService;
         }
 
         public IActionResult Dashboard()
@@ -93,24 +97,20 @@ namespace CarRentalMoveZ.Controllers
         }
 
         
-        public IActionResult ManageBookings()
-        {
-            return View();
-        }
+        public IActionResult ManageBookings() => View(_bookingService.GetAllBookings());
 
-        
+
+
         public IActionResult BookingDetails()
         {
             return View();
         }
 
         
-        public IActionResult ManagePayment()
-        {
-            return View();
-        }
+        public IActionResult ManagePayment() => View(_paymentService.GetAllPayments());
 
-        
+
+
         public IActionResult PaymentDetails()
         {
             return View();

@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
 using CarRentalMoveZ.ViewModels;
 
 namespace CarRentalMoveZ.Services.Interfaces
@@ -8,6 +9,8 @@ namespace CarRentalMoveZ.Services.Interfaces
         void AddCar(CarViewModel car);
 
         IEnumerable<CarDTO> GetAll();
+
+        IEnumerable<CarDTO> GetAllAvailable();
 
         void UpdateCar(CarViewModel car);
 
