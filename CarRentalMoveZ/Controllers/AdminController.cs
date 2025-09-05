@@ -202,7 +202,7 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        public IActionResult CreateStaffUser()
+        public IActionResult Settings()
         {
             ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)));
             ViewBag.RoleList = new SelectList(Enum.GetValues(typeof(Role)));
