@@ -1,4 +1,5 @@
-﻿using CarRentalMoveZ.Mappings;
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Mappings;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
 using CarRentalMoveZ.Services.Interfaces;
@@ -21,6 +22,12 @@ namespace CarRentalMoveZ.Services.Implementations
             _paymentRepository.AddPayment(payment);
 
 
+        }
+
+        public IEnumerable<PaymentDTO> GetAllPayments()
+        {
+            var payments = _paymentRepository.GetAllPayments();
+            return PaymentMapper.ToDTOList(payments);
         }
     }
 }

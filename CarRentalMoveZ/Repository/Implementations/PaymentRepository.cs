@@ -1,6 +1,7 @@
-﻿using CarRentalMoveZ.Models;
+﻿using CarRentalMoveZ.Data;
+using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
-using CarRentalMoveZ.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalMoveZ.Repository.Implementations
 {
@@ -16,5 +17,15 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.Payments.Add(payment);
             _context.SaveChanges();
         }
+
+        public IEnumerable<Payment> GetAllPayments()
+        {
+            return _context.Payments.Include(p => p.Booking).ToList();
+        }
+
+
+
+
+
     }
 }

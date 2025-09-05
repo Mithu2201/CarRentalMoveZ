@@ -1,6 +1,150 @@
-﻿@{
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.BookingDTO>
+
+@{
+    ViewData["Title"] = "Car Bookings";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="container-fluid py-3">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>Car Bookings</h3>
+        <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+            <!-- Search -->
+            <div class="input-group" style="max-width: 250px; flex-grow: 1;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search client name, car, etc" />
+            </div>
 
-<p>Hi i'm ManageBook-List all bookings (filter by status: pending, confirmed, completed)</p>
+            <!-- Status Filter -->
+            <select id="statusFilter" class="form-select" style="max-width: 150px;">
+                <option value="">All Status</option>
+                <option value="Returned">Returned</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Pending">Pending</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Booking Details Card -->
+    <div id="bookingDetails" class="card p-3 mb-3 d-none">
+        <h5 class="fw-semibold mb-2">Booking Details</h5>
+        <div id="detailsContent"></div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive mt-3">
+        <table class="table align-middle table-hover" id="bookingsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Booking #</th>
+                    <th>Client Name</th>
+                    <th>Car Model</th>
+                    <th>Dates</th>
+                    <th>Location</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>@booking.BookingId</td>
+                            <td>@booking.CustomerName</td>
+                            <td>@booking.CarModel @* <span class="text-muted ms-1">@booking.CarPlate</span> *@</td>
+                            <td>
+                                Start @booking.StartDate.ToString("MMM d, yyyy") •
+                                End @booking.EndDate.ToString("MMM d, yyyy")
+                            </td>
+                            <td>@booking.Location</td>
+                            @* <td>@booking.Payment.ToString("C")</td> *@
+                            <td>@booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+
+                            <td data-status="@booking.Status">
+                                <span class="pill pill-@booking.Status.ToLower()">
+                                    @booking.Status
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="ViewBook" asp-route-id="@booking.BookingId" class="btn btn-sm btn-primary text-white">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No bookings found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedRow = null;
+
+        // Expand booking details
+        document.querySelectorAll("#bookingsTable tbody tr").forEach(row => {
+            row.addEventListener("click", function(e) {
+                if (e.target.closest("a, button")) return;
+
+                const detailsCard = document.getElementById("bookingDetails");
+                const detailsContent = document.getElementById("detailsContent");
+
+                if (selectedRow === this) {
+                    detailsCard.classList.add("d-none");
+                    selectedRow = null;
+                } else {
+                    const cells = this.querySelectorAll("td");
+                    detailsContent.innerHTML = `
+                        <div class="d-flex gap-3 align-items-start flex-wrap">
+                            <div>
+                                <p><strong>Booking #:</strong> ${cells[0].innerText}</p>
+                                <p><strong>Client:</strong> ${cells[1].innerText}</p>
+                                <p><strong>Car:</strong> ${cells[2].innerText}</p>
+                                <p><strong>Dates:</strong> ${cells[3].innerText}</p>
+                                <p><strong>Location:</strong> ${cells[4].innerText}</p>
+                                <p><strong>Payment:</strong> ${cells[5].innerText}</p>
+                                <p><strong>Status:</strong> ${cells[6].innerText}</p>
+                            </div>
+                        </div>
+                    `;
+                    detailsCard.classList.remove("d-none");
+                    selectedRow = this;
+                }
+            });
+        });
+
+        // Search & Filter
+        document.getElementById("searchInput").addEventListener("input", filterTable);
+        document.getElementById("statusFilter").addEventListener("change", filterTable);
+
+        function filterTable() {
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+            const statusValue = document.getElementById("statusFilter").value;
+
+            document.querySelectorAll("#bookingsTable tbody tr").forEach(row => {
+                const client = row.cells[1].innerText.toLowerCase();
+                const car = row.cells[2].innerText.toLowerCase();
+				const date = row.cells[3].innerText.toLowerCase();
+				const location = row.cells[4].innerText.toLowerCase();
+				const price = row.cells[5].innerText.toLowerCase();
+                const status = row.cells[6].getAttribute("data-status");
+
+                const matchesSearch = client.includes(searchValue) || car.includes(searchValue) || date.includes(searchValue) || location.includes(searchValue) || price.includes(searchValue);
+                const matchesStatus = !statusValue || status === statusValue;
+
+                row.style.display = (matchesSearch && matchesStatus) ? "" : "none";
+            });
+        }
+    </script>
+}
