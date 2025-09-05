@@ -9,6 +9,8 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         IEnumerable<Car> GetAll();
 
+        IEnumerable<Car> GetAllAvailable();
+
         void UpdateCar(Car car);
 
         Car GetCarById(int id);

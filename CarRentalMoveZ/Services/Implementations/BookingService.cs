@@ -1,4 +1,5 @@
-﻿using CarRentalMoveZ.Mappings;
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Mappings;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
 using CarRentalMoveZ.Services.Interfaces;
@@ -24,5 +25,16 @@ namespace CarRentalMoveZ.Services.Implementations
             var id=_bookingRepo.Add(booking);
             return id;
         }
+
+
+        public IEnumerable<BookingDTO> GetAllBookings()
+        {
+
+            var bookings = _bookingRepo.GetAllBookings();
+
+
+            return BookingMapper.ToDTOList(bookings);
+        }
+
     }
 }
