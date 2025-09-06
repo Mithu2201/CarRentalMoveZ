@@ -9,5 +9,7 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         IEnumerable<BookingDTO> GetAllBookings();
 
+        IEnumerable<BookingDTO> GetBookingsByUserId(int userId);
+
     }
 }

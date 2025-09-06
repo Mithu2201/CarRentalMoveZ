@@ -1,5 +1,49 @@
-﻿@{
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.BookingDTO>
+@{
+    ViewData["Title"] = "My Bookings";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h1>Hi i'm Booking Details (single booking details)</h1>
+<div class="container py-4">
+    <h2 class="mb-4">My Bookings</h2>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Car</th>
+                <th>Dates</th>
+                <th>Location</th>
+                <th>Payment</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var booking in Model)
+                {
+                    <tr>
+                        <td>@booking.BookingId</td>
+                        <td>@booking.CarModel</td>
+                        <td>
+                            @booking.StartDate.ToString("MMM dd, yyyy") -
+                            @booking.EndDate.ToString("MMM dd, yyyy")
+                        </td>
+                        <td>@booking.Location</td>
+                        <td>@booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+                        <td>
+                            <span class="badge bg-@(booking.Status == "Confirmed" ? "success" : booking.Status == "Pending" ? "warning" : "secondary")">
+                                @booking.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="6" class="text-center text-muted">No bookings yet.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

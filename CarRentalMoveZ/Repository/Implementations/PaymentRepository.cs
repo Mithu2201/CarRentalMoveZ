@@ -23,7 +23,14 @@ namespace CarRentalMoveZ.Repository.Implementations
             return _context.Payments.Include(p => p.Booking).ToList();
         }
 
-
+        public IEnumerable<Payment> GetPaymentsByUserId(int userId)
+        {
+            return _context.Payments
+                .Include(p => p.Booking)
+                    .ThenInclude(b => b.Customer) // ensure Customer is included
+                .Where(p => p.Booking.Customer.UserId == userId)
+                .ToList();
+        }
 
 
 

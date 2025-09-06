@@ -30,5 +30,14 @@ namespace CarRentalMoveZ.Repository.Implementations
                            .ToList();
         }
 
+        public IEnumerable<Booking> GetBookingsByUserId(int userId)
+        {
+            return _context.Bookings
+                           .Include(b => b.Car)
+                           .Include(b => b.Customer)
+                           .Where(b => b.Customer.UserId == userId) // Assuming Customer has UserId FK
+                           .ToList();
+        }
+
     }
 }
