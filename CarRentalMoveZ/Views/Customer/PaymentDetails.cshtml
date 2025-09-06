@@ -1,6 +1,48 @@
-﻿@{
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.PaymentDTO>
+
+
+@{
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 
-<h1>Hi i'am New Booking (detailed receipt)</h1>
+
+
+<div class="container py-4">
+    <h2>My Payments</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Payment ID</th>
+                <th>Booking Dates</th>
+                <th>Amount</th>
+                <th>Payment Date</th>
+                <th>Method</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var payment in Model)
+                {
+                    <tr>
+                        <td>@payment.PaymentId</td>
+                        <td>@payment.BookingStartDate.ToString("MMM d, yyyy") – @payment.BookingEndDate.ToString("MMM d, yyyy")</td>
+                        <td>@payment.Amount.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+                        <td>@payment.PaymentDate.ToString("MMM d, yyyy")</td>
+                        <td>@payment.PaymentMethod</td>
+                        <td>@payment.Status</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No payments found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -77,22 +77,20 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult TestPost()
-        {
-            Console.WriteLine("🚀 TestPost HIT!");
-            return Ok("POST worked");
-        }
-
         public IActionResult Car()
         {
             return View(_carService.GetAllAvailable());
         }
 
-
+        [HttpGet]
         public IActionResult BookingDetails()
         {
-            return View();
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
+            var bookings = _bookingService.GetBookingsByUserId(userId.Value);
+            return View(bookings);
         }
 
         
@@ -197,10 +195,15 @@ namespace CarRentalMoveZ.Controllers
             return RedirectToAction("Car");
         }
 
-
+        [HttpGet]
         public IActionResult PaymentDetails()
         {
-            return View();
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
+            var payments = _paymentService.GetPaymentsByUserId(userId.Value);
+            return View(payments);
         }
     }
 }

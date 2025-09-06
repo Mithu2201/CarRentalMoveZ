@@ -9,5 +9,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         void addPayment(PaymentViewModel paymentViewModel);
 
         IEnumerable<PaymentDTO> GetAllPayments();
+
+        IEnumerable<PaymentDTO> GetPaymentsByUserId(int userId);
     }
 }

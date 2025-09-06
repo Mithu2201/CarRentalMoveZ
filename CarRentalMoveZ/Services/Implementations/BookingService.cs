@@ -36,5 +36,11 @@ namespace CarRentalMoveZ.Services.Implementations
             return BookingMapper.ToDTOList(bookings);
         }
 
+        public IEnumerable<BookingDTO> GetBookingsByUserId(int userId)
+        {
+            var bookings = _bookingRepo.GetBookingsByUserId(userId);
+            return BookingMapper.ToDTOList(bookings);
+        }
+
     }
 }

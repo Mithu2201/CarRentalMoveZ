@@ -7,5 +7,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
         void AddPayment(Payment payment);
 
         IEnumerable<Payment> GetAllPayments();
+
+        IEnumerable<Payment> GetPaymentsByUserId(int userId);
     }
 }

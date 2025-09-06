@@ -29,5 +29,11 @@ namespace CarRentalMoveZ.Services.Implementations
             var payments = _paymentRepository.GetAllPayments();
             return PaymentMapper.ToDTOList(payments);
         }
+
+        public IEnumerable<PaymentDTO> GetPaymentsByUserId(int userId)
+        {
+            var payments = _paymentRepository.GetPaymentsByUserId(userId);
+            return PaymentMapper.ToDTOList(payments);
+        }
     }
 }
