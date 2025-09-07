@@ -15,6 +15,7 @@ namespace CarRentalMoveZ.Models
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
+        [Required]
         public String Location { get; set; }
 
         [Required]

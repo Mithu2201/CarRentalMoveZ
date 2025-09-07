@@ -1,7 +1,152 @@
-﻿@{
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.PaymentDTO>
+
+@{
+    ViewData["Title"] = "Manage Payments";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="container-fluid py-3">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>Manage Payments</h3>
+        <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+            <!-- Search -->
+            <div class="input-group" style="max-width: 250px; flex-grow: 1;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search booking ID, payment method, status..." />
+            </div>
 
+            <!-- Status Filter -->
+            <select id="statusFilter" class="form-select" style="max-width: 150px;">
+                <option value="">All Status</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+            </select>
+        </div>
+    </div>
 
-<p>Hi i'm ManagePayment-List all payments (view by booking/customer)</p>
+    <!-- Payment Details Card -->
+    <div id="paymentDetails" class="card p-3 mb-3 d-none">
+        <h5 class="fw-semibold mb-2">Payment Details</h5>
+        <div id="detailsContent"></div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive mt-3">
+        <table class="table align-middle table-hover" id="paymentsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Booking ID</th>
+                    <th>Booking Dates</th>
+                    <th>Amount</th>
+                    <th>Payment Date</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var payment in Model)
+                    {
+                        <tr>
+                            <td>@payment.PaymentId</td>
+                            <td>@payment.BookingId</td>
+                            <td>@payment.BookingStartDate.ToString("MMM d, yyyy") – @payment.BookingEndDate.ToString("MMM d, yyyy")</td>
+                            <td>@payment.Amount.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+                            <td>@payment.PaymentDate.ToString("MMM d, yyyy")</td>
+                            <td>@payment.PaymentMethod</td>
+                            <td data-status="@payment.Status">
+                                <span class="pill pill-@payment.Status.ToLower()">
+                                    @payment.Status
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="ViewPayment" asp-route-id="@payment.PaymentId" class="btn btn-sm btn-primary text-white">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No payments found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedRow = null;
+
+        // Expand payment details
+        document.querySelectorAll("#paymentsTable tbody tr").forEach(row => {
+            row.addEventListener("click", function(e) {
+                if (e.target.closest("a, button")) return;
+
+                const detailsCard = document.getElementById("paymentDetails");
+                const detailsContent = document.getElementById("detailsContent");
+
+                if (selectedRow === this) {
+                    detailsCard.classList.add("d-none");
+                    selectedRow = null;
+                } else {
+                    const cells = this.querySelectorAll("td");
+                    detailsContent.innerHTML = `
+                        <div class="d-flex gap-3 align-items-start flex-wrap">
+                            <div>
+                                <p><strong>Payment ID:</strong> ${cells[0].innerText}</p>
+                                <p><strong>Booking ID:</strong> ${cells[1].innerText}</p>
+                                <p><strong>Booking Dates:</strong> ${cells[2].innerText}</p>
+                                <p><strong>Amount:</strong> ${cells[3].innerText}</p>
+                                <p><strong>Payment Date:</strong> ${cells[4].innerText}</p>
+                                <p><strong>Payment Method:</strong> ${cells[5].innerText}</p>
+                                <p><strong>Status:</strong> ${cells[6].innerText}</p>
+                            </div>
+                        </div>
+                    `;
+                    detailsCard.classList.remove("d-none");
+                    selectedRow = this;
+                }
+            });
+        });
+
+        // Search & Filter
+        document.getElementById("searchInput").addEventListener("input", filterTable);
+        document.getElementById("statusFilter").addEventListener("change", filterTable);
+
+        function filterTable() {
+            const searchValue = document.getElementById("searchInput").value.toLowerCase();
+            const statusValue = document.getElementById("statusFilter").value;
+
+            document.querySelectorAll("#paymentsTable tbody tr").forEach(row => {
+                const paymentId = row.cells[0].innerText.toLowerCase();
+                const bookingId = row.cells[1].innerText.toLowerCase();
+                const bookingDates = row.cells[2].innerText.toLowerCase();
+                const amount = row.cells[3].innerText.toLowerCase();
+                const paymentDate = row.cells[4].innerText.toLowerCase();
+                const paymentMethod = row.cells[5].innerText.toLowerCase();
+                const status = row.cells[6].getAttribute("data-status");
+
+                const matchesSearch = paymentId.includes(searchValue)
+                    || bookingId.includes(searchValue)
+                    || bookingDates.includes(searchValue)
+                    || amount.includes(searchValue)
+                    || paymentDate.includes(searchValue)
+                    || paymentMethod.includes(searchValue);
+
+                const matchesStatus = !statusValue || status === statusValue;
+
+                row.style.display = (matchesSearch && matchesStatus) ? "" : "none";
+            });
+        }
+    </script>
+}

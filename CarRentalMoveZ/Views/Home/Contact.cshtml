@@ -1,1 +1,187 @@
-﻿<h1>Hi i'am contact-Contact form</h1>
+﻿@{
+    ViewData["Title"] = "Contact";
+}
+
+<!-- Page Title -->
+<img src="~/Img/Contact/ContactUS.png" alt="banner" class="img-fluid w-100" />
+
+
+<div class="container py-5">
+ 
+    <!-- Contact Info Cards -->
+    <div class="row text-center mb-5">
+        <!-- Address -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 p-4 contact-card">
+                <div class="icon-box mx-auto mb-3">
+                    <img src="~/Img/Contact/Map.jpeg" alt="Location" class="img-fluid" />
+                </div>
+                <div class="icon-wrapper mx-auto mb-3">
+                    <i class="bi bi-geo-alt-fill"></i>
+                </div>
+                <h5 class="fw-bold">Our Address</h5>
+                <p>No-12,Temple Rd , Jaffna</p>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 p-4 contact-card">
+                <div class="icon-box mx-auto mb-3">
+                    <img src="~/Img/Contact/EmailReceive.jpg" alt="Location" class="img-fluid" />
+                </div>
+                <div class="icon-wrapper mx-auto mb-3">
+                    <i class="bi bi-envelope-fill"></i>
+                </div>
+                <h5 class="fw-bold">MoveZ@Company.Com</h5>
+                <p>Email us anytime for any kind of query.</p>
+            </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 p-4 contact-card">
+                <div class="icon-box mx-auto mb-3">
+                    <img src="~/Img/Contact/CallCenter.jfif" alt="Location" class="img-fluid" />
+                </div>
+                <div class="icon-wrapper mx-auto mb-3">
+                    <i class="bi bi-telephone-fill"></i>
+                </div>
+                <h5 class="fw-bold">+94 75 041 0696</h5>
+                <p>Call us any time, we will wait for it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="container py-5">
+        <!-- Title -->
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary-custom">Contact Us</h2>
+            <p class="text-muted">We’d love to hear from you. Please fill out the form below.</p>
+        </div>
+
+        <div class="row align-items-stretch">
+            <!-- Image -->
+            <div class="col-md-6 mb-4 mb-md-0 d-flex">
+                <img src="~/Img/Contact/ContactTaxi.jfif"
+                     class="img-fluid rounded shadow w-100 h-100 object-fit-cover"
+                     alt="Taxi Driver" />
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-md-6 d-flex">
+                <div class="card border-0 shadow-lg w-100 h-100" style="background-color:#D6E4F0;">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h4 class="fw-bold mb-4 text-dark-custom">Get In Touch</h4>
+                        <form id="contactForm" class="h-100 d-flex flex-column">
+                            <div class="mb-3">
+                                <input type="email" class="form-control border-0 shadow-sm"
+                                       placeholder="Your Email" required />
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control border-0 shadow-sm"
+                                       placeholder="Phone" required />
+                            </div>
+                            <div class="mb-3 flex-grow-1">
+                                <textarea class="form-control border-0 shadow-sm h-100"
+                                          rows="6" placeholder="Message" required></textarea>
+                            </div>
+                            <button type="submit"
+                                    class="btn btn-primary-custom w-100 mt-auto py-2 fw-bold">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Map -->
+    <div class="mb-5">
+        <h4 class="fw-bold text-center mb-3">Google Map</h4>
+        <div class="ratio ratio-16x9 shadow-sm">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0869371816905!2d-122.420679084681!3d37.77492977975964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064e2c3b9d9%3A0x4f2b43a4a73e0f!2sSan%20Francisco!5e0!3m2!1sen!2sus!4v1617294714470!5m2!1sen!2sus"
+                    style="border:0; height:600px" allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+    /* Card Hover Effects */
+    .contact-card {
+        transition: all 0.3s ease-in-out;
+        border-radius: 12px;
+    }
+
+        .contact-card:hover {
+            background-color: #f6f6f6;
+            transform: translateY(-6px);
+        }
+
+    /* Icon Wrapper Styling */
+    .icon-wrapper {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #1E56A0; /* yellow */
+        color: white;
+        font-size: 36px;
+        border-radius: 50%; /* circle */
+        transition: all 0.3s ease-in-out;
+    }
+
+    .contact-card:hover .icon-wrapper {
+        background: #D6E4F0; /* blue hover */
+        color: black;
+    }
+
+    .icon-box img {
+        max-width: 85%;
+        max-height: 85%;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    body {
+        background-color: #F6F6F6;
+    }
+
+    .text-primary-custom {
+        color: #1E56A0;
+    }
+
+    .text-dark-custom {
+        color: #163172;
+    }
+
+    .btn-primary-custom {
+        background-color: #1E56A0;
+        border: none;
+        color: white;
+        transition: 0.3s;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #163172;
+        }
+
+    .form-control {
+        border-radius: 8px;
+        background-color: #fff;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Simple JS form handler
+        document.getElementById("contactForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Your message has been sent successfully!");
+        });
+    </script>
+}

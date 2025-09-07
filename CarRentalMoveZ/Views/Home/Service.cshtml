@@ -1,1 +1,209 @@
-﻿<h1>Hi i'am Service-See services offered</h1>
+﻿<!-- Page Title -->
+<div><img src="~/Img/Service/ServiceBanner.png" alt="banner" class="img-fluid w-100" /></div>
+
+<style>
+    body {
+        background-color: #F6F6F6;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .service-card {
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 2rem;
+        border-radius: 0.25rem;
+        box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+        background-color: #fff;
+    }
+
+    .service-image {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .icon-circle {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #1E56A0; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+        .icon-circle svg {
+            width: 30px;
+            height: 30px;
+            stroke: #D6E4F0;
+            stroke-width: 2;
+            fill: none;
+        }
+
+    .label-container {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #163172;
+    }
+
+    .label-background {
+        background-color: #FFFFFF;
+        padding: 0.4rem 1rem;
+        border-left: 6px solid #163172;
+        border-top-right-radius: 0.25rem;
+        border-bottom-right-radius: 0.25rem;
+        box-shadow: 1px 1px 6px rgb(0 0 0 / 0.12);
+    }
+
+    .arrow-btn {
+        background-color: #163172;
+        border: none;
+        color: white;
+        font-weight: 700;
+        margin-left: 0.5rem;
+        padding: 0.4rem 0.9rem;
+        border-radius: 0 0.25rem 0.25rem 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+        box-shadow: 1px 1px 5px rgb(0 0 0 / 0.15);
+    }
+
+        .arrow-btn:hover {
+            background-color: #1E56A0;
+            color: #FFFFFF;
+        }
+
+    .arrow-icon {
+        font-size: 1.2rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+</style>
+
+
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Card 1: Regular Transport -->
+            <div class="col-md-4">
+                <div class="service-card">
+                <img src="~/Img/Service/Re1.jpg" alt="Regular Transport" class="service-image" />
+                    <div class="icon-circle" title="Car Icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 12h18M5 16v-4h14v4M7 16v2M17 16v2M9 16v-4h6v4" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="label-container">
+                        <div class="label-background">Regular Transport</div>
+                        <button class="arrow-btn" aria-label="Regular Transport">»</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: City Transport -->
+            <div class="col-md-4">
+                <div class="service-card">
+                <img src="~/Img/Service/city.jpeg" alt="City Transport" class="service-image" />
+                    <div class="icon-circle" title="Buildings Icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="10" width="4" height="8" stroke-linecap="round" stroke-linejoin="round" />
+                            <rect x="9" y="7" width="4" height="11" stroke-linecap="round" stroke-linejoin="round" />
+                            <rect x="15" y="4" width="4" height="14" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7 10v-3h6v3" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="label-container">
+                        <div class="label-background">City Transport</div>
+                        <button class="arrow-btn" aria-label="City Transport">»</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Business Tour -->
+            <div class="col-md-4">
+                <div class="service-card">
+                <img src="~/Img/Service/Business.jpg" alt="Business Tour" class="service-image" />
+                    <div class="icon-circle" title="Briefcase Icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="8" width="18" height="10" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <rect x="8" y="4" width="8" height="4" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="label-container">
+                        <div class="label-background">Business Tour</div>
+                        <button class="arrow-btn" aria-label="Business Tour">»</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Shuttle Service -->
+            <div class="col-md-4">
+                <div class="service-card">
+                <img src="~/Img/Service/ceremony.jfif" alt="Shuttle Service" class="service-image" />
+                    <div class="icon-circle" title="Shuttle Icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="8" width="18" height="8" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="7" cy="18" r="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="17" cy="18" r="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M6 8V6a4 4 0 0 1 8 0v2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="label-container">
+                        <div class="label-background">Shuttle Service</div>
+                        <button class="arrow-btn" aria-label="Shuttle Service">»</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Airport Transport -->
+            <div class="col-md-4">
+                <div class="service-card">
+                <img src="~/Img/Service/airport.jpg" alt="Airport Transport" class="service-image" />
+                    <div class="icon-circle" title="Airport Icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 13v-2l-5-2v6l5-2z" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M10 3v18" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M3 12h3l4-3v6l-4-3H3z" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="label-container">
+                        <div class="label-background">Airport Transport</div>
+                        <button class="arrow-btn" aria-label="Airport Transport">»</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Holiday Tour -->
+            <div class="col-md-4">
+                <div class="service-card">
+                <img src="~/Img/Service/family.jpg" alt="Holiday Tour" class="service-image" />
+                    <div class="icon-circle" title="Holiday Icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3v18" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M6 9h12l-3 6H9l-3-6z" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M9 21h6" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="label-container">
+                        <div class="label-background">Holiday Tour</div>
+                        <button class="arrow-btn" aria-label="Holiday Tour">»</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

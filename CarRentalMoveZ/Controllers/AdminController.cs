@@ -14,12 +14,18 @@ namespace CarRentalMoveZ.Controllers
         private readonly ICarService _carService;
         private readonly IStaffService _staffService;
         private readonly IRegisterService _registerService;
+        private readonly ICustomerService _customerService;
+        private readonly IBookingService _bookingService;
+        private readonly IPaymentService _paymentService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService)
         {
             _carService = carService;
             _staffService = staffService;
             _registerService = registerService;
+            _customerService = customerService;
+            _bookingService = bookingService;
+            _paymentService = paymentService;
         }
 
         public IActionResult Dashboard()
@@ -91,36 +97,29 @@ namespace CarRentalMoveZ.Controllers
         }
 
         
-        public IActionResult ManageBookings()
-        {
-            return View();
-        }
+        public IActionResult ManageBookings() => View(_bookingService.GetAllBookings());
 
-        
+
+
         public IActionResult BookingDetails()
         {
             return View();
         }
 
         
-        public IActionResult ManagePayment()
-        {
-            return View();
-        }
+        public IActionResult ManagePayment() => View(_paymentService.GetAllPayments());
 
-        
+
+
         public IActionResult PaymentDetails()
         {
             return View();
         }
 
         
-        public IActionResult ManageCustomer()
-        {
-            return View();
-        }
+        public IActionResult ManageCustomer() => View(_customerService.GetAllCustomer());
 
-        
+
         public IActionResult CustomerDetails()
         {
             return View();
@@ -203,7 +202,7 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        public IActionResult CreateStaffUser()
+        public IActionResult Settings()
         {
             ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)));
             ViewBag.RoleList = new SelectList(Enum.GetValues(typeof(Role)));

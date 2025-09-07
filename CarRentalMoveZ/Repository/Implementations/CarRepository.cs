@@ -23,6 +23,14 @@ namespace CarRentalMoveZ.Repository.Implementations
             return _context.Cars.ToList();
         }
 
+        public IEnumerable<Car> GetAllAvailable()
+        {
+            return _context.Cars
+                .Where(car => car.Status == "Available")
+                .ToList();
+        }
+
+
         public Car GetCarById(int id)
         {
             return _context.Cars.FirstOrDefault(c => c.CarId == id);
