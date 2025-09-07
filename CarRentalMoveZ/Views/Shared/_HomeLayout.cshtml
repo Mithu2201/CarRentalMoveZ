@@ -13,7 +13,7 @@
 </head>
 <body>
     <!-- Top bar -->
-    <div class="top-bar bg-warning text-dark py-1 px-3 d-flex justify-content-between align-items-center">
+    <div class="top-bar  py-1 px-3 d-flex justify-content-between align-items-center">
         <div class="left">
             <i class="fas fa-envelope"></i> MoveZ@company.com &nbsp;&nbsp;
             <i class="fas fa-map-marker-alt"></i> TempleRd , Jaffna 01 , Srilanka
@@ -79,6 +79,16 @@
 
     <!-- Body -->
     @RenderSection("Banner", required: false)
+    @RenderSection("About", required: false)
+    @RenderSection("Service", required: false)
+    @RenderSection("WhyChoose", required: false)
+    @RenderSection("CarMenu", required: false)
+    @RenderSection("BookingProcess", required: false)
+    @RenderSection("Testimonials", required: false)
+   
+   
+    
+   
 
     <div class="container">
         <main role="main" class="pb-3">
