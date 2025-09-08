@@ -1,0 +1,88 @@
+﻿/* ====== Responsive Sidebar ====== */
+
+/* Desktop - full sidebar */
+.sidebar {
+    width: 240px;
+    transition: all 0.3s ease;
+}
+
+.main {
+    margin-left: 240px;
+}
+
+/* Tablet - icons only */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 80px;
+        padding: 16px 6px;
+    }
+
+        .sidebar .brand {
+            display: none;
+        }
+
+    .side-link {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+        .side-link i {
+            font-size: 1.25rem;
+        }
+
+        .side-link span {
+            display: none; /* hide text labels */
+        }
+
+    .main {
+        margin-left: 80px;
+    }
+}
+
+/* Mobile - hamburger menu (full sidebar with icons + text) */
+@media (max-width: 576px) {
+    .sidebar {
+        position: fixed;
+        left: -240px; /* hidden by default */
+        top: 0;
+        height: 100%;
+        width: 240px; /* full width for text + icons */
+        transition: left 0.3s ease;
+        z-index: 2000;
+        background: #fff;
+        padding: 16px 10px;
+        box-shadow: 2px 0 12px rgba(0,0,0,.1);
+    }
+
+        .sidebar.open {
+            left: 0; /* slide in */
+        }
+
+        .sidebar .brand {
+            display: block; /* show brand on mobile menu */
+        }
+
+        .sidebar .side-link span {
+            display: inline; /* show text */
+        }
+
+    .main {
+        margin-left: 0; /* full width content */
+    }
+
+    /* Overlay */
+    body.sidebar-open::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 1000;
+    }
+}
+
+/* Hamburger icon */
+.hamburger {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #1E56A0;
+}
