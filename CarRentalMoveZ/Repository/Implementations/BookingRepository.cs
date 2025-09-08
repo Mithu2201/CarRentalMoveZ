@@ -39,5 +39,20 @@ namespace CarRentalMoveZ.Repository.Implementations
                            .ToList();
         }
 
+        public Booking GetBooking(int id)
+        {
+            return _context.Bookings
+                           .Include(b => b.Car)
+                           .Include(b => b.Customer)
+                           .FirstOrDefault(b => b.BookingId == id);
+        }
+
+
+        public void Update(Booking booking)
+        {
+            _context.Bookings.Update(booking);
+            _context.SaveChanges();
+        }
+
     }
 }

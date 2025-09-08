@@ -57,8 +57,55 @@ namespace CarRentalMoveZ.Mappings
                 });
         }
 
+        public static BookingDetailsViewModel ToDetailsViewModel(Booking booking, Payment payment)
+        {
+            if (booking == null) return null;
 
+            return new BookingDetailsViewModel
+            {
+                BookingId = booking.BookingId,
+                CarId = booking.CarId,
+                CustomerId = booking.CustomerId,
+                Location = booking.Location,
+                BookingStatus = booking.Status,
+                StartDate = booking.StartDate,
+                EndDate = booking.EndDate,
+                Days = booking.Days,
+                Amount = booking.Amount,
 
+                CarName = booking.Car?.CarName ?? "",
+                ImgURL = booking.Car?.ImgURL ?? "",
+                PricePerDay = booking.Car?.PricePerDay ?? 0m,
+
+                CustomerName = booking.Customer?.Name ?? "",
+                PhoneNumber = booking.Customer?.PhoneNumber ?? "",
+
+                IsPaid = payment != null && payment.Status == "Paid",
+                PaymentDate = payment?.PaymentDate,
+                PaymentMethod = payment?.PaymentMethod,
+                PaymentAmount = payment?.Amount ?? 0m,
+                PaymentStatus = payment?.Status ?? "Pending"
+            };
+        }
+
+        // Map BookingDetailsViewModel → Booking entity
+        public static Booking ToEntity(BookingDetailsViewModel vm)
+        {
+            if (vm == null) return null;
+
+            return new Booking
+            {
+                BookingId = vm.BookingId,
+                CarId = vm.CarId,
+                CustomerId = vm.CustomerId,
+                Location = vm.Location,
+                Status = vm.BookingStatus,
+                StartDate = vm.StartDate,
+                EndDate = vm.EndDate,
+                Days = vm.Days,
+                Amount = vm.Amount
+            };
+        }
     }
 }
 
