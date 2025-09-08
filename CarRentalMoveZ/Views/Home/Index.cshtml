@@ -531,6 +531,100 @@
                 transform: scale(1.05);
             }
 
+        .blog-card {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+            .blog-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 24px rgba(30,86,160,.15);
+            }
+
+        .date-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #1E56A0;
+            color: #fff;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-weight: 600;
+        }
+
+            .date-badge .day {
+                font-size: 18px;
+                line-height: 1;
+                display: block;
+            }
+
+            .date-badge .month {
+                font-size: 12px;
+                text-transform: uppercase;
+            }
+
+        .blog-link {
+            color: #163172;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color .3s ease;
+        }
+
+            .blog-link:hover {
+                color: #1E56A0;
+            }
+
+        .blog-btn {
+            background: linear-gradient(135deg, #1E56A0, #3E7BDA);
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            min-width: 160px;
+            text-align: center;
+            /* Animation start state */
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+            .blog-btn:hover {
+                background: linear-gradient(135deg, #3E7BDA, #6CAAF7);
+                box-shadow: 0 10px 25px rgba(62,123,218,0.18);
+                transform: translateY(-3px);
+            }
+
+            /* On load animation */
+            .blog-btn.animate {
+                animation: fadeUp 0.8s cubic-bezier(.2,.9,.2,1) forwards;
+            }
+
+        /* Keyframes */
+        @@keyframes fadeUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .blog-btn:hover {
+            background: linear-gradient(135deg, #3E7BDA, #6CAAF7);
+            box-shadow: 0 10px 25px rgba(62,123,218,0.18);
+            transform: translateY(-3px);
+        }
+
     </style>
 </head>
 <body>
@@ -1001,8 +1095,137 @@
             </div>
         </div>
     </section>
+
 }
 
+@section blog{
+
+    <section class="blog-section py-5" style="background:#fff;">
+        <div class="container">
+            <!-- Heading -->
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <span class="text-uppercase small fw-bold" style="color:#1E56A0;">
+                        <i class="fa-solid fa-minus me-2"></i> Our Latest News
+                    </span>
+                    <h2 class="fw-bold display-6" style="color:#163172;">
+                        Latest News & Blog On DriveEasy
+                    </h2>
+                </div>
+                <div>
+                        <a href="#" class="blog-btn">
+                            View All Blog
+                        </a>
+
+                </div>
+            </div>
+
+            <!-- Blog Grid -->
+            <div class="row g-4">
+                <!-- Blog Item -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card blog-card border-0 shadow h-100">
+                        <div class="position-relative">
+                            <img src="~/Img/blog.jpg" class="card-img-top" alt="Blog 1">
+                            <div class="date-badge text-center">
+                                <span class="day">25</span>
+                                <small class="month">June</small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex text-muted small mb-2">
+                                <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                <span><i class="fa-solid fa-comment me-1"></i> 2 Comments</span>
+                            </div>
+                            <h6 class="fw-bold" style="color:#1E56A0;">
+                                Cupidatat Nonproident Sunt In Culpa Qui Officia
+                            </h6>
+                            <a href="#" class="blog-link">
+                                Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Item -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card blog-card border-0 shadow h-100">
+                        <div class="position-relative">
+                            <img src="~/Img/blog.jpg" class="card-img-top" alt="Blog 2">
+                            <div class="date-badge text-center">
+                                <span class="day">25</span>
+                                <small class="month">June</small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex text-muted small mb-2">
+                                <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
+                            </div>
+                            <h6 class="fw-bold" style="color:#1E56A0;">
+                                Big Data. Any Leftovers In The Kitchen?
+                            </h6>
+                            <a href="#" class="blog-link">
+                                Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Blog Item -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card blog-card border-0 shadow h-100">
+                        <div class="position-relative">
+                            <img src="~/Img/blog.jpg" class="card-img-top" alt="Blog 2">
+                            <div class="date-badge text-center">
+                                <span class="day">25</span>
+                                <small class="month">June</small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex text-muted small mb-2">
+                                <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
+                            </div>
+                            <h6 class="fw-bold" style="color:#1E56A0;">
+                                Big Data. Any Leftovers In The Kitchen?
+                            </h6>
+                            <a href="#" class="blog-link">
+                                Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Blog Item -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card blog-card border-0 shadow h-100">
+                        <div class="position-relative">
+                            <img src="~/Img/blog.jpg" class="card-img-top" alt="Blog 2">
+                            <div class="date-badge text-center">
+                                <span class="day">25</span>
+                                <small class="month">June</small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex text-muted small mb-2">
+                                <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
+                            </div>
+                            <h6 class="fw-bold" style="color:#1E56A0;">
+                                Big Data. Any Leftovers In The Kitchen?
+                            </h6>
+                            <a href="#" class="blog-link">
+                                Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Repeat for 2 more blog items -->
+            </div>
+        </div>
+    </section>
+
+}
 
 
 
