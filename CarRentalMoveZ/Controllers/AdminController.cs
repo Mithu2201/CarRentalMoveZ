@@ -91,22 +91,62 @@ namespace CarRentalMoveZ.Controllers
         }
 
 
-        public IActionResult CarDetails()
+        public IActionResult CarDetails(int id)
         {
-            return View();
+            var car = _carService.GetCarById(id);
+            return View(car);
         }
 
         
         public IActionResult ManageBookings() => View(_bookingService.GetAllBookings());
 
 
-
-        public IActionResult BookingDetails()
+        [HttpGet]
+        public IActionResult BookingDetails(int id)
         {
-            return View();
+            var booking = _bookingService.GetBookingById(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+            return View(booking);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BookingDetails(BookingDetailsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Inspect and log errors
+                var errors = ModelState
+                    .Where(kv => kv.Value.Errors.Count > 0)
+                    .Select(kv => new
+                    {
+                        Key = kv.Key,
+                        Errors = kv.Value.Errors.Select(e => string.IsNullOrEmpty(e.ErrorMessage) ? (e.Exception?.Message ?? "(exception)") : e.ErrorMessage)
+                    }).ToList();
+
+                // Log to console (or use ILogger)
+                foreach (var e in errors)
+                {
+                    Console.WriteLine($"ModelState error for '{e.Key}': {string.Join(" | ", e.Errors)}");
+                }
+
+                // Optionally: pass errors to ViewBag/TempData to show in view for dev
+                TempData["ModelErrors"] = string.Join("\n", errors.Select(x => $"{x.Key}: {string.Join(", ", x.Errors)}"));
+
+                return View(model); // return view to let user correct / for debugging
+            }
+
+            // If valid → process (e.g., update booking status)
+            model.BookingStatus = "Assigned";
+            _bookingService.UpdateBooking(model);
+            // ...
+            return RedirectToAction("ManageBookings");
         }
 
-        
+
+
         public IActionResult ManagePayment() => View(_paymentService.GetAllPayments());
 
 
@@ -202,7 +242,7 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        public IActionResult Settings()
+        public IActionResult CreateStaffUser()
         {
             ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)));
             ViewBag.RoleList = new SelectList(Enum.GetValues(typeof(Role)));

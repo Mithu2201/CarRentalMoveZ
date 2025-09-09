@@ -10,10 +10,12 @@ namespace CarRentalMoveZ.Services.Implementations
     public class BookingService : IBookingService
     {
         private readonly IBookingRepository _bookingRepo;
-       
-        public BookingService(IBookingRepository bookingRepo)
+        private readonly IPaymentRepository _paymentRepo;
+
+        public BookingService(IBookingRepository bookingRepo,IPaymentRepository paymentRepo)
         {
             _bookingRepo = bookingRepo;
+            _paymentRepo = paymentRepo;
         }
 
         public int CreateBooking(BookingViewModel model)
@@ -26,7 +28,6 @@ namespace CarRentalMoveZ.Services.Implementations
             return id;
         }
 
-
         public IEnumerable<BookingDTO> GetAllBookings()
         {
 
@@ -35,11 +36,40 @@ namespace CarRentalMoveZ.Services.Implementations
 
             return BookingMapper.ToDTOList(bookings);
         }
-
         public IEnumerable<BookingDTO> GetBookingsByUserId(int userId)
         {
             var bookings = _bookingRepo.GetBookingsByUserId(userId);
             return BookingMapper.ToDTOList(bookings);
+        }
+
+        public BookingDetailsViewModel GetBookingById(int id)
+        {
+            var booking = _bookingRepo.GetBooking(id);
+            var payment = _paymentRepo.GetPaymentByBookingId(id);
+            if (booking == null)
+            {
+                return null; // Or throw an exception, based on your error handling strategy
+            }
+            return BookingMapper.ToDetailsViewModel(booking,payment);
+        }
+
+        public void UpdateBooking(BookingDetailsViewModel model)
+        {
+            // Fetch existing booking
+            var existingBooking = _bookingRepo.GetBooking(model.BookingId);
+            if (existingBooking == null)
+            {
+                throw new Exception("Booking not found");
+            }
+            // Update fields
+            existingBooking.Location = model.Location;
+            existingBooking.StartDate = model.StartDate;
+            existingBooking.EndDate = model.EndDate;
+            existingBooking.Days = model.Days;
+            existingBooking.Amount = model.Amount;
+            existingBooking.Status = model.BookingStatus;
+            // Save changes
+            _bookingRepo.Update(existingBooking);
         }
 
     }

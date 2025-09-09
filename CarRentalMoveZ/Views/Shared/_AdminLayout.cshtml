@@ -1,58 +1,186 @@
 ﻿@{
     Layout = null;
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CarRentalMoveZ-Admin</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/AdminPanel.css" asp-append-version="true" />
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Wheelzie Admin</title>
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/AdminResponsive.css" asp-append-version="true" />
 </head>
 <body>
 
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <img src="~/Img/Logo.PNG" alt="Logo" />
-            
+    <aside class="sidebar">
+        <div class="px-3 d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-speedometer2 fs-4" style="color: #1E56A0;"></i>
+            <div class="brand fs-5">MoveZ</div>
         </div>
-        <ul class="sidebar-menu">
-            <li><a asp-controller="Admin" asp-action="Dashboard" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a asp-controller="Admin" asp-action="ManageCar" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageCar" ? "active" : "")"><i class="fas fa-car"></i> Manage Cars</a></li>
-            <li><a asp-controller="Admin" asp-action="ManageBookings" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageBookings" ? "active" : "")"><i class="fas fa-calendar-alt"></i> Manage Bookings</a></li>
-            <li><a asp-controller="Admin" asp-action="ManageCustomer" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageCustomer" ? "active" : "")"><i class="fas fa-users"></i> Manage Customers</a></li>
-            <li><a asp-controller="Admin" asp-action="ManagePayment" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManagePayment" ? "active" : "")"><i class="fas fa-credit-card"></i> Manage Payments</a></li>
-            <li><a asp-controller="Admin" asp-action="ManageStaff" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageStaff" ? "active" : "")"><i class="fas fa-user-tie"></i> Manage Staff</a></li>
-            <li><a asp-controller="Admin" asp-action="CreateStaffUser" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Setting" ? "active" : "")"><i class="fas fa-chart-line"></i> Setting</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <span>@Context.Session.GetString("UserName")</span>
-            <a asp-controller="Home" asp-action="Index"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-    </div>
+        <nav>
+            <!-- Dashboard -->
+            <a class="side-link @(currentController == "Admin" && currentAction == "Dashboard" ? "active" : "")"
+               asp-controller="Admin" asp-action="Dashboard">
+                <i class="bi bi-grid"></i> <span>Dashboard</span>
+            </a>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <header class="admin-header">
-            <h2>@ViewData["Title"]</h2>
-        </header>
-        <main>
-            @RenderBody()
+            <!-- Units -->
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManageCar" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManageCar">
+                <i class="bi bi-car-front"></i> <span>Units</span>
+            </a>
+
+            <!-- Bookings -->
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManageBookings" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManageBookings">
+                <i class="bi bi-calendar2-week"></i> <span>Bookings</span>
+            </a>
+
+        @*     <!-- Calendar -->
+            <a class="side-link @(currentController == "Calendar" ? "active" : "")"
+               asp-controller="Calendar" asp-action="Index">
+                <i class="bi bi-calendar3"></i> <span>Calendar</span>
+            </a> *@
+
+            <!-- Clients -->
+            <a class="side-link @(currentController == "Customers" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManageCustomer">
+                <i class="bi bi-people"></i> <span>Customers</span>
+            </a>
+
+            <!-- Payments -->
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManagePayment" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManagePayment">
+                <i class="bi-credit-card"></i> <span>Payments</span>
+            </a>
+
+            <!-- Drivers -->
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManageStaff" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManageStaff">
+                <i class="bi bi-person-badge"></i> <span>Staffs</span>
+            </a>
+
+            <!-- Reports -->
+            <a class="side-link @(currentController == "Reports" ? "active" : "")"
+               asp-controller="Admin" asp-action="Index">
+                <i class="bi bi-file-earmark-text"></i> <span>Reports</span>
+            </a>
+
+          
+            <!-- Tracking -->
+            <a class="side-link @(currentController == "Tracking" ? "active" : "")"
+               asp-controller="Tracking" asp-action="Index">
+                <i class="bi bi-geo-alt"></i> <span>Tracking</span>
+            </a>
+
+            <!-- Messages -->
+            <a class="side-link @(currentController == "Messages" ? "active" : "")"
+               asp-controller="Messages" asp-action="Index">
+                <i class="bi bi-chat-dots"></i> <span>Messages</span>
+            </a>
+
+            <hr class="my-3">
+
+            <!-- Logout -->
+            <a asp-controller="Home" asp-action="Index" class="side-link"><i class="bi bi-box-arrow-right"></i> <span>Logout</span></a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="container-fluid py-2 px-3 d-flex align-items-center justify-content-between">
+
+                <!-- Hamburger button for mobile -->
+                <div class="d-lg-none">
+                    <i class="bi bi-list hamburger" onclick="toggleSidebar()"></i>
+                </div>
+
+                <!-- Dashboard title -->
+                <div class="fw-semibold">Dashboard</div>
+
+                <!-- Right-side icons -->
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-none d-md-flex align-items-center border rounded-pill px-3 bg-white">
+                        <i class="bi bi-search me-2 text-muted"></i>
+                        <input class="form-control form-control-sm border-0" placeholder="Search…" />
+                    </div>
+                    <a class="text-secondary" href="#"><i class="bi bi-gear"></i></a>
+                    <a class="text-secondary position-relative" href="#">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    </a>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none" href="#" data-bs-toggle="dropdown">
+                            <img class="avatar me-2" src="https://i.pravatar.cc/100?img=12" alt="Admin">
+                            <div class="small">
+                                <div class="fw-semibold" style="color: #1E56A0;">Abram Schleifer</div>
+
+                                @*    <div class="fw-semibold" style="color: #1E56A0;">@Context.Session.GetString("UserName")</div> *@
+                                <div class="text-muted">Admin</div>
+                            </div>
+                            <i class="bi bi-caret-down ms-2 text-muted"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a asp-controller="Home" asp-action="Index" class="dropdown-item">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page content -->
+        <main class="flex-grow-1">
+            <div class="container-fluid py-3">
+                @RenderBody()
+            </div>
         </main>
     </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector(".sidebar");
+            const body = document.body;
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+            sidebar.classList.toggle("open");
+            body.classList.toggle("sidebar-open");
+        }
+
+        // Close sidebar if overlay clicked
+        document.body.addEventListener('click', function(e) {
+            const sidebar = document.querySelector(".sidebar");
+            const hamburger = document.querySelector(".hamburger");
+            if(document.body.classList.contains('sidebar-open') && !sidebar.contains(e.target) && e.target !== hamburger) {
+                sidebar.classList.remove('open');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

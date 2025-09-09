@@ -1,5 +1,118 @@
-﻿@{
+﻿@model CarRentalMoveZ.ViewModels.BookingDetailsViewModel
+
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Booking Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // safe fallbacks / string forms to post
+    var safeImgURL = Model.ImgURL ?? "/images/default-car.png";
+    var safePhone = Model.PhoneNumber ?? "";
+    var safePaymentMethod = Model.PaymentMethod ?? "";
+    var safePaymentStatus = Model.PaymentStatus ?? "";
+    var startDatePost = Model.StartDate.ToString("o", CultureInfo.InvariantCulture);
+    var endDatePost = Model.EndDate.ToString("o", CultureInfo.InvariantCulture);
+    var paymentDatePost = Model.PaymentDate.HasValue ? Model.PaymentDate.Value.ToString("o", CultureInfo.InvariantCulture) : "";
+    var amountPost = Model.Amount.ToString(CultureInfo.InvariantCulture);
+    var paymentAmountPost = Model.PaymentAmount.ToString(CultureInfo.InvariantCulture);
+    var pricePerDayPost = Model.PricePerDay.ToString(CultureInfo.InvariantCulture);
+    var isPaidPost = (Model.IsPaid ? "true" : "false"); // model binder accepts true/false
 }
 
-<p>Hi i'm Booking Details-Approve/reject/update booking</p>
+<div class="container-fluid py-3">
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>Booking Details</h3>
+        <a href="@Url.Action("ManageBookings", "Admin")" class="btn btn-secondary d-flex align-items-center">
+            <i class="bi bi-arrow-left me-2"></i> Back to Bookings
+        </a>
+    </div>
+
+    <div class="card p-4 mb-4">
+        <div class="row g-3">
+            <div class="col-md-4 text-center">
+                <img src="@safeImgURL" alt="@Model.CarName" class="rounded border" style="width:100%; max-width:300px; height:auto;" />
+            </div>
+            <div class="col-md-8">
+                <h5 class="fw-semibold mb-3">Booking # @Model.BookingId</h5>
+                <p><strong>Client Name:</strong> @Model.CustomerName</p>
+                <p><strong>Phone:</strong> @(string.IsNullOrWhiteSpace(safePhone) ? "N/A" : safePhone)</p>
+                <p><strong>Car Model:</strong> @Model.CarName</p>
+                <p><strong>Booking Dates:</strong> Start @Model.StartDate.ToString("MMM d, yyyy") • End @Model.EndDate.ToString("MMM d, yyyy")</p>
+                <p><strong>Location:</strong> @Model.Location</p>
+                <p>
+                    <strong>Payment:</strong> @Model.PaymentAmount.ToString("C")
+                    @if (Model.IsPaid)
+                    {
+                        <span class="text-success">(Paid)</span>
+                        ;
+                    }
+                    else
+                    {
+
+                        <span class="text-danger">(Pending)</span>
+                        ;
+                    }
+                </p>
+                <p><strong>Payment Method:</strong> @(string.IsNullOrWhiteSpace(safePaymentMethod) ? "N/A" : safePaymentMethod)</p>
+                <p><strong>Payment Date:</strong> @(Model.PaymentDate.HasValue? Model.PaymentDate.Value.ToString("MMM d, yyyy") : "N/A")</p>
+                <p>
+                    <strong>Status:</strong>
+                    <span class="pill @(Model.BookingStatus?.ToLowerInvariant() ?? "pending")">@Model.BookingStatus</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap mb-4">
+        @* Assign Car: only if Pending *@
+        @if (string.Equals(Model.BookingStatus, "Pending", StringComparison.OrdinalIgnoreCase))
+        {
+            <form method="post" asp-controller="Admin" asp-action="BookingDetails" class="d-inline">
+                @Html.AntiForgeryToken()
+
+                @* Use HiddenFor where possible; for dates/decimals use invariant string posted values *@
+                @Html.HiddenFor(m => m.BookingId)
+                @Html.HiddenFor(m => m.CarId)
+                @Html.HiddenFor(m => m.CustomerId)
+                @Html.HiddenFor(m => m.Location)
+                @Html.HiddenFor(m => m.BookingStatus)
+
+                <input type="hidden" name="StartDate" value="@startDatePost" />
+                <input type="hidden" name="EndDate" value="@endDatePost" />
+                <input type="hidden" name="Days" value="@Model.Days" />
+                <input type="hidden" name="Amount" value="@amountPost" />
+                <input type="hidden" name="CarName" value="@Model.CarName" />
+                <input type="hidden" name="ImgURL" value="@safeImgURL" />
+                <input type="hidden" name="PricePerDay" value="@pricePerDayPost" />
+                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
+                <input type="hidden" name="PhoneNumber" value="@safePhone" />
+                <input type="hidden" name="IsPaid" value="@isPaidPost" />
+                <input type="hidden" name="PaymentAmount" value="@paymentAmountPost" />
+                <input type="hidden" name="PaymentDate" value="@paymentDatePost" />
+                <input type="hidden" name="PaymentMethod" value="@safePaymentMethod" />
+                <input type="hidden" name="PaymentStatus" value="@safePaymentStatus" />
+
+                <button type="submit" class="btn text-white d-flex align-items-center" style="background-color:#1E56A0;">
+                    <i class="bi bi-car-front me-2"></i> Assign Car
+                </button>
+            </form>
+        }
+
+        @* Push Notification if payment not done *@
+        @if (!Model.IsPaid)
+        {
+            <form method="post" asp-controller="Admin" asp-action="SendPaymentReminder" class="d-inline">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="BookingId" value="@Model.BookingId" />
+                <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
+                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
+                <input type="hidden" name="PhoneNumber" value="@safePhone" />
+
+                <button type="submit" class="btn text-white d-flex align-items-center" style="background-color:#1E56A0;">
+                    <i class="bi bi-bell me-2"></i> Send Payment Reminder
+                </button>
+            </form>
+        }
+    </div>
+</div>

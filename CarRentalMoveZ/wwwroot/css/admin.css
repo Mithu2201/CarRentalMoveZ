@@ -1,0 +1,252 @@
+﻿:root {
+    --bg: #f6f7fb;
+    --card: #ffffff;
+    --muted: #6c757d;
+    --brand: #eff44; /* soft red accent similar to the image */
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    color: #111827;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 2px 0 12px rgba(0,0,0,.04);
+    z-index: 1040;
+    padding: 16px 10px;
+}
+
+.brand {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    letter-spacing: .2px;
+    color: #111;
+}
+
+/* Sidebar links */
+.side-link {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: #2b2f33;
+    text-decoration: none;
+    padding: 10px 12px;
+    margin: 2px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+    .side-link:hover {
+        background-color: #e1e8f5;
+        color: #1E56A0;
+    }
+
+    .side-link.active {
+        background-color: #1E56A0;
+        color: #fff;
+    }
+
+
+
+/* Main canvas */
+.main {
+    margin-left: 240px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Cards + chips */
+.card {
+    border: 0;
+    border-radius: 18px;
+    background: var(--card);
+    box-shadow: 0 6px 18px rgba(10,10,10,.05);
+}
+
+.kpi h6 {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.kpi h3 {
+    margin: 0;
+}
+
+.chip-up, .chip-dn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 18px;
+    padding: 2px 10px;
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.chip-up {
+    background: #eaf6ee;
+    color: #1e7e34;
+}
+
+.chip-dn {
+    background: #fdecec;
+    color: #b02a37;
+}
+
+/* Pills */
+.pill {
+    border-radius: 18px;
+    padding: .25rem .65rem;
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.pill-returned {
+    background: #eaf6ee;
+    color: #198754;
+}
+
+.pill-ongoing {
+    background: #e7f1ff;
+    color: #0d6efd;
+}
+
+.pill-pending {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+/* Progress bars */
+.progress, .progress-bar {
+    height: 8px;
+    border-radius: 9px;
+}
+
+/* Chart helper heights */
+.h-chart-lg {
+    height: 320px;
+}
+
+.h-chart-md {
+    height: 260px;
+}
+
+/* Utility */
+.muted {
+    color: var(--muted);
+}
+
+/* Cars Table Mobile: Make rows cards */
+@media (max-width: 872.98px) {
+    #carsTable thead {
+        display: none;
+    }
+
+    #carsTable, #carsTable tbody, #carsTable tr, #carsTable td {
+        display: block;
+        width: 100%;
+    }
+
+        #carsTable tr {
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: .5rem;
+            padding: .75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        #carsTable td {
+            border: none !important;
+            padding: .25rem .5rem;
+            text-align: left;
+            position: relative;
+        }
+
+            #carsTable td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                display: block;
+                margin-bottom: 2px;
+                color: #6c757d;
+            }
+
+            #carsTable td img {
+                width: 100%;
+                max-width: 280px;
+                height: auto;
+                margin-bottom: .5rem;
+                border-radius: 8px;
+            }
+}
+
+
+/* Mobile: Bookings table rows as cards for ≤ 872.98px */
+@media (max-width: 872.98px) {
+    #bookingsTable thead {
+        display: none; /* hide table header on mobile */
+    }
+
+    #bookingsTable,
+    #bookingsTable tbody,
+    #bookingsTable tr,
+    #bookingsTable td {
+        display: block;
+        width: 100%;
+    }
+
+        #bookingsTable tr {
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: .5rem;
+            padding: .75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        #bookingsTable td {
+            border: none !important;
+            padding: .25rem .5rem;
+            text-align: left;
+        }
+
+            #bookingsTable td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                display: block;
+                margin-bottom: 2px;
+                color: #6c757d;
+            }
+
+            #bookingsTable td img {
+                width: 100%;
+                max-width: 280px;
+                height: auto;
+                margin-bottom: .5rem;
+            }
+}
+
+
