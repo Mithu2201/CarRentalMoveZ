@@ -632,7 +632,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="container position-relative" style="z-index:1;">
-                <div class="row align-items-center">
+                <div class="row align-items-center flex-column-reverse flex-lg-row">
                     <!-- Left Text -->
                     <div class="col-lg-7 col-12 text-center text-lg-start hero-text">
                         <h1 class="fw-bold mb-3">
@@ -650,7 +650,6 @@
                     <div class="col-lg-5 col-12 text-center mt-4 mt-lg-0 hero-car">
                         <img src="/Img/car2025.png" alt="Taxi Car" class="hero-img" />
                     </div>
-
                 </div>
             </div>
 
@@ -697,6 +696,103 @@
             </div>
         </section>
     }
+
+    <style>
+        /* Hero text improvements */
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+        }
+
+        .book-btn {
+            font-size: 1.2rem;
+            padding: 14px 46px;
+        }
+
+        /* Car image bigger on desktop */
+        .hero-car .hero-img {
+            width: 115%;
+            max-width: 1500px;
+            height: auto;
+        }
+
+        /* Mobile responsiveness */
+        @@media (max-width: 992px) {
+            .hero h1
+
+        {
+            font-size: 2.6rem;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+        }
+
+        .book-btn {
+            font-size: 1.1rem;
+            padding: 12px 36px;
+        }
+
+        .hero-car .hero-img {
+            width: 90%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        }
+
+        @@media (max-width: 768px) {
+            .hero
+
+        {
+            padding: 50px 20px 140px;
+            text-align: center;
+            min-height: auto;
+        }
+
+        .hero h1 {
+            font-size: 2.3rem;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+        }
+
+        .book-btn {
+            font-size: 1rem;
+            padding: 12px 30px;
+        }
+
+        .hero-car .hero-img {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        }
+
+        @@media (max-width: 576px) {
+            .hero h1
+
+        {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
+
+        .hero-car .hero-img {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        }
+    </style>
+
 
     @section About{
         <!-- About Section -->
@@ -785,14 +881,14 @@
 
     @section Service{
         <!-- Services Section -->
-        <section class="services-section py-5 position-relative w-100" style="background:#F6F6F6;">
+        <section class="services-section py-5 position-relative w-100" style="background:#D6E4F0;">
 
             <!-- Full-width Animated Header Bar -->
-            <div class="moving-bar-alt w-100">
+           @*  <div class="moving-bar-alt w-100">
                 <div class="marquee">
                     <span><i class="fa-solid fa-taxi me-2"></i> Premium Taxi & Car Rental Services — 24/7 Available — Affordable & Reliable — </span>
                 </div>
-            </div>
+            </div> *@
 
             <!-- Use container-fluid for full width -->
             <div class="container-fluid px-5 text-center mt-5">
@@ -943,7 +1039,7 @@
 
     @section WhyChoose {
         <!-- WHY CHOOSE US -->
-        <section class="py-5 " style="background:#F6F6F6;">
+        <section class="py-5 " style="background:#D6E4F0;">
             <div class="container text-center">
                 <span class="small fw-bold" style="color:#1E56A0;">Why Choose Us</span>
                 <h2 class="fw-bold display-6 mb-5" style="color:#163172;">Trusted Taxi Service</h2>
