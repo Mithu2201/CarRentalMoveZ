@@ -73,8 +73,20 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult Dashboard()
         {
-            
-            return View();
+
+            int userId = (int)HttpContext.Session.GetInt32("UserId"); // implement this
+            var profile = _userService.GetProfile(userId); // UserProfileDTO
+            var bookings = _bookingService.GetBookingsByUserId(userId);
+            var payments = _paymentService.GetPaymentsByUserId(userId);
+
+            var dashboardDto = new CustomerDashboardDTO
+            {
+                Profile = profile,
+                Bookings = bookings,
+                Payments = payments
+            };
+
+            return View(dashboardDto);
         }
 
         public IActionResult Car()
