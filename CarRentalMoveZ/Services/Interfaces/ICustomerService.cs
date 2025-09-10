@@ -9,5 +9,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         CustomerDTO GetCustomerById(int id);
 
         CustomerDTO GetCustomerByUserId(int userId);
+
+        int GetCustomerUserId(int customerId);
     }
 }

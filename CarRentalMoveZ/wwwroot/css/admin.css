@@ -2,7 +2,7 @@
     --bg: #f6f7fb;
     --card: #ffffff;
     --muted: #6c757d;
-    --brand: #eff44; /* soft red accent similar to the image */
+    --brand: #1E56A0; /* soft red accent similar to the image */
 }
 
 html, body {
@@ -133,7 +133,7 @@ body {
 
 .pill-ongoing {
     background: #e7f1ff;
-    color: #0d6efd;
+    color: #1E56A0;
 }
 
 .pill-pending {
@@ -142,9 +142,20 @@ body {
 }
 
 /* Progress bars */
-.progress, .progress-bar {
+/* Progress container */
+.progress {
     height: 8px;
     border-radius: 9px;
+    background-color: #e9ecef; /* light gray background */
+    overflow: hidden; /* ensures bar doesn't overflow rounded corners */
+}
+
+/* Progress fill */
+.progress-bar {
+    height: 100%;
+    border-radius: 9px; /* optional, keeps same radius */
+    background-color: #1E56A0; /* main progress color */
+    transition: width 0.4s ease; /* smooth animation */
 }
 
 /* Chart helper heights */

@@ -40,7 +40,9 @@ namespace CarRentalMoveZ.Mappings
         public static IEnumerable<BookingDTO> ToDTOList(IEnumerable<Booking> bookings)
         {
             if (bookings == null)
-                return null;
+            { 
+            return null;
+            }
 
             return bookings
                 .Where(b => b != null && b.Car != null && b.Customer != null)
