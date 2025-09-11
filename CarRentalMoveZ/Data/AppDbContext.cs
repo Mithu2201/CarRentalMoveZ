@@ -14,5 +14,11 @@ namespace CarRentalMoveZ.Data
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
+
+
+
     }
 }

@@ -66,6 +66,14 @@ namespace CarRentalMoveZ.Services.Implementations
               
                 return true;
             }
+            else if (result == PasswordVerificationResult.Success && user.Role == "Driver")
+            {
+                userId = user.UserId;
+                name = user.Name;
+                isAdmin = true;
+              
+                return true;
+            }
 
             return false;
 

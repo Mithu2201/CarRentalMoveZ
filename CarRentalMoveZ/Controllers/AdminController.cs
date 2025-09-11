@@ -20,8 +20,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IBookingService _bookingService;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
+        private readonly IDriverService _driverService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -30,6 +31,7 @@ namespace CarRentalMoveZ.Controllers
             _bookingService = bookingService;
             _paymentService = paymentService;
             _userService = userService;
+            _driverService = driverService;
         }
 
         public IActionResult Dashboard()
@@ -261,7 +263,51 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        
+
+        public IActionResult DeleteStaff(int id)
+        {
+            //_staffService.Delete(id);
+            return RedirectToAction("ManageStaff");
+        }
+
+
+       
+
+        public IActionResult ManageDriver() => View(_driverService.GetAllDriver());
+
+        public IActionResult DriverDetails()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AddDriver()
+        {
+            ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddDriver(RegisterDriverViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
+            }
+            bool isSuccess = _registerService.RegisterDriver(model);
+            if (isSuccess)
+            {
+                TempData["SuccessMessage"] = "Driver user created successfully.";
+                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Email already exists. Please try again.";
+                return View(model);
+            }
+        }
+
         public IActionResult Report()
         {
             return View();
