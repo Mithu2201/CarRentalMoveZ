@@ -31,5 +31,11 @@ namespace CarRentalMoveZ.Services.Implementations
             var customer = _customerRepo.GetByUserId(userId);
             return CustomerMapper.ToDTO(customer);
         }
+
+        public int  GetCustomerUserId(int customerId)
+        {
+            var customer = _customerRepo.GetById(customerId);
+            return customer.UserId;
+        }
     }
 }

@@ -1,6 +1,144 @@
-﻿@{
+﻿@model CarRentalMoveZ.DTOs.CustomerFullViewDTO
+
+@{
+    ViewData["Title"] = "Customer Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h3>Customer Details</h3>
+        <a asp-action="ManageCustomer" asp-controller="Admin" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Customers
+        </a>
+    </div>
 
-<p>Hi i'm Car Details-Detailed customer profile</p>
+    <!-- Customer Card -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <p><strong>Customer ID:</strong> @Model.Customer.CustomerId</p>
+                    <p><strong>Name:</strong> @Model.Customer.Name</p>
+                    <p><strong>Email:</strong> @Model.Customer.Email</p>
+                    <p><strong>Phone:</strong> @Model.Customer.PhoneNumber</p>
+                </div>
+                <div class="col-md-6">
+               @*      <p><strong>Address:</strong> @Model.Customer.Address</p>
+                    <p>
+                        <strong>Status:</strong>
+                        @if (Model.Customer.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </p> *@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-header bg-primary text-white">
+            <strong>Bookings</strong>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Car</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Dashboard.Bookings != null && Model.Dashboard.Bookings.Any())
+                    {
+                        foreach (var booking in Model.Dashboard.Bookings)
+                        {
+                            <tr>
+                                <td>@booking.BookingId</td>
+                                <td>@booking.CarModel </td>
+                                <td>@booking.StartDate.ToString("dd MMM yyyy")</td>
+                                <td>@booking.EndDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (booking.Status == "Assigned" || booking.Status == "Ongoing")
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No bookings found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Payments Table -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-header bg-success text-white">
+            <strong>Payments</strong>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Method</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Dashboard.Payments != null && Model.Dashboard.Payments.Any())
+                    {
+                        foreach (var payment in Model.Dashboard.Payments)
+                        {
+                            <tr>
+                                <td>@payment.PaymentId</td>
+                                <td>@payment.Amount.ToString("C")</td>
+                                <td>@payment.PaymentDate.ToString("dd MMM yyyy")</td>
+                                <td>@payment.PaymentMethod</td>
+                                <td>
+                                    @if (payment.Status == "Paid")
+                                    {
+                                        <span class="badge bg-success">Success</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Failed</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center">No payments found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

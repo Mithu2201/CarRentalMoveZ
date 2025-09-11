@@ -1,4 +1,6 @@
-﻿using CarRentalMoveZ.Enums;
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Enums;
+using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Services.Implementations;
 using CarRentalMoveZ.Services.Interfaces;
 using CarRentalMoveZ.ViewModels;
@@ -17,8 +19,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly ICustomerService _customerService;
         private readonly IBookingService _bookingService;
         private readonly IPaymentService _paymentService;
+        private readonly IUserService _userService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -26,6 +29,7 @@ namespace CarRentalMoveZ.Controllers
             _customerService = customerService;
             _bookingService = bookingService;
             _paymentService = paymentService;
+            _userService = userService;
         }
 
         public IActionResult Dashboard()
@@ -160,9 +164,30 @@ namespace CarRentalMoveZ.Controllers
         public IActionResult ManageCustomer() => View(_customerService.GetAllCustomer());
 
 
-        public IActionResult CustomerDetails()
+        public IActionResult CustomerDetails(int id)
         {
-            return View();
+            var customer = _customerService.GetCustomerById(id);
+            if (customer == null) return NotFound();
+
+            int userId = _customerService.GetCustomerUserId(id);
+            var profile = _userService.GetProfile(userId);
+            var bookings = _bookingService.GetBookingsByUserId(userId);
+            var payments = _paymentService.GetPaymentsByUserId(userId);
+
+            var dashboardDto = new CustomerDashboardDTO
+            {
+                Profile = profile,
+                Bookings = bookings,
+                Payments = payments
+            };
+
+            var fullViewDto = new CustomerFullViewDTO
+            {
+                Customer = customer,
+                Dashboard = dashboardDto
+            };
+
+            return View(fullViewDto);
         }
 
 
