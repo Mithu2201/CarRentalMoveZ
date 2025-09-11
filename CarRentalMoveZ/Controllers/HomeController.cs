@@ -1,4 +1,5 @@
 using CarRentalMoveZ.Models;
+using CarRentalMoveZ.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,6 +7,11 @@ namespace CarRentalMoveZ.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ICarService _carService;
+        public HomeController(ICarService carService)
+        {
+            _carService = carService;
+        }
 
         public IActionResult Index()
         {
@@ -28,7 +34,7 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult BrowseCar()
         {
-            return View();
+            return View(_carService.GetAllAvailable());
         }
     }
 }
