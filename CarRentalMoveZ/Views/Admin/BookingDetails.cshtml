@@ -29,10 +29,16 @@
     </div>
 
     <div class="card p-4 mb-4">
-        <div class="row g-3">
-            <div class="col-md-4 text-center">
-                <img src="@safeImgURL" alt="@Model.CarName" class="rounded border" style="width:100%; max-width:300px; height:auto;" />
+        <div class="row g-3 align-items-start">
+            <!-- Left Side: Car Image -->
+            <div class="col-md-4 d-flex justify-content-start">
+                <img src="@safeImgURL"
+                     alt="@Model.CarName"
+                     class="rounded border img-fluid"
+                     style="max-width: 500px; height: auto;" />
             </div>
+
+            <!-- Right Side: Booking Info -->
             <div class="col-md-8">
                 <h5 class="fw-semibold mb-3">Booking # @Model.BookingId</h5>
                 <p><strong>Client Name:</strong> @Model.CustomerName</p>
@@ -45,28 +51,28 @@
                     @if (Model.IsPaid)
                     {
                         <span class="text-success">(Paid)</span>
-                        ;
                     }
                     else
                     {
-
                         <span class="text-danger">(Pending)</span>
-                        ;
                     }
                 </p>
                 <p><strong>Payment Method:</strong> @(string.IsNullOrWhiteSpace(safePaymentMethod) ? "N/A" : safePaymentMethod)</p>
                 <p><strong>Payment Date:</strong> @(Model.PaymentDate.HasValue? Model.PaymentDate.Value.ToString("MMM d, yyyy") : "N/A")</p>
                 <p>
                     <strong>Status:</strong>
-                    <span class="pill @(Model.BookingStatus?.ToLowerInvariant() ?? "pending")">@Model.BookingStatus</span>
+                    <span class="pill @(Model.BookingStatus?.ToLowerInvariant() ?? "pending")">
+                        @Model.BookingStatus
+                    </span>
                 </p>
             </div>
         </div>
     </div>
 
+
     <div class="d-flex gap-2 flex-wrap mb-4">
         @* Assign Car: only if Pending *@
-        @if (string.Equals(Model.BookingStatus, "Pending", StringComparison.OrdinalIgnoreCase))
+        @if (string.Equals(Model.BookingStatus, "Pending", StringComparison.OrdinalIgnoreCase) && Model.IsPaid)
         {
             <form method="post" asp-controller="Admin" asp-action="BookingDetails" class="d-inline">
                 @Html.AntiForgeryToken()
