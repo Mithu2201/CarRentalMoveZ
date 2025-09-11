@@ -1,7 +1,7 @@
-﻿@model CarRentalMoveZ.ViewModels.RegisterStaffViewModel
+﻿@model CarRentalMoveZ.ViewModels.RegisterDriverViewModel
 
 @{
-    ViewData["Title"] = "Register Staff";
+    ViewData["Title"] = "Register Driver";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -11,7 +11,7 @@
             <!-- Card layout -->
             <div class="card shadow-lg border-0 rounded-3">
                 <div class="card-header" style="background-color: #1E56A0; color: white;">
-                    <h4 class="mb-0">Register Staff</h4>
+                    <h4 class="mb-0">Register Driver</h4>
                 </div>
                 <div class="card-body p-4">
 
@@ -23,52 +23,52 @@
                         </div>
                     }
 
-                    <form asp-action="AddStaff" method="post">
+                    <form asp-action="AddDriver" method="post">
                         @Html.AntiForgeryToken()
 
-                        <!-- Name Field -->
+                        <!-- Name -->
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label fw-semibold"></label>
-                            <input asp-for="Name" class="form-control" placeholder="Enter staff name" />
+                            <input asp-for="Name" class="form-control" placeholder="Enter driver name" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
-                        <!-- Email Field -->
+                        <!-- Email -->
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label fw-semibold"></label>
                             <input asp-for="Email" class="form-control" placeholder="Enter email address" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-                        <!-- Phone Number Field -->
+                        <!-- Phone Number -->
                         <div class="mb-3">
                             <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
                             <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
 
-                        <!-- Password Field -->
+                        <!-- Password -->
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label fw-semibold"></label>
                             <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
-                        <!-- Confirm Password Field -->
+                        <!-- Confirm Password -->
                         <div class="mb-3">
                             <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
                             <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
 
-                        <!-- Date of Birth Field -->
+                        <!-- Date of Birth -->
                         <div class="mb-3">
                             <label asp-for="DateOfBirth" class="form-label fw-semibold"></label>
                             <input asp-for="DateOfBirth" type="date" class="form-control" />
                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                         </div>
 
-                        <!-- Gender Field -->
+                        <!-- Gender -->
                         <div class="mb-3">
                             <label asp-for="Gender" class="form-label fw-semibold"></label>
                             <select asp-for="Gender" asp-items="ViewBag.GenderList" class="form-select">
@@ -77,34 +77,36 @@
                             <span asp-validation-for="Gender" class="text-danger"></span>
                         </div>
 
-                        <!-- Role Field -->
+                        <!-- License Number -->
+                        <div class="mb-3">
+                            <label asp-for="LicenseNo" class="form-label fw-semibold"></label>
+                            <input asp-for="LicenseNo" class="form-control" placeholder="Enter license number" />
+                            <span asp-validation-for="LicenseNo" class="text-danger"></span>
+                        </div>
+
+                        <!-- Status -->
+                     @*    <div class="mb-3">
+                            <label asp-for="Status" class="form-label fw-semibold"></label>
+                            <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-select">
+                                <option value="" disabled selected>-- Select Status --</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div> *@
+
+                        <!-- Role (fixed as Driver) -->
                         <div class="mb-3">
                             <label asp-for="Role" class="form-label fw-semibold"></label>
-                            <select asp-for="Role" asp-items="ViewBag.RoleList" class="form-select">
-                                <option value="" disabled selected>-- Select Role --</option>
-                            </select>
-                            <span asp-validation-for="Role" class="text-danger"></span>
+                            <input asp-for="Role" class="form-control" value="Driver" readonly />
                         </div>
 
                         <!-- Buttons -->
                         <div class="d-flex justify-content-end mt-3">
-                            <a asp-action="ManageStaff" class="btn btn-secondary px-4 me-2">Back</a>
+                            <a asp-action="ManageDrivers" class="btn btn-secondary px-4 me-2">Back</a>
                             <button type="submit" class="btn px-4" style="background-color: #1E56A0; color: white;">
-                                Register Staff
+                                Register Driver
                             </button>
                         </div>
                     </form>
-
-                    <!-- Success Message -->
-                    @* Uncomment if needed *@
-                    @* 
-                    @if (TempData["SuccessMessage"] != null)
-                    {
-                        <div class="alert alert-success mt-3">
-                            @TempData["SuccessMessage"]
-                        </div>
-                    } 
-                    *@
                 </div>
             </div>
         </div>
