@@ -68,10 +68,16 @@
                 <i class="bi-credit-card"></i> <span>Payments</span>
             </a>
 
-            <!-- Drivers -->
+            <!-- Staffs -->
             <a class="side-link @(currentController == "Admin" && currentAction == "ManageStaff" ? "active" : "")"
                asp-controller="Admin" asp-action="ManageStaff">
                 <i class="bi bi-person-badge"></i> <span>Staffs</span>
+            </a>
+
+            <!-- Drivers -->
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManageFriver" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManageDriver">
+                <i class="bi bi-person-badge"></i> <span>Drivers</span>
             </a>
 
             <!-- Reports -->
