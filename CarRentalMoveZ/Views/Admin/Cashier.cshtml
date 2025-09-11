@@ -127,9 +127,10 @@
                             }
                         </td>
                         <td>
-                            <a href="@Url.Action("ViewBooking", "Cashier", new { id = booking.BookingId })" class="btn btn-sm btn-primary">
+                            <a asp-controller="Admin" asp-action="CashierBookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-primary">
                                 <i class="bi bi-eye"></i> View
                             </a>
+
                         </td>
                     </tr>
                 }
@@ -214,7 +215,7 @@
 
         /* Table Body */
         table tbody {
-            background-color: white;
+            background-color: white;http://localhost:5028/Img/bmw.png
             color: black;
         }
 

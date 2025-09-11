@@ -36,6 +36,12 @@ namespace CarRentalMoveZ.Repository.Implementations
             return _context.Payments.FirstOrDefault(p => p.BookingId == bookingId);
         }
 
+        public void Update(Payment payment)
+        {
+            _context.Payments.Update(payment);
+            _context.SaveChanges();
+        }
+
 
     }
 }

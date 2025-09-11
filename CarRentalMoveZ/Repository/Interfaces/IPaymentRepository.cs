@@ -11,5 +11,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
         IEnumerable<Payment> GetPaymentsByUserId(int userId);
         Payment GetPaymentByBookingId(int bookingId);
 
+        void Update(Payment payment);
+
     }
 }

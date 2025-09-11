@@ -336,6 +336,31 @@ namespace CarRentalMoveZ.Controllers
            return View(_bookingService.GetAllBookingsDetail());
         }
 
+        [HttpGet]
+        public IActionResult CashierBookingDetails(int id)
+        {
+            var booking = _bookingService.GetBookingById(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+            return View(booking);
+           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CashierBookingDetails(BookingDetailsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            model.PaymentStatus = "Paid";
+            _paymentService.UpdatePayment(model);
+            return RedirectToAction("Cashier");
+        }
+
         public IActionResult Report()
         {
             return View();
