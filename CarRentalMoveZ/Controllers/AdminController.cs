@@ -21,8 +21,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
         private readonly IDriverService _driverService;
+        private readonly IOfferService _offerService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -32,6 +33,7 @@ namespace CarRentalMoveZ.Controllers
             _paymentService = paymentService;
             _userService = userService;
             _driverService = driverService;
+            _offerService = offerService;
         }
 
         public IActionResult Dashboard()
@@ -306,6 +308,27 @@ namespace CarRentalMoveZ.Controllers
                 TempData["ErrorMessage"] = "Email already exists. Please try again.";
                 return View(model);
             }
+        }
+
+        public IActionResult ManageOffer() => View(_offerService.GetAll());
+
+
+        [HttpGet]
+        public IActionResult AddOffer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddOffer(OfferViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _offerService.Add(model);
+            return RedirectToAction("ManageOffer");
         }
 
         public IActionResult Report()

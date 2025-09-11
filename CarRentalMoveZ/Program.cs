@@ -28,6 +28,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+            builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 
 
 
@@ -41,6 +42,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
             builder.Services.AddScoped<IDriverService, DriverService>();
+            builder.Services.AddScoped<IOfferService, OfferService>();
 
 
 
