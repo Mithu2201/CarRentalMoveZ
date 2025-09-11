@@ -1,4 +1,6 @@
-﻿using CarRentalMoveZ.Enums;
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Enums;
+using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Services.Implementations;
 using CarRentalMoveZ.Services.Interfaces;
 using CarRentalMoveZ.ViewModels;
@@ -17,8 +19,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly ICustomerService _customerService;
         private readonly IBookingService _bookingService;
         private readonly IPaymentService _paymentService;
+        private readonly IUserService _userService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -26,6 +29,7 @@ namespace CarRentalMoveZ.Controllers
             _customerService = customerService;
             _bookingService = bookingService;
             _paymentService = paymentService;
+            _userService = userService;
         }
 
         public IActionResult Dashboard()
@@ -91,22 +95,62 @@ namespace CarRentalMoveZ.Controllers
         }
 
 
-        public IActionResult CarDetails()
+        public IActionResult CarDetails(int id)
         {
-            return View();
+            var car = _carService.GetCarById(id);
+            return View(car);
         }
 
         
         public IActionResult ManageBookings() => View(_bookingService.GetAllBookings());
 
 
-
-        public IActionResult BookingDetails()
+        [HttpGet]
+        public IActionResult BookingDetails(int id)
         {
-            return View();
+            var booking = _bookingService.GetBookingById(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+            return View(booking);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult BookingDetails(BookingDetailsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Inspect and log errors
+                var errors = ModelState
+                    .Where(kv => kv.Value.Errors.Count > 0)
+                    .Select(kv => new
+                    {
+                        Key = kv.Key,
+                        Errors = kv.Value.Errors.Select(e => string.IsNullOrEmpty(e.ErrorMessage) ? (e.Exception?.Message ?? "(exception)") : e.ErrorMessage)
+                    }).ToList();
+
+                // Log to console (or use ILogger)
+                foreach (var e in errors)
+                {
+                    Console.WriteLine($"ModelState error for '{e.Key}': {string.Join(" | ", e.Errors)}");
+                }
+
+                // Optionally: pass errors to ViewBag/TempData to show in view for dev
+                TempData["ModelErrors"] = string.Join("\n", errors.Select(x => $"{x.Key}: {string.Join(", ", x.Errors)}"));
+
+                return View(model); // return view to let user correct / for debugging
+            }
+
+            // If valid → process (e.g., update booking status)
+            model.BookingStatus = "Assigned";
+            _bookingService.UpdateBooking(model);
+            // ...
+            return RedirectToAction("ManageBookings");
         }
 
-        
+
+
         public IActionResult ManagePayment() => View(_paymentService.GetAllPayments());
 
 
@@ -120,9 +164,30 @@ namespace CarRentalMoveZ.Controllers
         public IActionResult ManageCustomer() => View(_customerService.GetAllCustomer());
 
 
-        public IActionResult CustomerDetails()
+        public IActionResult CustomerDetails(int id)
         {
-            return View();
+            var customer = _customerService.GetCustomerById(id);
+            if (customer == null) return NotFound();
+
+            int userId = _customerService.GetCustomerUserId(id);
+            var profile = _userService.GetProfile(userId);
+            var bookings = _bookingService.GetBookingsByUserId(userId);
+            var payments = _paymentService.GetPaymentsByUserId(userId);
+
+            var dashboardDto = new CustomerDashboardDTO
+            {
+                Profile = profile,
+                Bookings = bookings,
+                Payments = payments
+            };
+
+            var fullViewDto = new CustomerFullViewDTO
+            {
+                Customer = customer,
+                Dashboard = dashboardDto
+            };
+
+            return View(fullViewDto);
         }
 
 
@@ -202,7 +267,7 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        public IActionResult Settings()
+        public IActionResult CreateStaffUser()
         {
             ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)));
             ViewBag.RoleList = new SelectList(Enum.GetValues(typeof(Role)));

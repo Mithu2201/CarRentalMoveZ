@@ -14,7 +14,7 @@ namespace CarRentalMoveZ.Mappings
                 Amount = viewModel.Amount,
                 PaymentDate = DateTime.Now,
                 PaymentMethod = viewModel.PaymentMethod,
-                Status = "Paid"
+                Status = viewModel.Status
             };
         }
 

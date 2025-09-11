@@ -1,40 +1,344 @@
 ﻿@model CarRentalMoveZ.ViewModels.PaymentViewModel
 
 @{
-    ViewData["Title"] = "Make Payment";
+    ViewData["Title"] = "Confirm Payment";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h2>Make Payment</h2>
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow-lg border-0" style="max-width: 500px; width: 100%;">
+        <div class="card-body p-4">
+            <h2 class="text-center fw-bold mb-2 heading-color">Confirm Payment</h2>
+            <p class="text-muted text-center mb-4">
+                Secure your rental by choosing a payment method below.
+            </p>
 
-<form asp-action="Payment" method="post">
-    @* Hidden BookingId *@
-    <input type="hidden" asp-for="BookingId" />
+            
+            <<!-- Payment Summary -->
+            <div class="rounded p-3 mb-4" style="background-color: #D6E4F0;">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Total Amount</span>
+                    <span class="fw-bold" id="total-amount">Rs. @Model.Amount.ToString("N2")</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 text-success d-none" id="discount-row">
+                    <span>Discount Amount</span>
+                    <span class="fw-bold" id="discount-amount">- Rs. 0.00</span>
+                </div>
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <span class="fw-bold">Net Amount</span>
+                    <span class="fw-bold text-primary" id="net-amount">Rs. @Model.Amount.ToString("N2")</span>
+                </div>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="Amount"></label>
-        <input asp-for="Amount" class="form-control" readonly />
-        <span asp-validation-for="Amount" class="text-danger"></span>
+            <!-- Promo Code -->
+            <div class="mb-3">
+                <label class="form-label">Promo Code</label>
+                <div class="input-group">
+                    <input type="text" id="promo-code" class="form-control" placeholder="Enter Promo Code" />
+                    <button type="button" id="apply-promo" class="btn btn-outline-primary">Apply</button>
+                </div>
+            </div>
+
+            <!-- Payment Options -->
+            <div class="d-flex justify-content-between bg-light rounded p-2 mb-4">
+                <button class="btn payment-option flex-fill me-2 active" id="card-tab">
+                    <img src="https://img.icons8.com/color/48/visa.png" width="40" class="me-1" />
+                    <img src="https://img.icons8.com/color/48/mastercard.png" width="40" />
+                    <span class="d-block small">Card</span>
+                </button>
+                <button class="btn payment-option flex-fill me-2" id="wallet-tab">
+                    <img src="https://img.icons8.com/color/48/paypal.png" width="40" />
+                    <span class="d-block small">Online Wallet</span>
+                </button>
+                <button class="btn payment-option flex-fill" id="cash-tab">
+                    <img src="https://img.icons8.com/color/48/cash.png" width="40" />
+                    <span class="d-block small">Cash</span>
+                </button>
+            </div>
+
+            <!-- Card Payment Section -->
+            <div id="card-section">
+                <form id="cardForm">
+                    <div class="mb-3">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" placeholder="•••• •••• •••• ••••" maxlength="19">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Card Holder Name</label>
+                        <input type="text" id="holder-name" class="form-control" placeholder="Full Name">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">CVC</label>
+                            <input type="password" id="cvc" class="form-control" placeholder="•••" maxlength="4">
+                        </div>
+                    </div>
+                    <button type="button" id="card-pay-btn" class="btn w-100 submit-btn">Pay Now</button>
+
+                    <div id="card-otp-section" class="mt-3 d-none">
+                        <p class="text-muted small">Enter the OTP sent to your phone:</p>
+                        <div class="input-group">
+                            <input type="text" id="card-otp-input" class="form-control" placeholder="Enter OTP">
+                            <button type="button" id="card-otp-verify-btn" class="btn btn-success">Verify</button>
+                        </div>
+                        <p id="card-otp-message" class="mt-2 small text-center"></p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Wallet Section -->
+            <div id="wallet-section" class="d-none text-center">
+                <p class="text-muted">Click below to continue with Wallet.</p>
+                <button type="button" id="wallet-pay-btn" class="btn submit-btn w-100 text-white">
+                    Pay with Wallet
+                </button>
+            </div>
+
+            <!-- Cash Section -->
+            <div id="cash-section" class="d-none text-center">
+                <p class="text-muted">Reserve your car and pay with cash within 3 days.</p>
+                <button type="button" id="cash-confirm-btn" class="btn w-100 submit-btn">Confirm with Cash</button>
+
+                <div id="cash-otp-section" class="mt-3 d-none">
+                    <p class="text-muted small">Enter the OTP sent to your phone:</p>
+                    <div class="input-group">
+                        <input type="text" id="cash-otp-input" class="form-control" placeholder="Enter OTP">
+                        <button type="button" id="cash-otp-verify-btn" class="btn submit-btn">Verify</button>
+                    </div>
+                    <p id="cash-otp-message" class="mt-2 small text-center"></p>
+                </div>
+            </div>
+
+            <form id="paymentForm" asp-action="Payment" method="post">
+                <input type="hidden" name="BookingId" value="@Model.BookingId" />
+                <input type="hidden" name="Amount" id="form-amount" value="@Model.Amount" />
+                <input type="hidden" name="PaymentMethod" id="form-method" />
+                <input type="hidden" name="Status" id="form-status" />
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <label asp-for="PaymentMethod"></label>
-        <select asp-for="PaymentMethod" class="form-control">
-            <option value="">-- Select Payment Method --</option>
-            <option value="Card">Card</option>
-            <option value="Cash">Cash</option>
-            <option value="Online">Online</option>
-        </select>
-        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-    </div>
+<!-- Styles -->
+<style>
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: url('../Img/loginbanner.png') no-repeat center center fixed;
+        background-size: cover;
+    }
 
-    <div class="d-flex justify-content-end mt-3">
-        <button type="submit" class="btn btn-primary">Submit Payment</button>
-    </div>
+    .heading-color {
+        color: #1E56A0;
+    }
 
-</form>
+    .submit-btn {
+        background-color: #1E56A0;
+        border: none;
+        transition: all 0.3s ease;
+        color: #fff;
+    }
+
+        .submit-btn:hover {
+            background-color: #163172;
+        }
+
+    .payment-option {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+        .payment-option:hover {
+            background-color: #D6E4F0;
+            color: #1E56A0;
+        }
+
+        .payment-option.active {
+            background-color: #1E56A0;
+            color: #fff;
+            border-color: #1E56A0;
+        }
+</style>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        const totalAmount = parseFloat("@Model.Amount");
+        const totalAmountEl = document.getElementById("total-amount");
+        const discountRow = document.getElementById("discount-row");
+        const discountAmountEl = document.getElementById("discount-amount");
+        const netAmountEl = document.getElementById("net-amount");
+
+        const promoCodes = {
+            "DISCOUNT10": 0.10,
+            "SAVE500": 500
+        };
+
+        // ✅ Promo apply
+        document.getElementById("apply-promo").addEventListener("click", function () {
+            const code = document.getElementById("promo-code").value.trim().toUpperCase();
+            let discount = 0;
+
+            if (promoCodes[code]) {
+                discount = promoCodes[code] < 1 ? totalAmount * promoCodes[code] : promoCodes[code];
+                discount = Math.min(discount, totalAmount);
+
+                discountAmountEl.textContent = "- Rs. " + discount.toFixed(2);
+                discountRow.classList.remove("d-none");
+                netAmountEl.textContent = "Rs. " + (totalAmount - discount).toFixed(2);
+
+                alert("Promo applied successfully!");
+            } else {
+                discountRow.classList.add("d-none");
+                discountAmountEl.textContent = "- Rs. 0.00";
+                netAmountEl.textContent = "Rs. " + totalAmount.toFixed(2);
+
+                alert("Invalid promo code!");
+            }
+        });
+
+        // ✅ Tab switching
+        const options = document.querySelectorAll('.payment-option');
+        const sections = {
+            card: document.getElementById('card-section'),
+            wallet: document.getElementById('wallet-section'),
+            cash: document.getElementById('cash-section')
+        };
+        options.forEach(opt => {
+            opt.addEventListener('click', function () {
+                options.forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+
+                Object.values(sections).forEach(sec => sec.classList.add('d-none'));
+                if (this.id === 'card-tab') sections.card.classList.remove('d-none');
+                if (this.id === 'wallet-tab') sections.wallet.classList.remove('d-none');
+                if (this.id === 'cash-tab') sections.cash.classList.remove('d-none');
+            });
+        });
+
+        // Format Card Number (#### #### #### ####)
+                document.getElementById('card-number').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ""); // remove non-digits
+            value = value.substring(0, 16); // max 16 digits
+            let formatted = value.replace(/(.{4})/g, "$1 ").trim(); // add space every 4
+            e.target.value = formatted;
+        });
+
+                        // Format Expiry Date (MM/YY) and restrict month < 13
+        document.getElementById('expiry-date').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ""); // remove non-digits
+
+            if (value.length > 2) {
+                let month = parseInt(value.substring(0, 2));
+                if (month < 1) month = 00;       // minimum 01
+                if (month > 12) month = 00;     // maximum 12
+                value = month.toString().padStart(2, "0") + value.substring(2, 4); // MMYY
+            }
+
+            // insert slash if more than 2 digits
+            if (value.length > 2) {
+                e.target.value = value.substring(0, 2) + "/" + value.substring(2);
+            } else {
+                e.target.value = value;
+            }
+        });
+
+        let currentOTP = '123';
+        function showMessage(title, message) { alert(title + ": " + message); }
+
+        // ✅ Card
+        document.getElementById('card-pay-btn').addEventListener('click', () => {
+            const cardNumber = document.getElementById('card-number').value.trim();
+            const holderName = document.getElementById('holder-name').value.trim();
+            const cvc = document.getElementById('cvc').value.trim();
+
+            if (cardNumber.length < 16 || holderName === '' || cvc.length < 3) {
+                showMessage('Error', 'Please enter valid card details.');
+                return;
+            }
+
+            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            console.log("Card OTP:", currentOTP);
+
+            showMessage('OTP Sent', 'An OTP has been sent to your phone.');
+            document.getElementById('card-otp-section').classList.remove('d-none');
+            document.getElementById('card-pay-btn').classList.add('d-none');
+        });
+
+        document.getElementById('card-otp-verify-btn').addEventListener('click', () => {
+            const entered = document.getElementById('card-otp-input').value.trim();
+            const msg = document.getElementById('card-otp-message');
+
+            if (entered === currentOTP) {
+                msg.textContent = "Payment Successful!";
+                msg.classList.add('text-success');
+                showMessage('Success', 'Your card payment was processed.');
+
+                document.getElementById("form-method").value = "Card";
+                document.getElementById("form-status").value = "Paid";
+                document.getElementById("paymentForm").submit();
+            } else {
+                msg.textContent = "Invalid OTP!";
+                msg.classList.add('text-danger');
+            }
+        });
+
+        // ✅ Cash
+        document.getElementById('cash-confirm-btn').addEventListener('click', () => {
+            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            console.log("Cash OTP:", currentOTP);
+
+            showMessage('Reservation Confirmed', 'Pay within 3 days. OTP sent.');
+            document.getElementById('cash-otp-section').classList.remove('d-none');
+            document.getElementById('cash-confirm-btn').classList.add('d-none');
+        });
+
+        document.getElementById('cash-otp-verify-btn').addEventListener('click', () => {
+            const entered = document.getElementById('cash-otp-input').value.trim();
+            const msg = document.getElementById('cash-otp-message');
+
+            if (entered === currentOTP) {
+                msg.textContent = "Booking Confirmed!";
+                msg.classList.add('text-success');
+                showMessage('Confirmed', 'Your booking has been finalized.');
+
+                document.getElementById("form-method").value = "Cash";
+                document.getElementById("form-status").value = "Pending";
+                document.getElementById("paymentForm").submit();
+            } else {
+                msg.textContent = "Invalid OTP!";
+                msg.classList.add('text-danger');
+            }
+        });
+
+        // ✅ Wallet (direct with paypal)
+
+                document.getElementById('wallet-pay-btn').addEventListener('click', () => {
+            // Open PayPal login page in a popup (demo only)
+            let paypalWindow = window.open("https://www.paypal.com/signin", "paypalPopup", "width=800,height=600");
+
+            // ✅ Simulate payment success after 2 sec
+            setTimeout(() => {
+                // Close the PayPal popup if still open
+                if (paypalWindow && !paypalWindow.closed) {
+                    paypalWindow.close();
+                }
+
+                // Set payment values
+                document.getElementById("form-method").value = "Wallet";
+                document.getElementById("form-status").value = "Paid";
+
+                // Submit form -> goes to your Payment controller
+                document.getElementById("paymentForm").submit();
+            }, 2000);
+        });
+    </script>
 }
+ 

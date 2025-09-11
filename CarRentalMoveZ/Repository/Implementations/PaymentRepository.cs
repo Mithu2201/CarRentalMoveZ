@@ -31,7 +31,10 @@ namespace CarRentalMoveZ.Repository.Implementations
                 .Where(p => p.Booking.Customer.UserId == userId)
                 .ToList();
         }
-
+        public Payment GetPaymentByBookingId(int bookingId)
+        {
+            return _context.Payments.FirstOrDefault(p => p.BookingId == bookingId);
+        }
 
 
     }

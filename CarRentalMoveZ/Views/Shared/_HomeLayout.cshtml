@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="~/CarRentalFrontEnd.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Top bar -->
@@ -22,7 +24,12 @@
                <a asp-controller="Account" asp-action="Login" class="text-white">
                     <i class="fas fa-user"></i> Log In
                </a>
+               <a asp-controller="Account" asp-action="Register" class="text-white">
+                <i class="fas"></i> / Register
+            </a>
         </div>
+            
+      
     </div>
 
     <!-- Main Navbar -->
@@ -80,11 +87,14 @@
     <!-- Body -->
     @RenderSection("Banner", required: false)
     @RenderSection("About", required: false)
-    @RenderSection("Service", required: false)
+    @RenderSection("servicenew", required: false)
     @RenderSection("WhyChoose", required: false)
+    @RenderSection("Service", required: false)
     @RenderSection("CarMenu", required: false)
     @RenderSection("BookingProcess", required: false)
     @RenderSection("Testimonials", required: false)
+    @RenderSection("App", required: false)
+    @RenderSection("blog", required: false)
    
    
     

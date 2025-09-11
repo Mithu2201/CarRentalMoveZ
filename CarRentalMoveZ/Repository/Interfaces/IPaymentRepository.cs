@@ -9,5 +9,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
         IEnumerable<Payment> GetAllPayments();
 
         IEnumerable<Payment> GetPaymentsByUserId(int userId);
+        Payment GetPaymentByBookingId(int bookingId);
+
     }
 }

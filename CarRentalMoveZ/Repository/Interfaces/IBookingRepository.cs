@@ -8,6 +8,10 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         IEnumerable<Booking> GetAllBookings();
         IEnumerable<Booking> GetBookingsByUserId(int userId);
+        Booking GetBooking(int id);
+
+
+        void Update(Booking booking);
 
     }
 }

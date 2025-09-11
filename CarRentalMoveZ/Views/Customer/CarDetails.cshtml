@@ -1,14 +1,14 @@
 ﻿@model CarRentalMoveZ.ViewModels.CarViewModel
 @{
     ViewData["Title"] = "Car Details";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 <div class="container-fluid py-3" style="background-color:#F6F6F6; min-height:100vh;">
     <!-- Header -->
     <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
         <h3 class="fw-bold">@Model.CarName Details</h3>
-        <a asp-action="ManageCars" class="btn" style="background-color:#1E56A0; color:white;">
+        <a asp-controller="Customer" asp-action="Car" class="btn" style="background-color:#1E56A0; color:white;">
             <i class="bi bi-arrow-left me-1"></i> Back to Cars
         </a>
     </div>
@@ -27,7 +27,7 @@
                     @Model.CarName is a stylish and reliable car, ideal for both city rides and long journeys.
                     With refined performance and advanced features, it ensures comfort and safety.
                 </p>
-                <a asp-action="BookCar" asp-route-id="@Model.CarId" class="btn px-4 py-2 mt-2"
+                <a asp-controller="Customer" asp-action="NewBooking" asp-route-id="@Model.CarId" class="btn px-4 py-2 mt-2"
                    style="background-color:#1E56A0; color:white; border-radius:8px;">
                     <i class="bi bi-car-front me-2"></i> Book Now
                 </a>
@@ -37,15 +37,8 @@
 
     <!-- Activity & Specs -->
     <div class="row mb-4">
-        <!-- Activity Graph -->
-        <div class="col-lg-7 mb-3">
-            <div class="card border-0 shadow-sm p-3" style="background-color:white; border-radius:12px;">
-                <h6 class="fw-bold mb-3">Activity</h6>
-                <canvas id="carActivityChart" height="120"></canvas>
-            </div>
-        </div>
         <!-- Specs -->
-        <div class="col-lg-5 mb-3">
+        <div class="col-lg-6 mb-3">
             <div class="card border-0 shadow-sm p-3" style="background-color:#D6E4F0; border-radius:12px;">
                 <h6 class="fw-bold mb-3">Specifications</h6>
                 <ul class="list-unstyled small">
@@ -58,11 +51,7 @@
                 </ul>
             </div>
         </div>
-    </div>
 
-    <!-- Features & Reminders -->
-    <div class="row">
-        <!-- Features -->
         <div class="col-lg-6 mb-3">
             <div class="card border-0 shadow-sm p-3" style="background-color:white; border-radius:12px;">
                 <h6 class="fw-bold mb-3">Car Features</h6>
@@ -78,22 +67,6 @@
                         <p>✔ Spacious Trunk</p>
                         <p>✔ Safety Assist</p>
                         <p>✔ Keyless Entry</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Reminders -->
-        <div class="col-lg-6 mb-3">
-            <div class="card border-0 shadow-sm p-3" style="background-color:#D6E4F0; border-radius:12px;">
-                <h6 class="fw-bold mb-3">Reminders</h6>
-                <div class="d-flex flex-wrap gap-3">
-                    <div class="p-3 rounded bg-white shadow-sm flex-fill text-center">
-                        <small class="text-muted">Next Oil Change</small>
-                        <p class="fw-bold mb-0">2025-09-15</p>
-                    </div>
-                    <div class="p-3 rounded bg-white shadow-sm flex-fill text-center">
-                        <small class="text-muted">Tire Replacement</small>
-                        <p class="fw-bold mb-0">2025-10-02</p>
                     </div>
                 </div>
             </div>
@@ -121,3 +94,4 @@
         });
     </script>
 }
+

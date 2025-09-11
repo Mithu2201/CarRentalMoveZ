@@ -11,5 +11,10 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         IEnumerable<BookingDTO> GetBookingsByUserId(int userId);
 
+        BookingDetailsViewModel GetBookingById(int id);
+
+
+        void UpdateBooking(BookingDetailsViewModel model);
+
     }
 }

@@ -14,6 +14,6 @@ namespace CarRentalMoveZ.ViewModels
         [Required]
         public string PaymentMethod { get; set; } // Card, Cash, Online
 
-        //public string Status { get; set; } = "Paid"; // Optional: default to Paid
+        public string Status { get; set; } // Paid, Pending, Failed
     }
 }
