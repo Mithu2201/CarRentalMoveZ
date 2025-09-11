@@ -103,14 +103,35 @@
                                     <li><strong>Brand:</strong> @car.Brand</li>
                                     <li><strong>Model:</strong> @car.Model</li>
                                 </ul>
+                                <!-- Book Now -->
                                 <a asp-controller="Customer" asp-action="NewBooking" asp-route-carId="@car.CarId"
-                                   class="btn w-100 fw-semibold"
+                                   class="btn w-100 fw-semibold mb-2"
                                    style="background:#D6E4F0; color:#163172; border-radius:6px;">
                                     Book Now
                                 </a>
+
+                                <!-- View Details (label) -->
+                                <small class="d-block text-center"
+                                       style="color:#D6E4F0; cursor:pointer;">
+                                    <a asp-controller="Customer"
+                                       asp-action="CarDetails"
+                                       asp-route-id="@car.CarId"
+                                       style="color:#D6E4F0; text-decoration:underline;">
+                                        View Details
+                                    </a>
+                                </small>
+                            </div>
+
+                            <!-- Hidden Expand Section -->
+                            <div class="car-details p-3" style="display:none; background:#F6F6F6; color:#163172;">
+                                <p><strong>Year:</strong> @car.Year</p>
+                                <p><strong>Price/Day:</strong> $@car.PricePerDay</p>
+                                <p><strong>Status:</strong> @car.Status</p>
+                                <p><strong>Description:</strong> Reliable and comfortable car, perfect for city and long trips.</p>
                             </div>
                         </div>
                     </div>
+
                 }
             </div>
         </div>
@@ -170,5 +191,20 @@
     minPriceInput.addEventListener("input", updatePriceLabel);
     maxPriceInput.addEventListener("input", updatePriceLabel);
     updatePriceLabel();
+
+                    document.querySelectorAll(".toggle-details").forEach(label => {
+            label.addEventListener("click", function () {
+                const card = this.closest(".car-card");
+                const details = card.querySelector(".car-details");
+
+                if (details.style.display === "none") {
+                    details.style.display = "block";
+                    this.textContent = "Hide Details";
+                } else {
+                    details.style.display = "none";
+                    this.textContent = "View Details";
+                }
+            });
+        });
 </script>
 }

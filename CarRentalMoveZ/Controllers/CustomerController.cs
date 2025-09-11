@@ -105,7 +105,13 @@ namespace CarRentalMoveZ.Controllers
             return View(bookings);
         }
 
-        
+        public IActionResult CarDetails(int id)
+        {
+            var car = _carService.GetCarById(id);
+            return View(car);
+        }
+
+
         public IActionResult Profile()
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
