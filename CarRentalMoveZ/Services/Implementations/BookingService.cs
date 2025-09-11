@@ -53,6 +53,19 @@ namespace CarRentalMoveZ.Services.Implementations
             return BookingMapper.ToDetailsViewModel(booking,payment);
         }
 
+        public IEnumerable<BookingDetailsViewModel> GetAllBookingsDetail()
+        {
+            var bookings = _bookingRepo.GetAllBookings();
+            var bookingDetailsList = new List<BookingDetailsViewModel>();
+            foreach (var booking in bookings)
+            {
+                var payment = _paymentRepo.GetPaymentByBookingId(booking.BookingId);
+                var bookingDetails = BookingMapper.ToDetailsViewModel(booking, payment);
+                bookingDetailsList.Add(bookingDetails);
+            }
+            return bookingDetailsList;
+        }
+
         public void UpdateBooking(BookingDetailsViewModel model)
         {
             // Fetch existing booking

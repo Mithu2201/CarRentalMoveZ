@@ -16,5 +16,7 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         void UpdateBooking(BookingDetailsViewModel model);
 
+        IEnumerable<BookingDetailsViewModel> GetAllBookingsDetail();
+
     }
 }

@@ -331,6 +331,11 @@ namespace CarRentalMoveZ.Controllers
             return RedirectToAction("ManageOffer");
         }
 
+        public IActionResult Cashier()
+        {
+           return View(_bookingService.GetAllBookingsDetail());
+        }
+
         public IActionResult Report()
         {
             return View();
