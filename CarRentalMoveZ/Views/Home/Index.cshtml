@@ -207,9 +207,10 @@
         }
 
             .hero-car .hero-img {
-                width: 180%;
+                width: 200%;
                 max-width: 1500px;
                 height: auto;
+				margin-left: -150px;
             }
 
         .hero-text.animate h1 {
@@ -847,7 +848,7 @@
                         <p class="lead">
                             Fast, reliable and affordable car booking service at your fingertips.
                         </p>
-                        <a href="#" class="btn book-btn mt-3 shadow">
+                        <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn mt-3 shadow">
                             <i class="fa-solid fa-taxi me-2"></i> Book Now
                         </a>
                     </div>
@@ -910,23 +911,28 @@
                             <img src="~/Img/car-family.jpeg" class="img-fluid" alt="Taxi Service" />
                         </div>
                         <!-- Floating Small Image -->
-                        <div class="position-absolute shadow rounded-4 overflow-hidden" style="bottom: -40px; left: 220px; width: 220px; border: 5px solid #fff;" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="position-absolute shadow rounded-4 overflow-hidden position-relative"
+                             style="bottom: -40px; left: 220px; width: 220px; border: 5px solid #fff;"
+                             data-aos="zoom-in" data-aos-delay="300">
+
                             <img src="~/Img/car-family2.jpeg" class="img-fluid" alt="Client" />
+
                             <!-- Play Button -->
-                            <a href="https://youtu.be/Mi0ZWuecT0Q" 
-                            class="position-absolute top-50 start-50 translate-middle btn btn-light rounded-circle shadow" 
-                            style="width: 60px; height: 60px; color: #1E56A0;" 
-                            target="_blank">
+                            <a href="https://youtu.be/Mi0ZWuecT0Q"
+                               class="position-absolute top-50 start-50 translate-middle btn btn-light rounded-circle shadow"
+                               style="width: 60px; height: 60px; display:flex; align-items:center; justify-content:center; color: #1E56A0;"
+                               target="_blank">
                                 <i class="fa-solid fa-play"></i>
                             </a>
                         </div>
+
                         <!-- Floating Stat Badge -->
                         <div class="position-absolute bg-white shadow-sm rounded-3 px-4 py-3" style="top: -20px; left: -20px;" data-aos="fade-down" data-aos-delay="500">
                             <div class="d-flex align-items-center">
                                 <i class="fa-solid fa-handshake me-2" style="color: #1E56A0; font-size: 1.5rem;"></i>
                                 <div>
                                     <h5 class="fw-bold">6561+</h5>
-                                    <small class="text-muted ms-1">(5/5)</small>
+                                    <small class="text-muted ms-1">Satisfied Clients</small>
                                 </div>
                             </div>
                         </div>
@@ -950,9 +956,10 @@
                                 <h5 class="fw-bold mb-0" style="color: #1E56A0;">+91 2569 003 452</h5>
                             </div>
                         </div>
-                        <a href="#" class="btn book-btn">
+                        <a asp-controller="Home" asp-action="About" class="btn book-btn">
                             About More <i class="fa-solid fa-arrow-right ms-2"></i>
                         </a>
+
                     </div>
                 </div>
             </div>
@@ -1021,19 +1028,19 @@
                 <div class="row g-4">
                     <div class="col-md-3 step" data-aos="fade-up">
                         <div class="step-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-                        <h6 style="color:white">Choose Destination</h6>
+                        <h6 class="text-light">Choose Destination</h6>
                     </div>
                     <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="200">
                         <div class="step-icon"><i class="fa-solid fa-calendar-check"></i></div>
-                        <h6 style="color:white">Select Date</h6>
+                        <h6 class="text-light">Select Date</h6>
                     </div>
                     <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="400">
                         <div class="step-icon"><i class="fa-solid fa-car"></i></div>
-                        <h6 style="color:white">Pick Your Car</h6>
+                        <h6 class="text-light">Pick Your Car</h6>
                     </div>
                     <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="600">
                         <div class="step-icon"><i class="fa-solid fa-credit-card"></i></div>
-                        <h6 style="color:white">Confirm & Pay</h6>
+                        <h6 class="text-light">Confirm & Pay</h6>
                     </div>
                 </div>
             </div>
@@ -1054,7 +1061,9 @@
                                 <h5 class="card-title fw-bold">Economy Car</h5>
                                 <p class="text-muted">Affordable rides, best for daily city travel.</p>
                                 <p class="fw-bold" style="color: #1E56A0;">From $10 / ride</p>
-                                <a href="#" class="btn book-btn w-100">Book Now</a>
+                                <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
+                                    Book Now
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -1066,7 +1075,9 @@
                                 <h5 class="card-title fw-bold">Premium Sedan</h5>
                                 <p class="text-muted">Luxury comfort with professional service.</p>
                                 <p class="fw-bold" style="color: #1E56A0;">From $25 / ride</p>
-                                <a href="#" class="btn book-btn w-100">Book Now</a>
+                                <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
+                                    Book Now
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -1078,7 +1089,9 @@
                                 <h5 class="card-title fw-bold">SUV</h5>
                                 <p class="text-muted">Spacious and powerful, perfect for family trips.</p>
                                 <p class="fw-bold" style="color: #1E56A0;">From $40 / ride</p>
-                                <a href="#" class="btn book-btn w-100">Book Now</a>
+                                <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
+                                    Book Now
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -1103,14 +1116,14 @@
                         </p>
                         <!-- Buttons -->
                         <div class="d-flex flex-wrap gap-3 justify-content-md-start justify-content-center">
-                            <a href="#" class="btn app-btn d-flex align-items-center px-3 py-2">
+                            <a href="https://www.apple.com/app-store/" class="btn app-btn d-flex align-items-center px-3 py-2" target="_blank">
                                 <i class="fa-brands fa-apple fa-2x me-2"></i>
                                 <div>
                                     <small class="d-block">Download App</small>
                                     <span class="fw-bold">From App Store</span>
                                 </div>
                             </a>
-                            <a href="#" class="btn app-btn d-flex align-items-center px-3 py-2">
+                            <a href="https://play.google.com/store/games?hl=en&pli=1" class="btn app-btn d-flex align-items-center px-3 py-2" target="_blank">
                                 <i class="fa-brands fa-google-play fa-2x me-2"></i>
                                 <div>
                                     <small class="d-block">Download App</small>
@@ -1141,7 +1154,7 @@
                         </h2>
                     </div>
                     <div>
-                        <a href="#" class="blog-btn">
+                        <a href="https://www.dailynews.lk/" class="blog-btn" target="_blank">
                             View All Blog
                         </a>
                     </div>
@@ -1164,7 +1177,7 @@
                                     <span><i class="fa-solid fa-comment me-1"></i> 2 Comments</span>
                                 </div>
                                 <h6 class="fw-bold" style="color: #1E56A0;">Cupidatat Nonproident Sunt In Culpa Qui Officia</h6>
-                                <a href="#" class="blog-link">
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
                                     Read More <i class="fa-solid fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1186,7 +1199,7 @@
                                     <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
                                 </div>
                                 <h6 class="fw-bold" style="color: #1E56A0;">Big Data. Any Leftovers In The Kitchen?</h6>
-                                <a href="#" class="blog-link">
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
                                     Read More <i class="fa-solid fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1208,7 +1221,7 @@
                                     <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
                                 </div>
                                 <h6 class="fw-bold" style="color: #1E56A0;">Big Data. Any Leftovers In The Kitchen?</h6>
-                                <a href="#" class="blog-link">
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
                                     Read More <i class="fa-solid fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1230,7 +1243,7 @@
                                     <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
                                 </div>
                                 <h6 class="fw-bold" style="color: #1E56A0;">Big Data. Any Leftovers In The Kitchen?</h6>
-                                <a href="#" class="blog-link">
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
                                     Read More <i class="fa-solid fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -1308,9 +1321,10 @@
                                     <i class="fas fa-plane"></i>
                                 </div>
                                 <h3 class="service-title">Airport Transport</h3>
-                                <a href="#" class="explore-btn">
+                                <a href="/Home/Service" class="explore-btn">
                                     Explore More <i class="fas fa-arrow-right"></i>
                                 </a>
+
                             </div>
                         </div>
                     </div>
