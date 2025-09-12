@@ -42,6 +42,10 @@ namespace CarRentalMoveZ.Migrations
                     b.Property<int>("Days")
                         .HasColumnType("int");
 
+                    b.Property<string>("DriverStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 

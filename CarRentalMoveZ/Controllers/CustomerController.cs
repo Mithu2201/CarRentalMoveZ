@@ -51,7 +51,15 @@ namespace CarRentalMoveZ.Controllers
                 PhoneNumber =  customer.PhoneNumber
             };
 
+            // 👇 get existing bookings for this car
+            var existingBookings = _bookingService.GetBookingsForCar(car.CarId);
+            ViewBag.BookedRanges = existingBookings
+                .Select(b => new { start = b.StartDate.ToString("yyyy-MM-dd"), end = b.EndDate.ToString("yyyy-MM-dd") })
+                .ToList();
+
             return View(vm);
+
+            
         }
 
         [HttpPost]
@@ -59,13 +67,23 @@ namespace CarRentalMoveZ.Controllers
         {
             if (ModelState.IsValid)
             {
-                var bid=_bookingService.CreateBooking(model); // Mapper handles conversion
-               
-                TempData["BookingId"]= bid;
-                TempData.Keep("BookingId"); // keep it alive for next request
-                TempData["Amount"] = model.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                try
+                {
+                    var bid = _bookingService.CreateBooking(model);
+                    TempData["BookingId"] = bid;
+                    TempData["Amount"] = model.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    return RedirectToAction("Payment", "Customer");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    TempData["BookingError"] = ex.Message;
+                }
+            }
 
-                return RedirectToAction("Payment", "Customer");
+            if (!model.StartDate.HasValue || !model.EndDate.HasValue)
+            {
+                ModelState.AddModelError("", "Please select start and end dates.");
+                return View(model);
             }
 
             return View(model);

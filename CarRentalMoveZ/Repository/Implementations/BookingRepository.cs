@@ -54,5 +54,12 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.SaveChanges();
         }
 
+        public IEnumerable<Booking> GetBookingsByCar(int carId)
+        {
+            return _context.Bookings
+                .Where(b => b.CarId == carId && b.Status != "Cancelled")
+                .ToList();
+        }
+
     }
 }

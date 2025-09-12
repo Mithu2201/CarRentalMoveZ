@@ -29,5 +29,8 @@ namespace CarRentalMoveZ.Models
         public string Status { get; set; } = "Pending"; // Pending, Confirmed, Cancelled, Completed
 
         public decimal Amount { get; set; }
+
+        [Required]
+        public string DriverStatus { get; set; }
     }
 }
