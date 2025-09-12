@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250912050215_CarUpdated")]
+    [Migration("20250912091934_CarUpdated")]
     partial class CarUpdated
     {
         /// <inheritdoc />
@@ -44,6 +44,10 @@ namespace CarRentalMoveZ.Migrations
 
                     b.Property<int>("Days")
                         .HasColumnType("int");
+
+                    b.Property<string>("DriverStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
