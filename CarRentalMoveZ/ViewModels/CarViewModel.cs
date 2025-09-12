@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRentalMoveZ.ViewModels
 {
@@ -34,5 +35,29 @@ namespace CarRentalMoveZ.ViewModels
         [Url]
         [Display(Name = "Image URL")]
         public string ImgURL { get; set; }
+
+        // New Specifications
+        [Display(Name = "Transmission")]
+        public string Transmission { get; set; }  // Automatic, Manual, etc.
+
+        [Range(1, 20, ErrorMessage = "Seats must be at least 1.")]
+        [Display(Name = "Seats")]
+        public int Seats { get; set; }
+
+        [Display(Name = "Fuel Type")]
+        public string Fuel { get; set; }  // Gasoline, Diesel, Electric
+
+        [Range(0, 400, ErrorMessage = "Top speed must be between 0 and 400 mph.")]
+        [Display(Name = "Top Speed (mph)")]
+        public int TopSpeed { get; set; }
+
+        // Maintenance Info
+        [DataType(DataType.Date)]
+        [Display(Name = "Next Oil Change")]
+        public DateTime? NextOilChange { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Tire Replacement")]
+        public DateTime? TireReplacement { get; set; }
     }
 }
