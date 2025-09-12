@@ -5,6 +5,7 @@ using CarRentalMoveZ.ViewModels;
 public class CarMapper
 {
     // Map CarViewModel to Car (for saving/updating in the database)
+    // Map CarViewModel to Car entity (for saving/updating in the database)
     public static Car MapToEntity(CarViewModel viewModel)
     {
         return new Car
@@ -16,11 +17,17 @@ public class CarMapper
             Year = viewModel.Year,
             PricePerDay = viewModel.PricePerDay,
             Status = viewModel.Status,
-            ImgURL = viewModel.ImgURL
+            ImgURL = viewModel.ImgURL,
+            Transmission = viewModel.Transmission,
+            Seats = viewModel.Seats,
+            Fuel = viewModel.Fuel,
+            TopSpeed = viewModel.TopSpeed,
+            NextOilChange = viewModel.NextOilChange,
+            TireReplacement = viewModel.TireReplacement
         };
     }
 
-    // Map Car to CarViewModel (for displaying data in the view)
+    // Map Car entity to CarViewModel (for displaying data in the view)
     public static CarViewModel MapToViewModel(Car car)
     {
         return new CarViewModel
@@ -32,7 +39,13 @@ public class CarMapper
             Year = car.Year,
             PricePerDay = car.PricePerDay,
             Status = car.Status,
-            ImgURL = car.ImgURL
+            ImgURL = car.ImgURL,
+            Transmission = car.Transmission,
+            Seats = car.Seats,
+            Fuel = car.Fuel,
+            TopSpeed = car.TopSpeed,
+            NextOilChange = car.NextOilChange,
+            TireReplacement = car.TireReplacement
         };
     }
 

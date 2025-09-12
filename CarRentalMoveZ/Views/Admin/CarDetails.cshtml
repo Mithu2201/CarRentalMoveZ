@@ -49,12 +49,10 @@
             <div class="card border-0 shadow-sm p-3" style="background-color:#D6E4F0; border-radius:12px;">
                 <h6 class="fw-bold mb-3">Specifications</h6>
                 <ul class="list-unstyled small">
-                    <li><strong>Transmission:</strong> Automatic</li>
-                    <li><strong>Seats:</strong> 5</li>
-                    <li><strong>Fuel:</strong> Gasoline</li>
-                    <li><strong>Top Speed:</strong> 120 mph</li>
-                    <li><strong>Acceleration:</strong> 8.0 sec (0-60)</li>
-                    <li><strong>Range:</strong> 400 miles</li>
+                    <li><strong>Transmission:</strong> @Model.Transmission</li>
+                    <li><strong>Seats:</strong> @Model.Seats</li>
+                    <li><strong>Fuel:</strong> @Model.Fuel</li>
+                    <li><strong>Top Speed:</strong> @Model.TopSpeed mph</li>
                 </ul>
             </div>
         </div>
@@ -89,11 +87,11 @@
                 <div class="d-flex flex-wrap gap-3">
                     <div class="p-3 rounded bg-white shadow-sm flex-fill text-center">
                         <small class="text-muted">Next Oil Change</small>
-                        <p class="fw-bold mb-0">2025-09-15</p>
+                        <p class="fw-bold mb-0">@Model.NextOilChange?.ToString("yyyy-MM-dd")</p>
                     </div>
                     <div class="p-3 rounded bg-white shadow-sm flex-fill text-center">
                         <small class="text-muted">Tire Replacement</small>
-                        <p class="fw-bold mb-0">2025-10-02</p>
+                        <p class="fw-bold mb-0">@Model.TireReplacement?.ToString("yyyy-MM-dd")</p>
                     </div>
                 </div>
             </div>
