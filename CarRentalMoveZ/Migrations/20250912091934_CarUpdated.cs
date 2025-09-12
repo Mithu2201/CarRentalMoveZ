@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalMoveZ.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class CarUpdated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,13 @@ namespace CarRentalMoveZ.Migrations
                     Year = table.Column<int>(type: "int", nullable: false),
                     PricePerDay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImgURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ImgURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Transmission = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Seats = table.Column<int>(type: "int", nullable: false),
+                    Fuel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TopSpeed = table.Column<int>(type: "int", nullable: false),
+                    NextOilChange = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TireReplacement = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
