@@ -1,0 +1,233 @@
+﻿@model IEnumerable<CarRentalMoveZ.ViewModels.BookingDetailsViewModel>
+
+@{
+    ViewData["Title"] = "Cashier Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-3">
+
+    <!-- Header + Cards -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>Cashier Dashboard</h3>
+        <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+            <!-- Search -->
+            <div class="input-group" style="max-width: 300px; flex-grow: 1;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search customer, car or location..." />
+            </div>
+
+            <!-- Payment Filter -->
+            <select id="paymentFilter" class="form-select" style="max-width: 150px;">
+                <option value="">All Payments</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+                <option value="Online">Online</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <!-- Booking Status Filter -->
+            <select id="statusFilter" class="form-select" style="max-width: 150px;">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Cards Row -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Total Revenue</h5>
+                    <p class="fs-4 fw-bold text-success">@Model.Sum(x => x.PaymentAmount).ToString("C")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Payments</h5>
+                    <p class="fs-4 fw-bold text-warning">@Model.Count(x => !x.IsPaid)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Cash Payments</h5>
+                    <p class="fs-4 fw-bold text-primary">@Model.Count(x => x.PaymentMethod == "Cash")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Confirmed Bookings</h5>
+                    <p class="fs-4 fw-bold text-success">@Model.Count(x => x.BookingStatus == "Confirmed")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Card -->
+    <div id="bookingDetailsCard" class="card p-3 mb-3 d-none">
+        <h5 class="fw-semibold mb-2">Booking Details</h5>
+        <div id="detailsContent"></div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="table-responsive shadow-sm rounded-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="cashier-thead">
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Car</th>
+                    <th>Location</th>
+                    <th>Dates</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr data-payment="@booking.PaymentMethod" data-status="@booking.BookingStatus">
+                        <td>@booking.BookingId</td>
+                        <td>@booking.CustomerName <br /><small>@booking.PhoneNumber</small></td>
+                        <td>
+                            @booking.CarName
+                            @if (!string.IsNullOrEmpty(booking.ImgURL))
+                            {
+                                <img src="@booking.ImgURL" alt="Car" class="ms-2 rounded" style="width:50px;" />
+                            }
+                        </td>
+                        <td>@booking.Location</td>
+                        <td>@booking.StartDate.ToShortDateString() - @booking.EndDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge bg-@(booking.BookingStatus == "Pending" ? "warning" : booking.BookingStatus == "Confirmed" ? "success" : "secondary")">
+                                @booking.BookingStatus
+                            </span>
+                        </td>
+                        <td>@booking.Amount.ToString("C")</td>
+                        <td>
+                            @if (!booking.IsPaid)
+                            {
+                                <span class="badge bg-warning">Pending</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@booking.PaymentMethod</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-controller="Admin" asp-action="CashierBookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        // Expand details
+        let selectedRow = null;
+        document.querySelectorAll("table tbody tr").forEach(row => {
+            row.addEventListener("click", e => {
+                if(e.target.closest("a, button")) return;
+                const card = document.getElementById("bookingDetailsCard");
+                const content = document.getElementById("detailsContent");
+                if(selectedRow === row){
+                    card.classList.add("d-none");
+                    selectedRow = null;
+                } else {
+                    const cells = row.querySelectorAll("td");
+                    content.innerHTML = `
+                        <p><strong>Booking ID:</strong> ${cells[0].innerText}</p>
+                        <p><strong>Customer:</strong> ${cells[1].innerText}</p>
+                        <p><strong>Car:</strong> ${cells[2].innerText}</p>
+                        <p><strong>Location:</strong> ${cells[3].innerText}</p>
+                        <p><strong>Dates:</strong> ${cells[4].innerText}</p>
+                        <p><strong>Status:</strong> ${cells[5].innerText}</p>
+                        <p><strong>Amount:</strong> ${cells[6].innerText}</p>
+                        <p><strong>Payment:</strong> ${cells[7].innerText}</p>
+                    `;
+                    card.classList.remove("d-none");
+                    selectedRow = row;
+                }
+            });
+        });
+
+        // Filter & Search
+        const searchInput = document.getElementById("searchInput");
+        const paymentFilter = document.getElementById("paymentFilter");
+        const statusFilter = document.getElementById("statusFilter");
+
+        function filterTable() {
+            const s = searchInput.value.toLowerCase();
+            const p = paymentFilter.value;
+            const st = statusFilter.value;
+            document.querySelectorAll("table tbody tr").forEach(r => {
+                const customer = r.cells[1].innerText.toLowerCase();
+                const car = r.cells[2].innerText.toLowerCase();
+                const payment = r.getAttribute("data-payment");
+                const status = r.getAttribute("data-status");
+                const matchSearch = customer.includes(s) || car.includes(s);
+                const matchPayment = !p || (p==="Other"?payment!=="Cash" && payment!=="Card" && payment!=="Online":payment===p);
+                const matchStatus = !st || status===st;
+                r.style.display = (matchSearch && matchPayment && matchStatus) ? "" : "none";
+            });
+        }
+
+        searchInput.addEventListener("input", filterTable);
+        paymentFilter.addEventListener("change", filterTable);
+        statusFilter.addEventListener("change", filterTable);
+    </script>
+
+    <style>
+        /* Table Header */
+        .cashier-thead th {
+            background-color: #1E56A0 !important;
+            color: white !important;
+            font-weight: 600;
+            border-bottom: 2px solid #163172;
+        }
+
+            .cashier-thead th:first-child {
+                border-top-left-radius: 1rem !important;
+            }
+
+            .cashier-thead th:last-child {
+                border-top-right-radius: 1rem !important;
+            }
+
+        /* Table Body */
+        table tbody {
+            background-color: white;http://localhost:5028/Img/bmw.png
+            color: black;
+        }
+
+        /* Table hover */
+        table.table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Responsive table container rounded */
+        .table-responsive.rounded-4 {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+    </style>
+}

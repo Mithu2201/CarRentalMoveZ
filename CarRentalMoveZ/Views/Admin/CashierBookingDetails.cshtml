@@ -1,0 +1,123 @@
+﻿@model CarRentalMoveZ.ViewModels.BookingDetailsViewModel
+
+@{
+    ViewData["Title"] = "Booking Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm rounded-4 p-3">
+        <h3>Booking Details</h3>
+        <hr />
+
+        <div class="row g-3 align-items-start">
+            <!-- Left: Car Image -->
+            <div class="col-md-5 text-center">
+                @if (!string.IsNullOrEmpty(Model.ImgURL))
+                {
+                    <img src="@Model.ImgURL" alt="Car" class="img-fluid rounded shadow-sm" style="max-height:400px; object-fit:cover;" />
+                }
+            </div>
+
+            <!-- Right: Booking Info & Payment -->
+            <div class="col-md-7">
+                <p><strong>Booking ID:</strong> @Model.BookingId</p>
+                <p><strong>Customer:</strong> @Model.CustomerName</p>
+                <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+                <p><strong>Car:</strong> @Model.CarName</p>
+                <p><strong>Location:</strong> @Model.Location</p>
+                <p><strong>Dates:</strong> @Model.StartDate.ToShortDateString() - @Model.EndDate.ToShortDateString()</p>
+                <p>
+                    <strong>Status:</strong>
+                    <span class="badge bg-@(Model.BookingStatus == "Pending" ? "warning" : Model.BookingStatus == "Confirmed" ? "success" : "secondary")">
+                        @Model.BookingStatus
+                    </span>
+                </p>
+                <p>
+                    <strong>Payment:</strong>
+                    @if (!Model.IsPaid)
+                    {
+                        <span class="badge bg-warning">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">@Model.PaymentMethod</span>
+                    }
+                </p>
+                <p><strong>Amount:</strong> @Model.Amount.ToString("C")</p>
+
+                @* Single form that handles payment confirmation and posts to CashierBookingDetails *@
+                @if (!Model.IsPaid)
+                {
+                    <form id="cashPaymentForm" method="post" asp-action="CashierBookingDetails" asp-controller="Admin">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.BookingId)
+                        @Html.HiddenFor(m => m.CarId)
+                        @Html.HiddenFor(m => m.CustomerId)
+                        @Html.HiddenFor(m => m.Location)
+                        @Html.HiddenFor(m => m.BookingStatus)
+                        <input type="hidden" name="PaymentMethod" value="Cash" />
+                        <input type="hidden" name="PaymentStatus" value="Confirmed" />
+                        <input type="hidden" name="IsPaid" value="true" />
+
+                        <div class="mb-2 text-start">
+                            <button type="button" class="btn btn-primary" id="cash-confirm-btn">Confirm Cash Payment</button>
+                        </div>
+
+                        <div id="cash-otp-section" class="mt-3 d-none text-start">
+                            <label for="cash-otp-input" class="form-label fw-semibold">Enter OTP sent:</label>
+                            <input type="text" id="cash-otp-input" class="form-control mb-2" />
+                            <button type="button" class="btn btn-success" id="cash-otp-verify-btn">Verify OTP</button>
+                            <p id="cash-otp-message" class="mt-2"></p>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let currentOTP = '';
+
+        function showMessage(title, message) {
+            alert(`${title}: ${message}`);
+        }
+
+        const cashBtn = document.getElementById('cash-confirm-btn');
+        if(cashBtn){
+            cashBtn.addEventListener('click', () => {
+                currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+                console.log("Cash OTP:", currentOTP);
+
+                showMessage('Reservation Confirmed', 'Pay within 3 days. OTP sent.');
+                document.getElementById('cash-otp-section').classList.remove('d-none');
+                cashBtn.classList.add('d-none');
+            });
+        }
+
+        const cashVerifyBtn = document.getElementById('cash-otp-verify-btn');
+        if(cashVerifyBtn){
+            cashVerifyBtn.addEventListener('click', () => {
+                const entered = document.getElementById('cash-otp-input').value.trim();
+                const msg = document.getElementById('cash-otp-message');
+
+                if(entered === currentOTP){
+                    msg.textContent = "Booking Confirmed!";
+                    msg.classList.remove('text-danger');
+                    msg.classList.add('text-success');
+
+                    showMessage('Confirmed', 'Your booking has been finalized.');
+
+                    // Submit the single form to CashierBookingDetails
+                    document.getElementById("cashPaymentForm").submit();
+                } else {
+                    msg.textContent = "Invalid OTP!";
+                    msg.classList.remove('text-success');
+                    msg.classList.add('text-danger');
+                }
+            });
+        }
+    </script>
+}

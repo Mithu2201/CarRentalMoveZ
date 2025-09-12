@@ -35,5 +35,23 @@ namespace CarRentalMoveZ.Services.Implementations
             var payments = _paymentRepository.GetPaymentsByUserId(userId);
             return PaymentMapper.ToDTOList(payments);
         }
+
+        public void UpdatePayment(BookingDetailsViewModel model)
+        {
+            // Fetch existing booking
+            var existingPayment = _paymentRepository.GetPaymentByBookingId(model.BookingId);
+            if (existingPayment == null)
+            {
+                throw new Exception("Payment not found");
+            }
+         
+
+            existingPayment.Amount = model.PaymentAmount;
+            existingPayment.PaymentDate = model.PaymentDate ?? existingPayment.PaymentDate; // retain old date if null
+            existingPayment.PaymentMethod = model.PaymentMethod ?? existingPayment.PaymentMethod; // retain old method if null
+            existingPayment.Status = model.PaymentStatus ?? existingPayment.Status; // retain old status if null
+         
+            _paymentRepository.Update(existingPayment);
+        }
     }
 }
