@@ -11,5 +11,8 @@ namespace CarRentalMoveZ.Services.Interfaces
         IEnumerable<PaymentDTO> GetAllPayments();
 
         IEnumerable<PaymentDTO> GetPaymentsByUserId(int userId);
+
+        void UpdatePayment(BookingDetailsViewModel model);
+
     }
 }

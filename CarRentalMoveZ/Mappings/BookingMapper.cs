@@ -14,11 +14,12 @@ namespace CarRentalMoveZ.Mappings
                 CarId = vm.CarId,
                 CustomerId = vm.CustomerId,
                 Location = vm.Location,
-                StartDate = vm.StartDate,
-                EndDate = vm.EndDate,
+                StartDate = vm.StartDate.Value,
+                EndDate = vm.EndDate.Value,
                 Days = vm.Days,
                 Amount = vm.Amount,
-                Status = "Pending"
+                Status = "Pending",
+                DriverStatus = vm.DriverStatus
             };
         }
 
@@ -55,7 +56,8 @@ namespace CarRentalMoveZ.Mappings
                     Location = b.Location,
                     Payment = b.Amount,
                     CustomerName = b.Customer.Name,
-                    CarModel = b.Car.Model
+                    CarModel = b.Car.Model,
+                    DriverStatus = b.DriverStatus
                 });
         }
 

@@ -1,1 +1,212 @@
-﻿<h1>Hi i'am Browsing Car-View cars (availability & price)</h1>
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.CarDTO>
+
+@{
+    ViewData["Title"] = "Car List";
+}
+
+<div class="container py-5" style="background-color:#F6F6F6;">
+    <div class="row gy-5">
+
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="p-4 rounded shadow-sm" style="background:#fff;">
+
+                <!-- Search -->
+                <h5 class="fw-bold mb-3" style="color:#163172;">Search</h5>
+                <div class="input-group mb-4">
+                    <input type="text" id="filterName" class="form-control"
+                           placeholder="Search by name..."
+                           style="background:#D6E4F0; border:none; color:#163172;" />
+                    <span class="input-group-text" style="background:#D6E4F0; color:#163172;">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+
+                <hr />
+
+                <!-- Select Brand -->
+                <h5 class="fw-bold mb-3" style="color:#163172;">Brand</h5>
+                <select id="filterBrand" class="form-select mb-3" style="background:#F6F6F6; border:1px solid #D6E4F0;">
+                    <option value="">All</option>
+                    @foreach (var brand in Model.Select(c => c.Brand).Distinct())
+                    {
+                        <option value="@brand">@brand</option>
+                    }
+                </select>
+
+                <!-- Select Model -->
+                <h5 class="fw-bold mb-3" style="color:#163172;">Model</h5>
+                <select id="filterModel" class="form-select mb-3" style="background:#F6F6F6; border:1px solid #D6E4F0;">
+                    <option value="">All</option>
+                    @foreach (var m in Model.Select(c => c.Model).Distinct())
+                    {
+                        <option value="@m">@m</option>
+                    }
+                </select>
+
+                <!-- Availability -->
+                <h5 class="fw-bold mb-3" style="color:#163172;">Availability</h5>
+                <select id="filterStatus" class="form-select mb-3" style="background:#F6F6F6; border:1px solid #D6E4F0;">
+                    <option value="">All</option>
+                    @foreach (var status in Model.Select(c => c.Status).Distinct())
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+
+                <hr />
+
+                <!-- Price -->
+                <h5 class="fw-bold mb-3" style="color:#163172;">Filter by Price</h5>
+                <input type="range" id="minPrice" min="0" max="500" step="10" value="0" class="form-range mb-2" />
+                <input type="range" id="maxPrice" min="0" max="500" step="10" value="500" class="form-range mb-2" />
+                <p class="small">Price: <span id="priceLabel" style="color:#1E56A0;">$0 - $500</span></p>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-link p-0" onclick="resetFilters()" style="color:#163172;">Clear</button>
+                    <button type="button" class="btn px-4 fw-semibold"
+                            style="background:#1E56A0; color:#fff;"
+                            onclick="applyFilters()">
+                        Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car List -->
+        <div class="col-lg-9">
+            <h2 class="mb-4 fw-bold" style="color:#163172;">Available Cars</h2>
+            <div class="row g-4" id="carList">
+                @foreach (var car in Model)
+                {
+                    <div class="col-md-6 col-lg-4 car-card"
+                         data-name="@car.CarName"
+                         data-brand="@car.Brand"
+                         data-model="@car.Model"
+                         data-price="@car.PricePerDay"
+                         data-status="@car.Status">
+                        <div class="card shadow-sm position-relative border-0" style="border-radius:12px; overflow:hidden;">
+                            <img src="@car.ImgURL" class="card-img-top" alt="@car.CarName"
+                                 style="height:200px; object-fit:cover;" />
+
+                            <!-- Price -->
+                            <div class="position-absolute top-0 end-0 m-3 px-3 py-1 rounded-pill shadow-sm"
+                                 style="background:#D6E4F0; color:#1E56A0; font-weight:600;">
+                                $@car.PricePerDay<span style="font-size:0.8rem; font-weight:400;">/Day</span>
+                            </div>
+
+                            <!-- Card Body -->
+                            <div class="card-body pb-4" style="background:#1E56A0; color:#fff;">
+                                <div class="d-flex align-items-center mb-2">
+                                    <h5 class="mb-0 fw-bold">@car.CarName</h5>
+                                    <span class="badge ms-auto px-3 py-1" style="background:#163172;">@car.Status</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li><strong>Brand:</strong> @car.Brand</li>
+                                    <li><strong>Model:</strong> @car.Model</li>
+                                </ul>
+                                <!-- Book Now -->
+                                <a asp-controller="Customer" asp-action="NewBooking" asp-route-carId="@car.CarId"
+                                   class="btn w-100 fw-semibold mb-2"
+                                   style="background:#D6E4F0; color:#163172; border-radius:6px;">
+                                    Book Now
+                                </a>
+
+                                <!-- View Details (label) -->
+                                <small class="d-block text-center"
+                                       style="color:#D6E4F0; cursor:pointer;">
+                                    <a asp-controller="Customer"
+                                       asp-action="CarDetails"
+                                       asp-route-id="@car.CarId"
+                                       style="color:#D6E4F0; text-decoration:underline;">
+                                        View Details
+                                    </a>
+                                </small>
+                            </div>
+
+                            <!-- Hidden Expand Section -->
+                            <div class="car-details p-3" style="display:none; background:#F6F6F6; color:#163172;">
+                                <p><strong>Year:</strong> @car.Year</p>
+                                <p><strong>Price/Day:</strong> $@car.PricePerDay</p>
+                                <p><strong>Status:</strong> @car.Status</p>
+                                <p><strong>Description:</strong> Reliable and comfortable car, perfect for city and long trips.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const minPriceInput = document.getElementById("minPrice");
+        const maxPriceInput = document.getElementById("maxPrice");
+        const priceLabel = document.getElementById("priceLabel");
+
+        function updatePriceLabel() {
+            priceLabel.textContent = `$${minPriceInput.value} - $${maxPriceInput.value}`;
+        }
+
+        function resetFilters() {
+            document.getElementById("filterName").value = "";
+            document.getElementById("filterBrand").value = "";
+            document.getElementById("filterModel").value = "";
+            document.getElementById("filterStatus").value = "";
+            minPriceInput.value = 0;
+            maxPriceInput.value = 500;
+            updatePriceLabel();
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const name = document.getElementById("filterName").value.toLowerCase();
+            const brand = document.getElementById("filterBrand").value.toLowerCase();
+            const model = document.getElementById("filterModel").value.toLowerCase();
+            const minPrice = parseFloat(minPriceInput.value);
+            const maxPrice = parseFloat(maxPriceInput.value);
+            const status = document.getElementById("filterStatus").value.toLowerCase();
+
+            const cards = document.querySelectorAll(".car-card");
+
+            cards.forEach(card => {
+                const carName = card.dataset.name.toLowerCase();
+                const carBrand = card.dataset.brand.toLowerCase();
+                const carModel = card.dataset.model.toLowerCase();
+                const carPrice = parseFloat(card.dataset.price);
+                const carStatus = card.dataset.status.toLowerCase();
+
+                let match = true;
+
+                if (name && !carName.includes(name)) match = false;
+                if (brand && carBrand !== brand) match = false;
+                if (model && carModel !== model) match = false;
+                if (carPrice < minPrice || carPrice > maxPrice) match = false;
+                if (status && carStatus !== status) match = false;
+
+                card.style.display = match ? "block" : "none";
+            });
+        }
+
+        minPriceInput.addEventListener("input", updatePriceLabel);
+        maxPriceInput.addEventListener("input", updatePriceLabel);
+        updatePriceLabel();
+
+                        document.querySelectorAll(".toggle-details").forEach(label => {
+                label.addEventListener("click", function () {
+                    const card = this.closest(".car-card");
+                    const details = card.querySelector(".car-details");
+
+                    if (details.style.display === "none") {
+                        details.style.display = "block";
+                        this.textContent = "Hide Details";
+                    } else {
+                        details.style.display = "none";
+                        this.textContent = "View Details";
+                    }
+                });
+            });
+    </script>
+}

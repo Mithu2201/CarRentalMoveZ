@@ -7,5 +7,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         void Register(RegisterViewModel model);
 
         bool RegisterStaff(RegisterStaffViewModel model);
+
+        bool RegisterDriver(RegisterDriverViewModel model);
     }
 }

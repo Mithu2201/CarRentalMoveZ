@@ -5,98 +5,111 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="text-lg-start">Register Staff</h2>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Card layout -->
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header" style="background-color: #1E56A0; color: white;">
+                    <h4 class="mb-0">Register Staff</h4>
+                </div>
+                <div class="card-body p-4">
 
-<!-- Error Message -->
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger mt-3">
-        @TempData["ErrorMessage"]
+                    <!-- Error Message -->
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger mb-3">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="AddStaff" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Name Field -->
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-semibold"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter staff name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Phone Number Field -->
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label fw-semibold"></label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- Confirm Password Field -->
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <!-- Date of Birth Field -->
+                        <div class="mb-3">
+                            <label asp-for="DateOfBirth" class="form-label fw-semibold"></label>
+                            <input asp-for="DateOfBirth" type="date" class="form-control" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+
+                        <!-- Gender Field -->
+                        <div class="mb-3">
+                            <label asp-for="Gender" class="form-label fw-semibold"></label>
+                            <select asp-for="Gender" asp-items="ViewBag.GenderList" class="form-select">
+                                <option value="" disabled selected>-- Select Gender --</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+
+                        <!-- Role Field -->
+                        <div class="mb-3">
+                            <label asp-for="Role" class="form-label fw-semibold"></label>
+                            <select asp-for="Role" asp-items="ViewBag.RoleList" class="form-select">
+                                <option value="" disabled selected>-- Select Role --</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <a asp-action="ManageStaff" class="btn btn-secondary px-4 me-2">Back</a>
+                            <button type="submit" class="btn px-4" style="background-color: #1E56A0; color: white;">
+                                Register Staff
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Success Message -->
+                    @* Uncomment if needed *@
+                    @* 
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success mt-3">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    } 
+                    *@
+                </div>
+            </div>
+        </div>
     </div>
-}
-
-<form asp-action="AddStaff" method="post">
-    @Html.AntiForgeryToken()
-
-    <!-- Name Field -->
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" placeholder="Enter staff name" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <!-- Email Field -->
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" placeholder="Enter email address" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <!-- Phone Number Field -->
-    <div class="mb-3">
-        <label asp-for="PhoneNumber" class="form-label"></label>
-        <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
-
-    <!-- Password Field -->
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <!-- Confirm Password Field -->
-    <div class="mb-3">
-        <label asp-for="ConfirmPassword" class="form-label"></label>
-        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-
-    <!-- Date of Birth Field -->
-    <div class="mb-3">
-        <label asp-for="DateOfBirth" class="form-label"></label>
-        <input asp-for="DateOfBirth" type="date" class="form-control" />
-        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-    </div>
-
-    <!-- Gender Field -->
-    <div class="mb-3">
-        <label asp-for="Gender" class="form-label"></label>
-        <select asp-for="Gender" asp-items="ViewBag.GenderList" class="form-control">
-            <option value="" disabled selected>-- Select Gender --</option>
-        </select>
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
-
-    <!-- Role Field -->
-    <div class="mb-3">
-        <label asp-for="Role" class="form-label"></label>
-        <select asp-for="Role" asp-items="ViewBag.RoleList" class="form-control">
-            <option value="" disabled selected>-- Select Role --</option>
-        </select>
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
-
-    <!-- Submit and Back Buttons -->
-    <div class="d-flex justify-content-end">
-        <a asp-action="ManageStaff" class="btn btn-secondary ms-2">Back</a>
-        <button type="submit" class="btn" style="background-color: #1E56A0; color: white; margin-left: 1rem;">
-            Register Staff
-        </button>
-    </div>
-</form>
-
-<!-- Success Message -->
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success mt-3">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-
-
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -13,6 +13,7 @@
         // Flatten related entities
         public string CustomerName { get; set; }
         public string CarModel { get; set; }
-        
+        public string DriverStatus { get; set; }
+
     }
 }
