@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250911054656_InitialUser")]
-    partial class InitialUser
+    [Migration("20250911093512_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,10 @@ namespace CarRentalMoveZ.Migrations
 
                     b.Property<int>("Days")
                         .HasColumnType("int");
+
+                    b.Property<string>("DriverStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");

@@ -5,6 +5,7 @@
     ViewData["Title"] = "New Booking";
 }
 
+
 <h2>Booking for @Model.CarName</h2>
 
 <div class="row">
@@ -42,20 +43,37 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="StartDate">Start Date</label>
-                <input asp-for="StartDate" type="date" class="form-control" id="startDate"
-                       min="@DateTime.Today.ToString("yyyy-MM-dd")" required onkeydown="return false" />
+                <label>Driver Option</label>
+                <select asp-for="DriverStatus" class="form-control" id="driverStatus">
+                    <option value="Without Driver">Without Driver</option>
+                    <option value="With Driver">With Driver (+LKR 1000/day)</option>
+                </select>
             </div>
 
             <div class="mb-3">
-                <label asp-for="EndDate">End Date</label>
-                <input asp-for="EndDate" type="date" class="form-control" id="endDate"
-                       min="@DateTime.Today.ToString("yyyy-MM-dd")" required onkeydown="return false" />
+                <label asp-for="StartDate">Start Date & Time</label>
+                <div class="input-group flatpickr" id="startDateWrapper">
+                    <input asp-for="StartDate" class="form-control" id="startDate" placeholder="Rent Date & Time" readonly data-input />
+                    <span class="input-group-text" data-toggle>
+                        <i class="bi bi-calendar"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="EndDate">End Date & Time</label>
+                <div class="input-group flatpickr" id="endDateWrapper">
+                    <input asp-for="EndDate" class="form-control" id="endDate" placeholder="Return Date & Time" readonly data-input />
+                    <span class="input-group-text" data-toggle>
+                        <i class="bi bi-calendar"></i>
+                    </span>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label>Number of Days</label>
                 <input type="text" id="daysDisplay" class="form-control" readonly />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
@@ -69,11 +87,15 @@
 </div>
 
 @section Scripts {
+
+  
+
     <script>
         function calculateBooking() {
             const start = document.getElementById("startDate").value;
             const end = document.getElementById("endDate").value;
             const price = parseFloat("@Model.PricePerDay");
+            const driverStatus = document.getElementById("driverStatus").value;
 
             if (start && end) {
                 const startDate = new Date(start);
@@ -82,10 +104,16 @@
                 if (endDate >= startDate) {
                     const diffTime = endDate - startDate;
                     const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // inclusive
-                    const amount = days * price;
+                    
+
+                    let amount = days * price;
+
+                    if (driverStatus === "With Driver") {
+                    amount += days * 1000;
+                    }
 
                     document.getElementById("daysDisplay").value = days;
-                    document.getElementById("amountDisplay").value = "$" + amount.toFixed(2);
+                    document.getElementById("amountDisplay").value = "Rs." + amount.toFixed(2);
 
                     document.getElementById("days").value = days;
                     document.getElementById("amount").value = amount.toFixed(2);
@@ -100,7 +128,61 @@
 
         document.getElementById("startDate").addEventListener("change", calculateBooking);
         document.getElementById("endDate").addEventListener("change", calculateBooking);
+        document.getElementById("driverStatus").addEventListener("change", calculateBooking);
 
         calculateBooking(); // Recalculate on page load if values are pre-filled
+
+
+            const startInput = document.getElementById("startDate");
+        const endInput = document.getElementById("endDate");
+
+        // Prevent selecting past dates for Start Date
+        const today = new Date().toISOString().split("T")[0];
+        startInput.setAttribute("min", today);
+
+        // When user selects Start Date → restrict End Date
+        startInput.addEventListener("change", function () {
+            const startDate = this.value;
+            endInput.value = ""; // clear old value if any
+            endInput.setAttribute("min", startDate);
+        });
+
+        // Show popup if error exists
+        @if (TempData["BookingError"] != null)
+        {
+                <text>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Booking Failed',
+                        text: '@TempData["BookingError"]'
+                    });
+                </text>
+        }
+
+        const bookedRanges = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.BookedRanges));
+
+        const endPicker = flatpickr("#endDateWrapper", {
+            wrap: true,
+            enableTime: true,       // enable time picker
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+            disable: bookedRanges.map(r => ({ from: r.start, to: r.end })),
+            clickOpens: false
+        });
+
+        flatpickr("#startDateWrapper", {
+            wrap: true,
+            enableTime: true,       // enable time picker
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+            disable: bookedRanges.map(r => ({ from: r.start, to: r.end })),
+            clickOpens: false,
+            onChange: function(selectedDates, dateStr) {
+                if (selectedDates.length > 0) {
+                    endPicker.set("minDate", dateStr);
+                }
+            }
+        });
+
     </script>
 }

@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
 using CarRentalMoveZ.ViewModels;
 
 namespace CarRentalMoveZ.Services.Interfaces
@@ -13,7 +14,7 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         BookingDetailsViewModel GetBookingById(int id);
 
-
+        IEnumerable<Booking> GetBookingsForCar(int carId);
         void UpdateBooking(BookingDetailsViewModel model);
 
         IEnumerable<BookingDetailsViewModel> GetAllBookingsDetail();

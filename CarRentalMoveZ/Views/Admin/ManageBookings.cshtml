@@ -44,6 +44,7 @@
                     <th>Location</th>
                     <th>Payment</th>
                     <th>Status</th>
+                    <th>Driver Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -69,6 +70,7 @@
                                     @booking.Status
                                 </span>
                             </td>
+                            <td>@booking.DriverStatus</td>
                             <td>
                                 <a asp-action="BookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-primary text-white">
                                     <i class="bi bi-eye"></i> View

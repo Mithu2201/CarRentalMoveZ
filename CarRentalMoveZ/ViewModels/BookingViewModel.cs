@@ -7,12 +7,14 @@
         public int CustomerId { get; set; }
 
         public string Location { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         // Calculated
         public int Days { get; set; }
         public decimal Amount { get; set; }
+
+        public string DriverStatus { get; set; }
 
         // Car Details
         public string CarName { get; set; }

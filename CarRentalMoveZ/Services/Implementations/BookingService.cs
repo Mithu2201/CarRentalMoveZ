@@ -20,6 +20,24 @@ namespace CarRentalMoveZ.Services.Implementations
 
         public int CreateBooking(BookingViewModel model)
         {
+
+            // Fetch existing bookings for this car
+            var existingBookings = _bookingRepo.GetBookingsByCar(model.CarId);
+
+            // Check for overlap
+            bool hasConflict = existingBookings.Any(b =>
+                (model.StartDate >= b.StartDate && model.StartDate <= b.EndDate) || // overlap start
+                (model.EndDate >= b.StartDate && model.EndDate <= b.EndDate) ||     // overlap end
+                (model.StartDate <= b.StartDate && model.EndDate >= b.EndDate)      // fully covers
+            );
+
+            if (hasConflict)
+            {
+                throw new InvalidOperationException("This car is already booked for the selected dates.");
+            }
+
+            
+
             // Map ViewModel → Entity using Mapper
             Booking booking = BookingMapper.ToEntity(model);
 
@@ -83,6 +101,11 @@ namespace CarRentalMoveZ.Services.Implementations
             existingBooking.Status = model.BookingStatus;
             // Save changes
             _bookingRepo.Update(existingBooking);
+        }
+
+        public IEnumerable<Booking> GetBookingsForCar(int carId)
+        {
+            return _bookingRepo.GetBookingsByCar(carId);
         }
 
     }
