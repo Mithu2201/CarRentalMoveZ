@@ -25,6 +25,14 @@ namespace CarRentalMoveZ.Repository.Implementations
             return _context.Drivers.Include(d => d.User).ToList();
         }
 
+        public Driver Getbyid(int id)
+        {
+            return _context.Drivers
+                .Include(d => d.User)
+                .FirstOrDefault(d => d.DriverId == id);
+
+        }
+
 
     }
 }
