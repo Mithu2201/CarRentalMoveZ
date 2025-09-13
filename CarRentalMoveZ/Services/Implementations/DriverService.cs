@@ -30,6 +30,20 @@ namespace CarRentalMoveZ.Services.Implementations
             return DriversMapper.ToDTO(driver);
         }
 
+        public void SetDriverOnDuty(int driverId)
+        {
+            var driver = driverRepository.Getbyid(driverId);
+            if (driver == null) return;
+
+            driver.Status = "On Duty";
+            driverRepository.Update(driver);
+        }
+
+        public IEnumerable<DriverDTO> GetAvailableDrivers()
+        {
+            var drivers = driverRepository.GetActiveDrivers();
+            return DriversMapper.ToAvailableDTOList(drivers);
+        }
 
     }
 }

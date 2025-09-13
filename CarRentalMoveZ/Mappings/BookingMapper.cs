@@ -77,6 +77,8 @@ namespace CarRentalMoveZ.Mappings
                 EndDate = booking.EndDate,
                 Days = booking.Days,
                 Amount = booking.Amount,
+                DriverStatus = booking.DriverStatus,
+                DriverId = booking.DriverId,
 
                 CarName = booking.Car?.CarName ?? "",
                 ImgURL = booking.Car?.ImgURL ?? "",
@@ -110,9 +112,12 @@ namespace CarRentalMoveZ.Mappings
                 StartDate = vm.StartDate,
                 EndDate = vm.EndDate,
                 Days = vm.Days,
-                Amount = vm.Amount
+                Amount = vm.Amount,
+                DriverStatus= vm.DriverStatus
             };
         }
+
+
     }
 }
 

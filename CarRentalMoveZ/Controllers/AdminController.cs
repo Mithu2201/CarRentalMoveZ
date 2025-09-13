@@ -124,6 +124,8 @@ namespace CarRentalMoveZ.Controllers
             {
                 return NotFound();
             }
+
+            booking.AvailableDrivers = _driverService.GetAvailableDrivers();
             return View(booking);
         }
         [HttpPost]
@@ -132,31 +134,25 @@ namespace CarRentalMoveZ.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Inspect and log errors
-                var errors = ModelState
-                    .Where(kv => kv.Value.Errors.Count > 0)
-                    .Select(kv => new
-                    {
-                        Key = kv.Key,
-                        Errors = kv.Value.Errors.Select(e => string.IsNullOrEmpty(e.ErrorMessage) ? (e.Exception?.Message ?? "(exception)") : e.ErrorMessage)
-                    }).ToList();
-
-                // Log to console (or use ILogger)
-                foreach (var e in errors)
-                {
-                    Console.WriteLine($"ModelState error for '{e.Key}': {string.Join(" | ", e.Errors)}");
-                }
-
-                // Optionally: pass errors to ViewBag/TempData to show in view for dev
-                TempData["ModelErrors"] = string.Join("\n", errors.Select(x => $"{x.Key}: {string.Join(", ", x.Errors)}"));
-
-                return View(model); // return view to let user correct / for debugging
+                model.AvailableDrivers = _driverService.GetAvailableDrivers();
+                return View(model);
             }
 
-            // If valid → process (e.g., update booking status)
-            model.BookingStatus = "Assigned";
+            // Update ViewModel properties
+          
+            
+            model.BookingStatus = "Assigned"; // update status in ViewModel
+            
+
+            // Update booking in database
             _bookingService.UpdateBooking(model);
-            // ...
+
+            // Set driver OnDuty if assigned
+            if (model.DriverId.HasValue)
+            {
+                _driverService.SetDriverOnDuty(model.DriverId.Value);
+            }
+
             return RedirectToAction("ManageBookings");
         }
 
