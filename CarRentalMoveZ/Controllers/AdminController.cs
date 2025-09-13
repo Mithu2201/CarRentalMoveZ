@@ -228,7 +228,7 @@ namespace CarRentalMoveZ.Controllers
             if (isSuccess)
             {
                 TempData["SuccessMessage"] = "Staff user created successfully.";
-                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+                return RedirectToAction("ManageStaff", "Admin"); // Optionally redirect to another action
             }
             else
             {
@@ -301,11 +301,12 @@ namespace CarRentalMoveZ.Controllers
             if (isSuccess)
             {
                 TempData["SuccessMessage"] = "Driver user created successfully.";
-                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+                return RedirectToAction("ManageDriver", "Admin"); // Optionally redirect to another action
             }
             else
             {
                 TempData["ErrorMessage"] = "Email already exists. Please try again.";
+                ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
                 return View(model);
             }
         }
