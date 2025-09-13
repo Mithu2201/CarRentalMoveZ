@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Car List";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+
 }
 
 <div class="container py-5" style="background-color:#F6F6F6;">
@@ -115,8 +117,8 @@
                                 <!-- View Details (label) -->
                                 <small class="d-block text-center"
                                        style="color:#D6E4F0; cursor:pointer;">
-                                    <a asp-controller="Customer"
-                                       asp-action="CarDetails"
+                                    <a asp-controller="Home"
+                                       asp-action="CarDetail"
                                        asp-route-id="@car.CarId"
                                        style="color:#D6E4F0; text-decoration:underline;">
                                         View Details

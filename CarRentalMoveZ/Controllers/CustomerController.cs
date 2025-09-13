@@ -26,6 +26,11 @@ namespace CarRentalMoveZ.Controllers
             _paymentService = paymentService;
         }
 
+        public IActionResult Home()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult NewBooking(int carId,int customerId)
         {

@@ -1,0 +1,1455 @@
+﻿@{
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEasy - Car Booking Service</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-btn: #1E56A0; /* Button / accents */
+            --dark-bg: #163172; /* Deep navy */
+            --light-bg: #F6F6F6; /* Page background */
+            --card-bg: #D6E4F0; /* Cards / light sections */
+            --text-light: #ffffff;
+            --text-dark: #163172;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #FFFFFF, #E9F0FB, #C8DAF2);
+            background-size: 400% 400%;
+            animation: gradientMove 14s ease-in-out infinite;
+            min-height: 85vh;
+            padding: 80px 0 120px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Diagonal gradient motion */
+        @@keyframes gradientMove {
+            0%
+
+        {
+            background-position: 0% 0%;
+        }
+
+        50% {
+            background-position: 100% 100%;
+        }
+
+        100% {
+            background-position: 0% 0%;
+        }
+
+        }
+        /* Decorative floating circles */
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(30, 86, 160, 0.1);
+            z-index: 0;
+            animation: floatShapes 12s ease-in-out infinite alternate;
+        }
+
+        .hero::before {
+            width: 280px;
+            height: 280px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .hero::after {
+            width: 420px;
+            height: 420px;
+            bottom: -160px;
+            right: -160px;
+        }
+        /* Shape floating animation */
+        @@keyframes floatShapes {
+            0%
+
+        {
+            transform: translate(0, 0) scale(1);
+            opacity: 0.6;
+        }
+
+        50% {
+            transform: translate(40px, 30px) scale(1.12);
+            opacity: 0.85;
+        }
+
+        100% {
+            transform: translate(-25px, -20px) scale(1);
+            opacity: 0.65;
+        }
+
+        }
+        @@keyframes pulseShape {
+            from
+
+        {
+            transform: scale(1);
+            opacity: 0.45;
+        }
+
+        to {
+            transform: scale(1.18);
+            opacity: 0.75;
+        }
+
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            font-size: 3.5rem;
+            color: #163172;
+            line-height: 1.15;
+        }
+
+            .hero h1 span {
+                color: #1E56A0;
+            }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 18px;
+        }
+        /* Buttons */
+        .book-btn {
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+            z-index: 1;
+            background: linear-gradient(135deg, #1E56A0, #3E7BDA);
+            color: #fff;
+            border-radius: 50px;
+            padding: 14px 46px;
+            font-size: 1.2rem;
+            transition: transform .32s ease, box-shadow .32s ease, background .32s ease;
+            overflow: hidden;
+            border: 0;
+        }
+
+            .book-btn:hover {
+                background: linear-gradient(135deg, #3E7BDA, #6CAAF7);
+                box-shadow: 0 14px 30px rgba(62,123,218,0.18);
+                transform: translateY(-4px);
+                color: black !important;
+                border-color: #1E56A0;
+            }
+
+            .book-btn i {
+                margin-right: 10px;
+            }
+
+            .book-btn::after {
+                content: "";
+                position: absolute;
+                top: -10%;
+                left: -120%;
+                width: 40%;
+                height: 120%;
+                background: rgba(255,255,255,0.28);
+                transform: skewX(-18deg);
+                transition: left .55s cubic-bezier(.2,.9,.2,1);
+            }
+
+            .book-btn:hover::after {
+                left: 120%;
+            }
+
+        .search-btn {
+            background: linear-gradient(135deg, #1E56A0, #3E7BDA);
+            color: #fff;
+            border-radius: 10px;
+            transition: transform .28s ease, box-shadow .28s ease, background .28s ease;
+            border: 0;
+        }
+
+            .search-btn:hover {
+                background: linear-gradient(135deg, #3E7BDA, #6CAAF7);
+                box-shadow: 0 10px 24px rgba(62,123,218,0.14);
+                transform: translateY(-2px);
+            }
+        /* Entrance Animations */
+        .hero-text > * {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .hero-car {
+            opacity: 0;
+            transform: translateX(80px);
+        }
+
+            .hero-car .hero-img {
+                width: 200%;
+                max-width: 1500px;
+                height: auto;
+				margin-left: -150px;
+            }
+
+        .hero-text.animate h1 {
+            animation: slideInLeft 0.9s cubic-bezier(.2,.9,.2,1) forwards;
+        }
+
+        .hero-text.animate p {
+            animation: slideInLeft 0.9s cubic-bezier(.2,.9,.2,1) forwards 0.2s;
+        }
+
+        .hero-text.animate .book-btn {
+            animation: slideInLeft 0.9s cubic-bezier(.2,.9,.2,1) forwards 0.45s;
+        }
+
+        .hero-car.animate {
+            animation: slideInRight 1.0s cubic-bezier(.2,.9,.2,1) forwards;
+        }
+
+            .hero-car.animate img {
+                animation: floatCar 4.5s ease-in-out 1.05s infinite;
+            }
+        /* Keyframes */
+        @@keyframes slideInLeft {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(-80px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+        @@keyframes slideInRight {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(80px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+        @@keyframes floatCar {
+            0%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-12px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+
+        }
+        /* Align search box elements */
+        .search-box .form-control,
+        .search-box .form-select,
+        .search-box .btn {
+            height: 44px;
+            line-height: 1;
+        }
+        /* Responsive */
+        @@media (max-width: 992px) {
+            .hero h1
+
+        {
+            font-size: 2.6rem;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+        }
+
+        .book-btn {
+            font-size: 1.1rem;
+            padding: 12px 36px;
+        }
+
+        .hero-car .hero-img {
+            width: 90%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        }
+        @@media (max-width: 768px) {
+            .hero
+
+        {
+            padding: 50px 20px 140px;
+            text-align: center;
+            min-height: auto;
+        }
+
+        .hero h1 {
+            font-size: 2.3rem;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+        }
+
+        .book-btn {
+            font-size: 1rem;
+            padding: 12px 30px;
+        }
+
+        .hero-car .hero-img {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .hero-card {
+            padding: 30px 20px;
+        }
+
+        .taxi-image {
+            position: static;
+            width: 100%;
+            transform: none;
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 36px;
+        }
+
+        .service-card {
+            height: auto;
+        }
+
+        .feature-item {
+            margin-bottom: 40px;
+        }
+
+        #servicesContainer {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 15px;
+            scrollbar-width: thin;
+        }
+
+            #servicesContainer::-webkit-scrollbar {
+                height: 8px;
+            }
+
+            #servicesContainer::-webkit-scrollbar-thumb {
+                background: var(--primary-btn);
+                border-radius: 4px;
+            }
+
+            #servicesContainer .col-lg-4 {
+                flex: 0 0 80%;
+                max-width: 80%;
+            }
+
+        }
+        @@media (max-width: 576px) {
+            .hero h1
+
+        {
+            font-size: 0.01rem;
+        }
+
+        .hero p {
+            font-size: 0.01rem;
+        }
+
+        .hero-car .hero-img {
+            width: 380%;
+            max-width: 400px;
+        }
+
+        }
+        /* Alternative moving bar with marquee text */
+        .moving-bar-alt {
+            width: 100%;
+            background: linear-gradient(90deg, #1E56A0, #3E7BDA);
+            overflow: hidden;
+            white-space: nowrap;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 10px 0;
+            position: relative;
+        }
+
+            .moving-bar-alt .marquee {
+                display: inline-block;
+                padding-left: 100%;
+                animation: marqueeMove 15s linear infinite;
+            }
+
+                .moving-bar-alt .marquee span {
+                    padding-right: 100%;
+                }
+        @@keyframes marqueeMove {
+            0%
+
+        {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+
+        }
+        /* Testimonials */
+        .testimonial-card {
+            border-radius: 15px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+            .testimonial-card img {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        /* Booking Process */
+        .step {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #fff;
+            color: #1E56A0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: auto;
+            margin-bottom: 15px;
+        }
+        /* Car Card Animations */
+        .car-card {
+            background: #fff;
+            border-radius: 15px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards;
+        }
+
+            .car-card:hover {
+                transform: translateY(-8px) scale(1.03);
+                box-shadow: 0 20px 40px rgba(30, 86, 160, 0.2);
+            }
+
+            .car-card img {
+                transition: transform 0.4s ease;
+            }
+
+            .car-card:hover img {
+                transform: scale(1.05);
+            }
+
+        .car-btn {
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+            .car-btn:hover {
+                background: #3E7BDA;
+                transform: translateY(-2px);
+            }
+        @@keyframes fadeUp {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+        /* App Section */
+        .app-btn {
+            background: linear-gradient(135deg, #1E56A0, #3E7BDA);
+            color: #fff !important;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            text-align: left;
+        }
+
+            .app-btn:hover {
+                background: linear-gradient(135deg, #3E7BDA, #6CAAF7);
+                box-shadow: 0 14px 30px rgba(62,123,218,0.18);
+                transform: translateY(-4px);
+            }
+
+            .app-btn small {
+                font-size: 12px;
+                font-weight: 500;
+                opacity: 0.9;
+            }
+
+        .app-mockup {
+            max-height: 400px;
+            transition: transform 0.4s ease;
+        }
+
+            .app-mockup:hover {
+                transform: scale(1.05);
+            }
+        /* Blog Section */
+        .blog-card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+            .blog-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 24px rgba(30, 86, 160, 0.15);
+            }
+
+        .date-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #1E56A0;
+            color: #fff;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-weight: 600;
+        }
+
+            .date-badge .day {
+                font-size: 18px;
+                line-height: 1;
+                display: block;
+            }
+
+            .date-badge .month {
+                font-size: 12px;
+                text-transform: uppercase;
+            }
+
+        .blog-link {
+            color: #163172;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color .3s ease;
+        }
+
+            .blog-link:hover {
+                color: #1E56A0;
+            }
+
+        .blog-btn {
+            background: linear-gradient(135deg, #1E56A0, #3E7BDA);
+            color: #fff !important;
+            border-radius: 10px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            min-width: 160px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+            .blog-btn:hover {
+                background: linear-gradient(135deg, #3E7BDA, #6CAAF7);
+                box-shadow: 0 10px 25px rgba(62,123,218,0.18);
+                transform: translateX(5px);
+            }
+
+            .blog-btn.animate {
+                animation: fadeUp 0.8s cubic-bezier(.2,.9,.2,1) forwards;
+            }
+        /* Title Animations */
+        .fleet-title {
+            font-size: 3rem;
+            color: #1E56A0;
+            opacity: 0;
+        }
+
+        .fleet-subtitle {
+            font-size: 2.5rem;
+            color: #163172;
+            opacity: 0;
+        }
+        /* Service Section (Merged) */
+        .hero-section {
+            position: relative;
+            padding: 80px 0;
+            background: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        .hero-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: visible;
+        }
+
+            .hero-card::before {
+                content: "";
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                width: 100%;
+                height: 100%;
+                border: 3px solid #fff;
+                border-top: none;
+                border-left: none;
+                border-radius: 15px;
+                z-index: 0;
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-item {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary-btn);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+            .feature-icon:hover {
+                transform: scale(1.1);
+            }
+
+        .taxi-image {
+            position: absolute;
+            right: 0px;
+            top: 0.001%;
+            width: 35%;
+            height: auto;
+            z-index: 3;
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        .services-section {
+            padding: 20px 0;
+            background: linear-gradient(to bottom, var(--dark-bg) 65%, #fff 60%);
+            min-height: auto;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+            .section-subtitle::before {
+                content: '';
+                position: absolute;
+                left: -30px;
+                top: 50%;
+                width: 20px;
+                height: 3px;
+                background: var(--primary-btn);
+                transform: translateY(-50%);
+            }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            color: var(--text-light);
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            position: relative;
+            height: 450px;
+            color: var(--text-light);
+        }
+
+            .service-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(30, 86, 160, 0.2);
+            }
+
+        .service-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .service-image {
+            transform: scale(1.05);
+        }
+
+        .service-content {
+            padding: 25px;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-btn);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            font-size: 20px;
+        }
+
+        .service-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .explore-btn {
+            background: transparent;
+            border: 2px solid var(--primary-btn);
+            color: var(--primary-btn);
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .explore-btn:hover {
+                background: var(--primary-btn);
+                color: var(--text-light);
+                transform: translateX(5px);
+            }
+
+        .service-number {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(30, 86, 160, 0.2);
+        }
+        /* Navigation arrows */
+        .nav-arrows {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .nav-arrow {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-btn);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-light);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .nav-arrow:hover {
+                transform: scale(1.1);
+                box-shadow: 0 5px 15px rgba(30, 86, 160, 0.3);
+            }
+
+        #suggestions {
+            position: absolute; /* Take out of the flow */
+            top: 100%; /* Below the input */
+            left: 0;
+            right: 0; /* Make width match input */
+            z-index: 1000;
+            background: #fff;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        /* Individual suggestion item */
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+            .suggestion-item:hover, .suggestion-item.active {
+                background-color: #007bff;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    @section Banner {
+        <section class="hero">
+            <div class="container position-relative">
+                <div class="row align-items-center flex-column-reverse flex-lg-row">
+                    <!-- Left Text -->
+                    <div class="col-lg-7 col-md-12 text-center text-lg-start hero-text">
+                        <h1 class="fw-bold mb-3">
+                            Book Your Car <br />
+                            <span>Anywhere, Anytime</span>
+                        </h1>
+                        <p class="lead">
+                            Fast, reliable and affordable car booking service at your fingertips.
+                        </p>
+                        <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn mt-3 shadow">
+                            <i class="fa-solid fa-taxi me-2"></i> Book Now
+                        </a>
+                    </div>
+                    <!-- Right Car -->
+                    <div class="col-lg-5 col-12 text-center mt-4 mt-lg-0 hero-car">
+                        <img src="/Img/bmw.png" alt="Taxi Car" class="hero-img" />
+                    </div>
+                </div>
+            </div>
+            <!-- Search Box -->
+            <div class="container position-absolute start-50 translate-middle-x search-box" style="bottom: -10px; z-index: 10; max-width: 1200px;">
+                <div class="bg-white shadow-lg p-4" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
+                    <div class="row g-3 align-items-stretch">
+                        <!-- Destination -->
+                        <div class="col-md-3 col-12 d-flex flex-column">
+                            <label class="form-label text-muted small">Your Destination</label>
+                            <input type="text" id="autocomplete" class="form-select flex-fill" placeholder="Enter destination" />
+                            <div id="suggestions"></div>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div class="col-md-2 col-6 d-flex flex-column">
+                            <label class="form-label text-muted small">When to Start</label>
+                            <input type="date" class="form-control flex-fill" />
+                        </div>
+                        <!-- End Date -->
+                        <div class="col-md-2 col-6 d-flex flex-column">
+                            <label class="form-label text-muted small">When to Finish</label>
+                            <input type="date" class="form-control flex-fill" />
+                        </div>
+                        <!-- People -->
+                        <div class="col-md-3 col-12 d-flex flex-column">
+                            <label class="form-label text-muted small">People</label>
+                            <input type="number"
+                                   id="People"                                  
+                                   class="form-select flex-fill"
+                                   placeholder="Enter No of Passengers" />                         
+                        </div>
+                        <!-- Button -->
+                        <div class="col-md-2 col-12 d-flex flex-column">
+                            <label class="form-label text-muted small d-none d-md-block">&nbsp;</label>
+                            <a asp-controller="Home" asp-action="BrowseCar"
+                               class="btn flex-fill fw-bold search-btn d-flex justify-content-center align-items-center">
+                                Search
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section About {
+        <section class="about py-5" style="background: #fff; position: relative; z-index: 2;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Left Images -->
+                    <div class="col-lg-6 mb-4 mb-lg-0 position-relative">
+                        <!-- Main Image -->
+                        <div class="rounded-4 overflow-hidden shadow" style="max-width: 420px;" data-aos="fade-right">
+                            <img src="~/Img/car-family.jpeg" class="img-fluid" alt="Taxi Service" />
+                        </div>
+                        <!-- Floating Small Image -->
+                        <div class="position-absolute shadow rounded-4 overflow-hidden position-relative"
+                             style="bottom: -40px; left: 220px; width: 220px; border: 5px solid #fff;"
+                             data-aos="zoom-in" data-aos-delay="300">
+
+                            <img src="~/Img/car-family2.jpeg" class="img-fluid" alt="Client" />
+
+                            <!-- Play Button -->
+                            <a href="https://youtu.be/Mi0ZWuecT0Q"
+                               class="position-absolute top-50 start-50 translate-middle btn btn-light rounded-circle shadow"
+                               style="width: 60px; height: 60px; display:flex; align-items:center; justify-content:center; color: #1E56A0;"
+                               target="_blank">
+                                <i class="fa-solid fa-play"></i>
+                            </a>
+                        </div>
+
+                        <!-- Floating Stat Badge -->
+                        <div class="position-absolute bg-white shadow-sm rounded-3 px-4 py-3" style="top: -20px; left: -20px;" data-aos="fade-down" data-aos-delay="500">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-handshake me-2" style="color: #1E56A0; font-size: 1.5rem;"></i>
+                                <div>
+                                    <h5 class="fw-bold">6561+</h5>
+                                    <small class="text-muted ms-1">Satisfied Clients</small>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Content -->
+                    <div class="col-lg-6 ps-lg-5">
+                        <span class="text-uppercase fw-bold small" style="color: #1E56A0;">
+                            <i class="fa-solid fa-minus me-2"></i>About Our Company<i class="fa-solid fa-minus me-2"></i>
+                        </span>
+                        <h2 class="fw-bold display-6 mb-3" style="color: #163172;">
+                            Services With A Wide Range Of Cars
+                        </h2>
+                        <p class="text-muted mb-4">
+                            Whether you're embarking on a cross-country adventure or exploring a new destination by car, finding the right rental vehicle is essential for a stress-free journey. Here are some rental car tips to help you score.
+                        </p>
+                        <!-- Call & Button -->
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="/Img/staff-woman.png" class="rounded-circle me-3" style="width: 50px; height: 50px;" alt="Agent" />
+                            <div>
+                                <small class="text-muted d-block">Emergency Call Us</small>
+                                <h5 class="fw-bold mb-0" style="color: #1E56A0;">+91 2569 003 452</h5>
+                            </div>
+                        </div>
+                        <a asp-controller="Home" asp-action="About" class="btn book-btn">
+                            About More <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section Testimonials {
+        <section class="py-5">
+            <div class="container text-center">
+                <span class="small fw-bold" style="color: #1E56A0;">Testimonials</span>
+                <h2 class="fw-bold display-6 mb-5" style="color: #163172;">What Our Clients Say</h2>
+                <div class="row g-4">
+                    <div class="col-md-4" data-aos="fade-up">
+                        <div class="testimonial-card">
+                            <img src="/Img/client1.jpg" alt="Client" class="mb-3" />
+                            <p>"Excellent service! The car was clean and driver was very professional."</p>
+                            <h6 class="fw-bold">John Doe</h6>
+                            <div class="service-rating mb-2">
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <small class="text-muted ms-1">(5/5)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="testimonial-card">
+                            <img src="/Img/client3.jpg" alt="Client" class="mb-3" />
+                            <p>"Very affordable and easy booking process. Highly recommend CityRide!"</p>
+                            <h6 class="fw-bold">Sarah Lee</h6>
+                            <div class="service-rating mb-2">
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                                <small class="text-muted ms-1">(4.5/5)</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="testimonial-card">
+                            <img src="/Img/client2.jpg" alt="Client" class="mb-3" />
+                            <p>"I use CityRide for airport transfers every time. Always reliable."</p>
+                            <h6 class="fw-bold">Michael Chen</h6>
+                            <div class="service-rating mb-2">
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <i class="fa-solid fa-star-half-stroke text-warning"></i>
+                                <small class="text-muted ms-1">(4.5/5)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section BookingProcess {
+        <section class="py-5" style="background: #163172;">
+            <div class="container text-center">
+                <span class="small fw-bold" style="color: #fff;">How It Works</span>
+                <h2 class="fw-bold display-6 mb-5" style="color: #f6f6f6;">Easy Booking Process</h2>
+                <div class="row g-4">
+                    <div class="col-md-3 step" data-aos="fade-up">
+                        <div class="step-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                        <h6 class="text-light">Choose Destination</h6>
+                    </div>
+                    <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                        <h6 class="text-light">Select Date</h6>
+                    </div>
+                    <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-icon"><i class="fa-solid fa-car"></i></div>
+                        <h6 class="text-light">Pick Your Car</h6>
+                    </div>
+                    <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="600">
+                        <div class="step-icon"><i class="fa-solid fa-credit-card"></i></div>
+                        <h6 class="text-light">Confirm & Pay</h6>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section CarMenu {
+        <section class="py-5" style="background: #fff;">
+            <div class="container text-center">
+                <!-- Main Title -->
+                <h1 class="fw-bold fleet-title" data-aos="fade-right">- Our Fleet -</h1>
+                <h2 class="fw-bold display-4 mb-5 fleet-subtitle" data-aos="fade-right" data-aos-delay="200">Choose Your Ride</h2>
+                <div class="row g-4">
+                    <!-- Car 1 -->
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="card car-card shadow-sm h-100 border-0">
+                            <img src="~/Img/EconomyCar.png" class="card-img-top" alt="Economy Car">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Economy Car</h5>
+                                <p class="text-muted">Affordable rides, best for daily city travel.</p>
+                                <p class="fw-bold" style="color: #1E56A0;">From $10 / ride</p>
+                                <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
+                                    Book Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Car 2 -->
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                        <div class="card car-card shadow-sm h-100 border-0">
+                            <img src="~/Img/sedan.jpg" class="card-img-top" alt="Premium Sedan">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Premium Sedan</h5>
+                                <p class="text-muted">Luxury comfort with professional service.</p>
+                                <p class="fw-bold" style="color: #1E56A0;">From $25 / ride</p>
+                                <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
+                                    Book Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Car 3 -->
+                    <div class="col-md-4" data-aos="fade-up" data-aos-delay="900">
+                        <div class="card car-card shadow-sm h-100 border-0">
+                            <img src="~/Img/bluesuv.png" class="card-img-top" alt="SUV">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">SUV</h5>
+                                <p class="text-muted">Spacious and powerful, perfect for family trips.</p>
+                                <p class="fw-bold" style="color: #1E56A0;">From $40 / ride</p>
+                                <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
+                                    Book Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section App {
+        <section class="app-download-section py-5" style="background: #D6E4F0;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Left Content -->
+                    <div class="col-md-6 text-md-start text-center mb-4 mb-md-0">
+                        <span class="text-uppercase fw-bold small" style="color: #1E56A0;">
+                            <i class="fa-solid fa-mobile-screen me-2"></i> Download Our App
+                        </span>
+                        <h2 class="fw-bold display-6 mb-3" style="color: #163172;">
+                            Get Free DriveEasy App<br /> On Your Store
+                        </h2>
+                        <p class="text-muted mb-4">
+                            Whether you’re booking an airport ride, a city trip, or a business journey, our app makes your travel easier and faster. Download now and enjoy a stress-free experience.
+                        </p>
+                        <!-- Buttons -->
+                        <div class="d-flex flex-wrap gap-3 justify-content-md-start justify-content-center">
+                            <a href="https://www.apple.com/app-store/" class="btn app-btn d-flex align-items-center px-3 py-2" target="_blank">
+                                <i class="fa-brands fa-apple fa-2x me-2"></i>
+                                <div>
+                                    <small class="d-block">Download App</small>
+                                    <span class="fw-bold">From App Store</span>
+                                </div>
+                            </a>
+                            <a href="https://play.google.com/store/games?hl=en&pli=1" class="btn app-btn d-flex align-items-center px-3 py-2" target="_blank">
+                                <i class="fa-brands fa-google-play fa-2x me-2"></i>
+                                <div>
+                                    <small class="d-block">Download App</small>
+                                    <span class="fw-bold">From Play Store</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Right Image -->
+                    <div class="col-md-6 text-center">
+                        <img src="~/Img/app.png" alt="App Mockup" class="img-fluid app-mockup" />
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section blog {
+        <section class="blog-section py-5" style="background: #fff;">
+            <div class="container">
+                <!-- Heading -->
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <div>
+                        <span class="text-uppercase small fw-bold" style="color: #1E56A0;">
+                            <i class="fa-solid fa-minus me-2"></i> Our Latest News
+                        </span>
+                        <h2 class="fw-bold display-6" style="color: #163172;">
+                            Latest News & Blog On DriveEasy
+                        </h2>
+                    </div>
+                    <div>
+                        <a href="https://www.dailynews.lk/" class="blog-btn" target="_blank">
+                            View All Blog
+                        </a>
+                    </div>
+                </div>
+                <!-- Blog Grid -->
+                <div class="row g-4">
+                    <!-- Blog Item -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card blog-card border-0 shadow h-100">
+                            <div class="position-relative">
+                                <img src="~/Img/people 1.jpeg" class="card-img-top" alt="Blog 1">
+                                <div class="date-badge text-center">
+                                    <span class="day">25</span>
+                                    <small class="month">June</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex text-muted small mb-2">
+                                    <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                    <span><i class="fa-solid fa-comment me-1"></i> 2 Comments</span>
+                                </div>
+                                <h6 class="fw-bold" style="color: #1E56A0;">Cupidatat Nonproident Sunt In Culpa Qui Officia</h6>
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
+                                    Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Blog Item -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card blog-card border-0 shadow h-100">
+                            <div class="position-relative">
+                                <img src="~/Img/boy.jpeg" class="card-img-top" alt="Blog 2">
+                                <div class="date-badge text-center">
+                                    <span class="day">25</span>
+                                    <small class="month">June</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex text-muted small mb-2">
+                                    <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                    <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
+                                </div>
+                                <h6 class="fw-bold" style="color: #1E56A0;">Big Data. Any Leftovers In The Kitchen?</h6>
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
+                                    Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Blog Item -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card blog-card border-0 shadow h-100">
+                            <div class="position-relative">
+                                <img src="~/Img/familycar.jpeg" class="card-img-top" alt="Blog 2">
+                                <div class="date-badge text-center">
+                                    <span class="day">26</span>
+                                    <small class="month">June</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex text-muted small mb-2">
+                                    <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                    <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
+                                </div>
+                                <h6 class="fw-bold" style="color: #1E56A0;">Big Data. Any Leftovers In The Kitchen?</h6>
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
+                                    Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Blog Item -->
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card blog-card border-0 shadow h-100">
+                            <div class="position-relative">
+                                <img src="~/Img/youngboy.jpeg" class="card-img-top" alt="Blog 2">
+                                <div class="date-badge text-center">
+                                    <span class="day">27</span>
+                                    <small class="month">June</small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex text-muted small mb-2">
+                                    <span class="me-3"><i class="fa-solid fa-user me-1"></i> Admin</span>
+                                    <span><i class="fa-solid fa-comment me-1"></i> 5 Comments</span>
+                                </div>
+                                <h6 class="fw-bold" style="color: #1E56A0;">Big Data. Any Leftovers In The Kitchen?</h6>
+                                <a href="https://www.dailynews.lk/" class="blog-link" target="_blank">
+                                    Read More <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @section servicenew {
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-card" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="hero-content">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div class="col-md-4 feature-item" data-aos="fade-up" data-aos-delay="200">
+                                        <div class="feature-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="feature-title">Easier & Faster</div>
+                                        <div class="feature-subtitle">Bookings</div>
+                                    </div>
+                                    <div class="col-md-4 feature-item" data-aos="fade-up" data-aos-delay="400">
+                                        <div class="feature-icon">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <div class="feature-title">Too Many Pickup</div>
+                                        <div class="feature-subtitle">Locations</div>
+                                    </div>
+                                    <div class="col-md-4 feature-item" data-aos="fade-up" data-aos-delay="600">
+                                        <div class="feature-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="feature-title">Customers 100%</div>
+                                        <div class="feature-subtitle">Satisfied</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Taxi Street" class="taxi-image" data-aos="fade-left" data-aos-delay="800">
+                </div>
+            </div>
+        </section>
+        <!-- Services Section -->
+        <section class="services-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="section-header" data-aos="fade-right">
+                            <div class="section-subtitle">OUR SERVICES</div>
+                            <h2 class="section-title">We're Partner Of<br>Your Business</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="nav-arrows" data-aos="fade-left">
+                            <button class="nav-arrow" onclick="previousSlide()">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="nav-arrow" onclick="nextSlide()">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="servicesContainer">
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1pYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Airport Transport" class="service-image">
+                            <div class="service-content">
+                                <div class="service-icon">
+                                    <i class="fas fa-plane"></i>
+                                </div>
+                                <h3 class="service-title">Airport Transport</h3>
+                                <a href="/Home/Service" class="explore-btn">
+                                    Explore More <i class="fas fa-arrow-right"></i>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1pYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="City Transport" class="service-image">
+                            <div class="service-content">
+                                <div class="service-icon">
+                                    <i class="fas fa-city"></i>
+                                </div>
+                                <h3 class="service-title">City Transport</h3>
+                                <a href="#" class="explore-btn">
+                                    Explore More <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="600">
+                        <div class="service-card">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1pYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Business Tour" class="service-image">
+                            <div class="service-content">
+                                <div class="service-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <h3 class="service-title">Business Tour</h3>
+                                <a href="#" class="explore-btn">
+                                    Explore More <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 100
+            });
+        }
+
+        // Services scroll navigation
+        const servicesContainer = document.getElementById("servicesContainer");
+        const cardWidth = 320; // approx card width (adjust if needed)
+        function nextSlide() {
+            if (servicesContainer) {
+                servicesContainer.scrollBy({
+                    left: cardWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        function previousSlide() {
+            if (servicesContainer) {
+                servicesContainer.scrollBy({
+                    left: -cardWidth,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            // Add animate classes to hero elements
+            const heroText = document.querySelector(".hero-text");
+            const heroCar = document.querySelector(".hero-car");
+            const searchBox = document.querySelector(".search-box");
+            if (heroText) setTimeout(() => heroText.classList.add("animate"), 80);
+            if (heroCar) setTimeout(() => heroCar.classList.add("animate"), 120);
+
+            // Explore buttons click handling
+            document.querySelectorAll('.explore-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Explore more clicked');
+                });
+            });
+
+            // Service card hover effects (desktop only)
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    if (window.innerWidth > 768) {
+                        this.style.transform = 'translateY(-10px)';
+                    }
+                });
+                card.addEventListener('mouseleave', function() {
+                    if (window.innerWidth > 768) {
+                        this.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -14,7 +14,7 @@
             </p>
 
             
-            <<!-- Payment Summary -->
+            <!-- Payment Summary -->
             <div class="rounded p-3 mb-4" style="background-color: #D6E4F0;">
                 <div class="d-flex justify-content-between mb-2">
                     <span>Total Amount</span>
@@ -254,7 +254,7 @@
         function showMessage(title, message) { alert(title + ": " + message); }
 
         // ✅ Card
-        document.getElementById('card-pay-btn').addEventListener('click', () => {
+                document.getElementById('card-pay-btn').addEventListener('click', () => {
             const cardNumber = document.getElementById('card-number').value.trim();
             const holderName = document.getElementById('holder-name').value.trim();
             const cvc = document.getElementById('cvc').value.trim();
@@ -265,9 +265,10 @@
             }
 
             currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log("Card OTP:", currentOTP);
 
-            showMessage('OTP Sent', 'An OTP has been sent to your phone.');
+            // ✅ Show OTP directly in popup
+            alert("Your OTP is: " + currentOTP);
+
             document.getElementById('card-otp-section').classList.remove('d-none');
             document.getElementById('card-pay-btn').classList.add('d-none');
         });
@@ -291,11 +292,12 @@
         });
 
         // ✅ Cash
-        document.getElementById('cash-confirm-btn').addEventListener('click', () => {
+                document.getElementById('cash-confirm-btn').addEventListener('click', () => {
             currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log("Cash OTP:", currentOTP);
 
-            showMessage('Reservation Confirmed', 'Pay within 3 days. OTP sent.');
+            // ✅ Show OTP directly in popup
+            alert("Your OTP is: " + currentOTP);
+
             document.getElementById('cash-otp-section').classList.remove('d-none');
             document.getElementById('cash-confirm-btn').classList.add('d-none');
         });

@@ -36,5 +36,13 @@ namespace CarRentalMoveZ.Controllers
         {
             return View(_carService.GetAllAvailable());
         }
+
+        public IActionResult CarDetail(int id)
+        {
+            var car = _carService.GetCarById(id);
+            return View(car);
+        }
+
+
     }
 }
