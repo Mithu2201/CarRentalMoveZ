@@ -33,6 +33,19 @@ namespace CarRentalMoveZ.Repository.Implementations
 
         }
 
+        public IEnumerable<Driver> GetActiveDrivers()
+        {
+            return _context.Drivers
+                .Where(d => d.Status == "Active")
+                .OrderBy(d => d.Name)
+                .ToList();
+        }
+
+        public void Update(Driver driver)
+        {
+            _context.Drivers.Update(driver);
+            _context.SaveChanges();
+        }
 
     }
 }

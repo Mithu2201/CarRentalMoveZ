@@ -43,5 +43,24 @@ namespace CarRentalMoveZ.Mappings
             };
         }
 
+        public static IEnumerable<DriverDTO> ToAvailableDTOList(IEnumerable<Driver> drivers)
+        {
+            if (drivers == null)
+                return Enumerable.Empty<DriverDTO>();
+
+            return drivers.Select(d => new DriverDTO
+            {
+                DriverId = d.DriverId,
+                UserId = d.UserId,
+                // Use Driver.Name if available, otherwise fallback to User.Name
+                Name = !string.IsNullOrWhiteSpace(d.Name) ? d.Name : (d.User?.Name ?? "Unknown"),
+                Email = !string.IsNullOrWhiteSpace(d.Email) ? d.Email : (d.User?.Email ?? "N/A"),
+                PhoneNumber = !string.IsNullOrWhiteSpace(d.PhoneNumber) ? d.PhoneNumber : (d.User?.PhoneNumber ?? "N/A"),
+                LicenseNo = d.LicenseNo,
+                Status = d.Status,
+                Role = "Driver"
+            });
+        }
+
     }
 }

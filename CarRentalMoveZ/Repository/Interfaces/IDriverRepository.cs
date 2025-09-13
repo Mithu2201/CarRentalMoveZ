@@ -10,5 +10,9 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         Driver Getbyid(int id);
 
+        IEnumerable<Driver> GetActiveDrivers();
+       
+        void Update(Driver driver);
+
     }
 }

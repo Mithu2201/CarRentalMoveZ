@@ -100,6 +100,10 @@ namespace CarRentalMoveZ.Services.Implementations
             existingBooking.Days = model.Days;
             existingBooking.Amount = model.Amount;
             existingBooking.Status = model.BookingStatus;
+            existingBooking.DriverStatus = model.DriverStatus;
+            existingBooking.DriverId = model.DriverId;
+
+
             // Save changes
             _bookingRepo.Update(existingBooking);
         }

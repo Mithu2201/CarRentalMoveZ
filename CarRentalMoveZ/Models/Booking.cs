@@ -32,5 +32,11 @@ namespace CarRentalMoveZ.Models
 
         [Required]
         public string DriverStatus { get; set; }
+
+        public int? DriverId { get; set; }  // Nullable foreign key
+
+        public Driver? Driver { get; set; }  // Navigation property can be null
+
+
     }
 }
