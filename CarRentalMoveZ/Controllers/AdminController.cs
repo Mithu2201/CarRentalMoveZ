@@ -372,8 +372,14 @@ namespace CarRentalMoveZ.Controllers
             {
                 return View(model);
             }
-            model.PaymentStatus = "Paid";
+
+            // Don't override PaymentStatus or IsPaid here.
+            // The values come from the form:
+            //   PaymentStatus = "Confirmed" OR "Refunded"
+            //   IsPaid = true/false
+
             _paymentService.UpdatePayment(model);
+
             return RedirectToAction("Cashier");
         }
 
