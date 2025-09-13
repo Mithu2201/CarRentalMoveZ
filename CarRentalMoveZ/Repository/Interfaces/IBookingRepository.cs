@@ -14,5 +14,9 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         void Update(Booking booking);
 
+        void Cancel(int bookingId);
+
+
+
     }
 }

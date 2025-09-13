@@ -44,7 +44,7 @@
                     <th>Payment Date</th>
                     <th>Payment Method</th>
                     <th>Status</th>
-                    <th>Action</th>
+                 @*    <th>Action</th> *@
                 </tr>
             </thead>
             <tbody class="small">
@@ -64,11 +64,11 @@
                                     @payment.Status
                                 </span>
                             </td>
-                            <td>
+                        @*     <td>
                                 <a asp-action="ViewPayment" asp-route-id="@payment.PaymentId" class="btn btn-sm btn-primary text-white">
                                     <i class="bi bi-eye"></i> View
                                 </a>
-                            </td>
+                            </td> *@
                         </tr>
                     }
                 }

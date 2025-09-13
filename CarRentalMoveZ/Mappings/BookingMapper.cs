@@ -34,7 +34,8 @@ namespace CarRentalMoveZ.Mappings
                 Location = booking.Location,
                 Payment = booking.Amount, // Assuming Amount is the payment
                 CustomerName = booking.Customer?.Name,
-                CarModel = booking.Car?.Model
+                CarModel = booking.Car?.Model,
+                
             };
         }
 
@@ -76,6 +77,8 @@ namespace CarRentalMoveZ.Mappings
                 EndDate = booking.EndDate,
                 Days = booking.Days,
                 Amount = booking.Amount,
+                DriverStatus = booking.DriverStatus,
+                DriverId = booking.DriverId,
 
                 CarName = booking.Car?.CarName ?? "",
                 ImgURL = booking.Car?.ImgURL ?? "",
@@ -84,7 +87,9 @@ namespace CarRentalMoveZ.Mappings
                 CustomerName = booking.Customer?.Name ?? "",
                 PhoneNumber = booking.Customer?.PhoneNumber ?? "",
 
-                IsPaid = payment != null && payment.Status == "Paid",
+                IsPaid = payment != null &&
+                (payment.Status == "Paid" || payment.Status == "Pending to refund" || payment.Status=="Refunded"),
+
                 PaymentDate = payment?.PaymentDate,
                 PaymentMethod = payment?.PaymentMethod,
                 PaymentAmount = payment?.Amount ?? 0m,
@@ -107,9 +112,12 @@ namespace CarRentalMoveZ.Mappings
                 StartDate = vm.StartDate,
                 EndDate = vm.EndDate,
                 Days = vm.Days,
-                Amount = vm.Amount
+                Amount = vm.Amount,
+                DriverStatus= vm.DriverStatus
             };
         }
+
+
     }
 }
 

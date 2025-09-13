@@ -7,6 +7,7 @@
 
 
 <div class="container py-4">
+
     <h2 class="mb-4">My Bookings</h2>
 
     <table class="table table-hover">
@@ -41,6 +42,17 @@
                             </span>
                         </td>
                         <td>@booking.DriverStatus</td>
+
+                        <td>
+                            @if (booking.Status == "Pending")
+                            {
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmCancel(@booking.BookingId)">
+                                    Cancel
+                                </button>
+                            }
+                        </td>
+
                     </tr>
                 }
             }
@@ -51,3 +63,40 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    function confirmCancel(bookingId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to cancel this booking?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/Customer/CancelBooking', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: `id=${bookingId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Cancelled!', data.message, 'success')
+                            .then(() => location.reload());
+                    } else {
+                        Swal.fire('Not Allowed!', data.message, 'error');
+                    }
+                })
+                .catch(() => {
+                    Swal.fire('Error!', 'Something went wrong.', 'error');
+                });
+            }
+        });
+    }
+</script>

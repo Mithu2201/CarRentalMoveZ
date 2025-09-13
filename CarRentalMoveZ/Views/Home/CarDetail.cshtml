@@ -1,14 +1,14 @@
 ﻿@model CarRentalMoveZ.ViewModels.CarViewModel
 @{
     ViewData["Title"] = "Car Details";
-    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
 <div class="container-fluid py-3" style="background-color:#F6F6F6; min-height:100vh;">
     <!-- Header -->
     <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
         <h3 class="fw-bold">@Model.CarName Details</h3>
-        <a asp-controller="Customer" asp-action="Car" class="btn" style="background-color:#1E56A0; color:white;">
+        <a asp-controller="Home" asp-action="BrowseCar" class="btn" style="background-color:#1E56A0; color:white;">
             <i class="bi bi-arrow-left me-1"></i> Back to Cars
         </a>
     </div>
@@ -27,7 +27,7 @@
                     @Model.CarName is a stylish and reliable car, ideal for both city rides and long journeys.
                     With refined performance and advanced features, it ensures comfort and safety.
                 </p>
-                <a asp-controller="Customer" asp-action="NewBooking" asp-route-id="@Model.CarId" class="btn px-4 py-2 mt-2"
+                <a asp-controller="Account" asp-action="Login" class="btn px-4 py-2 mt-2"
                    style="background-color:#1E56A0; color:white; border-radius:8px;">
                     <i class="bi bi-car-front me-2"></i> Book Now
                 </a>

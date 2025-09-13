@@ -1,6 +1,46 @@
-﻿@{
+﻿@model CarRentalMoveZ.DTOs.StaffDTO
+
+@{
+    ViewData["Title"] = "Staff Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h3>Staff Details</h3>
+        <a asp-action="ManageStaff" asp-controller="Admin" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Staff
+        </a>
+    </div>
 
-<p>Hi i'm Staff Details-Detailed staff profile</p>
+    <!-- Staff Card -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <p><strong>Staff ID:</strong> @Model.StaffId</p>
+                    <p><strong>Name:</strong> @Model.Name</p>
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+                    <p><strong>Role:</strong> @Model.Role</p>
+                </div>
+                <div class="col-md-6">
+                    
+                  @*   <p>
+                        <strong>Status:</strong>
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </p>
+                    <p><strong>Joined On:</strong> @Model.Staff.JoinDate.ToString("dd MMM yyyy")</p> *@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

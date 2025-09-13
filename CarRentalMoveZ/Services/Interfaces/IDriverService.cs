@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
 
 namespace CarRentalMoveZ.Services.Interfaces
 {
@@ -7,5 +8,10 @@ namespace CarRentalMoveZ.Services.Interfaces
         
 
         IEnumerable<DriverDTO> GetAllDriver();
+
+        DriverDTO Getbyid(int id);
+
+        IEnumerable<DriverDTO> GetAvailableDrivers();
+        void SetDriverOnDuty(int driverId);
     }
 }

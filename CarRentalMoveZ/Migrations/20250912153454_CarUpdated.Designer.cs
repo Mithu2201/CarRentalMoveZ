@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250911093512_Init")]
-    partial class Init
+    [Migration("20250912153454_CarUpdated")]
+    partial class CarUpdated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,10 @@ namespace CarRentalMoveZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Fuel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImgURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -96,10 +100,26 @@ namespace CarRentalMoveZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("NextOilChange")
+                        .HasColumnType("datetime2");
+
                     b.Property<decimal>("PricePerDay")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Seats")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TireReplacement")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TopSpeed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Transmission")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

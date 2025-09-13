@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250912050215_CarUpdated")]
-    partial class CarUpdated
+    [Migration("20250913153355_BookingUpdated")]
+    partial class BookingUpdated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,13 @@ namespace CarRentalMoveZ.Migrations
                     b.Property<int>("Days")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DriverStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -64,6 +71,8 @@ namespace CarRentalMoveZ.Migrations
                     b.HasIndex("CarId");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("DriverId");
 
                     b.ToTable("Bookings");
                 });
@@ -365,9 +374,15 @@ namespace CarRentalMoveZ.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CarRentalMoveZ.Models.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
                     b.Navigation("Car");
 
                     b.Navigation("Customer");
+
+                    b.Navigation("Driver");
                 });
 
             modelBuilder.Entity("CarRentalMoveZ.Models.Customer", b =>

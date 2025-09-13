@@ -1,4 +1,5 @@
-﻿using CarRentalMoveZ.DTOs;
+﻿using CarRentalMoveZ.Data;
+using CarRentalMoveZ.DTOs;
 using CarRentalMoveZ.Enums;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Services.Implementations;
@@ -7,6 +8,7 @@ using CarRentalMoveZ.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalMoveZ.Controllers
 {
@@ -22,8 +24,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IUserService _userService;
         private readonly IDriverService _driverService;
         private readonly IOfferService _offerService;
+        private readonly IDashboardService _dashboardService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,IDashboardService dashboardService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -34,12 +37,16 @@ namespace CarRentalMoveZ.Controllers
             _userService = userService;
             _driverService = driverService;
             _offerService = offerService;
+            _dashboardService = dashboardService;
+
         }
 
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
-            return View();
+            var dashboardDto = await _dashboardService.GetDashboardDataAsync(); // <- await the Task
+            return View(dashboardDto);
         }
+
 
 
         public IActionResult ManageCar() => View(_carService.GetAll());
@@ -117,6 +124,8 @@ namespace CarRentalMoveZ.Controllers
             {
                 return NotFound();
             }
+
+            booking.AvailableDrivers = _driverService.GetAvailableDrivers();
             return View(booking);
         }
         [HttpPost]
@@ -125,31 +134,25 @@ namespace CarRentalMoveZ.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Inspect and log errors
-                var errors = ModelState
-                    .Where(kv => kv.Value.Errors.Count > 0)
-                    .Select(kv => new
-                    {
-                        Key = kv.Key,
-                        Errors = kv.Value.Errors.Select(e => string.IsNullOrEmpty(e.ErrorMessage) ? (e.Exception?.Message ?? "(exception)") : e.ErrorMessage)
-                    }).ToList();
-
-                // Log to console (or use ILogger)
-                foreach (var e in errors)
-                {
-                    Console.WriteLine($"ModelState error for '{e.Key}': {string.Join(" | ", e.Errors)}");
-                }
-
-                // Optionally: pass errors to ViewBag/TempData to show in view for dev
-                TempData["ModelErrors"] = string.Join("\n", errors.Select(x => $"{x.Key}: {string.Join(", ", x.Errors)}"));
-
-                return View(model); // return view to let user correct / for debugging
+                model.AvailableDrivers = _driverService.GetAvailableDrivers();
+                return View(model);
             }
 
-            // If valid → process (e.g., update booking status)
-            model.BookingStatus = "Assigned";
+            // Update ViewModel properties
+          
+            
+            model.BookingStatus = "Assigned"; // update status in ViewModel
+            
+
+            // Update booking in database
             _bookingService.UpdateBooking(model);
-            // ...
+
+            // Set driver OnDuty if assigned
+            if (model.DriverId.HasValue)
+            {
+                _driverService.SetDriverOnDuty(model.DriverId.Value);
+            }
+
             return RedirectToAction("ManageBookings");
         }
 
@@ -228,7 +231,7 @@ namespace CarRentalMoveZ.Controllers
             if (isSuccess)
             {
                 TempData["SuccessMessage"] = "Staff user created successfully.";
-                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+                return RedirectToAction("ManageStaff", "Admin"); // Optionally redirect to another action
             }
             else
             {
@@ -260,9 +263,19 @@ namespace CarRentalMoveZ.Controllers
         }
 
 
-        public IActionResult StaffDetails()
+        public IActionResult StaffDetails(int id)
         {
-            return View();
+            var staff = _staffService.GetById(id);
+            StaffDTO staffDTO = new StaffDTO
+            {
+                StaffId = staff.Id,
+                Name = staff.Name,
+                Email = staff.Email,
+                Role = staff.Role.ToString(),
+                PhoneNumber = staff.PhoneNumber
+            };
+
+            return View(staffDTO);
         }
 
 
@@ -277,9 +290,10 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult ManageDriver() => View(_driverService.GetAllDriver());
 
-        public IActionResult DriverDetails()
+        public IActionResult DriverDetails(int id)
         {
-            return View();
+            var driver = _driverService.Getbyid(id);
+            return View(driver);
         }
 
         [HttpGet]
@@ -301,11 +315,12 @@ namespace CarRentalMoveZ.Controllers
             if (isSuccess)
             {
                 TempData["SuccessMessage"] = "Driver user created successfully.";
-                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+                return RedirectToAction("ManageDriver", "Admin"); // Optionally redirect to another action
             }
             else
             {
                 TempData["ErrorMessage"] = "Email already exists. Please try again.";
+                ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
                 return View(model);
             }
         }
@@ -356,8 +371,14 @@ namespace CarRentalMoveZ.Controllers
             {
                 return View(model);
             }
-            model.PaymentStatus = "Paid";
+
+            // Don't override PaymentStatus or IsPaid here.
+            // The values come from the form:
+            //   PaymentStatus = "Confirmed" OR "Refunded"
+            //   IsPaid = true/false
+
             _paymentService.UpdatePayment(model);
+
             return RedirectToAction("Cashier");
         }
 
