@@ -1,350 +1,113 @@
-﻿@{
+﻿@model CarRentalMoveZ.DTOs.DashboardDTO
+
+
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<!-- KPI CARDS -->
+
+
+<!-- KPI Cards Row -->
 <div class="row g-3 mb-3">
+    <!-- Card 1 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
-            <h6>Total Revenue</h6>
+            <h6>Total Bookings</h6>
             <div class="d-flex align-items-center justify-content-between">
-                <h3>$8,450</h3>
-                <span class="chip-up"><i class="bi bi-arrow-up-right"></i> 12.6%</span>
-            </div>
-            <div class="muted small">from last week</div>
-        </div>
-    </div>
-    <div class="col-12 col-md-3">
-        <div class="card p-3 kpi">
-            <h6>New Bookings</h6>
-            <div class="d-flex align-items-center justify-content-between">
-                <h3>386</h3>
+                <h3>@Model.TotalBookings</h3>
                 <span class="chip-up"><i class="bi bi-arrow-up-right"></i> 11.2%</span>
             </div>
             <div class="muted small">from last week</div>
         </div>
+        <!-- Buttons under Card 1 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="AddCar" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Car</a>
+            <a asp-controller="Admin" asp-action="AddDriver" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Driver</a>
+        </div>
     </div>
+
+    <!-- Card 2 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
-            <h6>Rented Cars</h6>
+            <h6>Total Revenue</h6>
             <div class="d-flex align-items-center justify-content-between">
-                <h3>214 Unit</h3>
+                <h3>$@Model.TotalRevenue</h3>
+                <span class="chip-up"><i class="bi bi-arrow-up-right"></i> 12.6%</span>
+            </div>
+            <div class="muted small">from last week</div>
+        </div>
+        <!-- Buttons under Card 2 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="AddOffer" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Offer</a>
+            <a asp-controller="Admin" asp-action="AddStaff" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Staff</a>
+        </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-12 col-md-3">
+        <div class="card p-3 kpi">
+            <h6>Available Cars / Total Cars</h6>
+            <div class="d-flex align-items-center justify-content-between">
+                <h3>@Model.AvailableCars / @Model.TotalCars</h3>
                 <span class="chip-dn"><i class="bi bi-arrow-down-right"></i> 2.8%</span>
             </div>
             <div class="muted small">from last week</div>
         </div>
+        <!-- Buttons under Card 3 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="ManageBookings" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Bookings</a>
+            <a asp-controller="Admin" asp-action="ManageCar" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Cars</a>
+        </div>
     </div>
+
+    <!-- Card 4 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
-            <h6>Available Cars</h6>
+            <h6>Total Customers</h6>
             <div class="d-flex align-items-center justify-content-between">
-                <h3>89 Unit</h3>
+                <h3>@Model.TotalCustomers</h3>
                 <span class="chip-up"><i class="bi bi-arrow-up-right"></i> 3.4%</span>
             </div>
             <div class="muted small">from last week</div>
+        </div>
+        <!-- Buttons under Card 4 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="ManageCustomer" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Customers</a>
+            <a asp-controller="Admin" asp-action="Cashier" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Cashier</a>
         </div>
     </div>
 </div>
 
 <div class="row g-3">
-    <!-- LEFT: charts + table -->
-    <div class="col-12 col-lg-8">
-        <!-- Earnings + Rent Status -->
-        <div class="row g-3">
-            <div class="col-12 col-xl-8">
-                <div class="card p-3 h-100">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <div class="fw-semibold">Earnings Summary</div>
-                            <div class="small muted">Last 8 Months</div>
-                        </div>
-                        <span class="badge text-bg-light">Apr 2028 • $18,450</span>
-                    </div>
-                    <!-- Same fixed height -->
-                    <div class="mt-2" style="height:300px;">
-                        <canvas id="earningsChart"></canvas>
-                    </div>
+    <div class="col-12">
+        <div class="d-flex" style="gap:1rem;">
+            <!-- Bar Chart: fixed width -->
+            <div class="card p-3" style="width:65%;">
+                <div class="fw-semibold mb-2">Earnings Summary</div>
+                <div style="height:300px;">
+                    <canvas id="earningsChart"></canvas>
                 </div>
             </div>
 
-            <div class="col-12 col-xl-4">
-                <div class="card p-3 h-100">
-                    <div class="fw-semibold mb-2">Rent Status <span class="small text-muted">(This Week)</span></div>
-                    <!-- Same fixed height -->
-                    <div style="height:300px;">
-                        <canvas id="rentStatusChart"></canvas>
-                    </div>
-                    <div class="mt-2 small">
-                        <div class="d-flex justify-content-between"><span>Hired</span><span>58%</span></div>
-                        <div class="d-flex justify-content-between"><span>Pending</span><span>24%</span></div>
-                        <div class="d-flex justify-content-between"><span>Cancelled</span><span>18%</span></div>
-                    </div>
+            <!-- Pie Chart: fixed width -->
+            <div class="card p-3" style="width:25%;">
+                <div class="fw-semibold mb-2">Rent Status <span class="small text-muted">(This Week)</span></div>
+                <div style="height:230px;">
+                    <canvas id="rentStatusChart"></canvas>
                 </div>
-            </div>
-        </div>
-
-
-        <!-- Bookings Overview + Reminders -->
-        <div class="row g-3 mt-0">
-            <div class="col-12 col-xl-8">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center justify-content-between" >
-                        <div class="fw-semibold">Bookings Overview</div>
-                        <span class="small muted">This Year</span>
-                    </div>
-                    <div class="h-chart-lg mt-2">
-                        <canvas id="bookingsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-xl-4" style="height:300px;">
-                <div class="card p-3">
-                    <div class="d-flex align-items-center justify-content-between" >
-                        <div class="fw-semibold">Reminders</div>
-                        <button class="btn btn-sm btn-light"><i class="bi bi-plus"></i></button>
-                    </div>
-                    <ul class="list-group list-group-flush mt-2">
-                        <li class="list-group-item px-0 d-flex gap-2">
-                            <input class="form-check-input mt-1" type="checkbox" />
-                            <div>
-                                <div>Inspect and service the fleet vehicles.</div>
-                                <div class="small muted">2028-09-10</div>
-                            </div>
-                        </li>
-                        <li class="list-group-item px-0 d-flex gap-2">
-                            <input class="form-check-input mt-1" type="checkbox" />
-                            <div>
-                                <div>Update car rental pricing plans for the upcoming season.</div>
-                                <div class="small muted">2028-09-12</div>
-                            </div>
-                        </li>
-                        <li class="list-group-item px-0 d-flex gap-2">
-                            <input class="form-check-input mt-1" type="checkbox" />
-                            <div>
-                                <div>Review customer feedback and implement improvements.</div>
-                                <div class="small muted">2028-09-15</div>
-                            </div>
-                        </li>
-                      @*   <li class="list-group-item px-0 d-flex gap-2">
-                            <input class="form-check-input mt-1" type="checkbox" />
-                            <div>
-                                <div>Inspect and service the fleet vehicles.</div>
-                                <div class="small muted">2028-09-10</div>
-                            </div>
-                        </li> *@
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Car Bookings Table -->
-        <div class="card p-3 mt-3">
-            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
-                <div class="fw-semibold">Car Bookings</div>
-                <div class="d-flex gap-2">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Search client name, car, etc">
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-funnel me-1"></i>Filter</button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <button class="dropdown-item">Returned</button>
-                            <button class="dropdown-item">Ongoing</button>
-                            <button class="dropdown-item">Pending</button>
-                        </div>
-                    </div>
+                <div class="mt-2 small">
+                    <div class="d-flex justify-content-between"><span>Booked</span><span>58%</span></div>
+                    <div class="d-flex justify-content-between"><span>Pending</span><span>24%</span></div>
+                    <div class="d-flex justify-content-between"><span>Cancelled</span><span>18%</span></div>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table align-middle">
-                    <thead>
-                        <tr>
-                            <th>Booking #</th>
-                            <th>Booking Date</th>
-                            <th>Client Name</th>
-                            <th>Car Model</th>
-                            <th>Plan</th>
-                            <th>Dates</th>
-                            <th>Payment</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="small">
-                        <tr>
-                            <td>BK-WZ010</td>
-                            <td>Aug 1, 2028</td>
-                            <td>Alice Johnson</td>
-                            <td>Toyota Corolla <span class="text-muted ms-1">TX234</span></td>
-                            <td>2 Days</td>
-                            <td>Start Aug 1 • End Aug 3</td>
-                            <td>$50</td>
-                            <td><span class="pill pill-returned">Returned</span></td>
-                        </tr>
-                        <tr>
-                            <td>BK-WZ002</td>
-                            <td>Aug 1, 2028</td>
-                            <td>Bob Smith</td>
-                            <td>Honda Civic <span class="text-muted ms-1">HK5678</span></td>
-                            <td>7 Days</td>
-                            <td>Start Aug 1 • End Aug 8</td>
-                            <td>$350</td>
-                            <td><span class="pill pill-ongoing">Ongoing</span></td>
-                        </tr>
-                        <tr>
-                            <td>BK-WZ003</td>
-                            <td>Aug 2, 2028</td>
-                            <td>Charlie Davis</td>
-                            <td>Ford Focus <span class="text-muted ms-1">FX9101</span></td>
-                            <td>31 Days</td>
-                            <td>Start Aug 2 • End Sep 2</td>
-                            <td>$980</td>
-                            <td><span class="pill pill-ongoing">Ongoing</span></td>
-                        </tr>
-                        <tr>
-                            <td>BK-WZ004</td>
-                            <td>Aug 2, 2028</td>
-                            <td>Diana White</td>
-                            <td>Chevrolet Malibu <span class="text-muted ms-1">CX2436</span></td>
-                            <td>1 Day</td>
-                            <td>Start Aug 2 • End Aug 3</td>
-                            <td>$50</td>
-                            <td><span class="pill pill-returned">Returned</span></td>
-                        </tr>
-                        <tr>
-                            <td>BK-WZ005</td>
-                            <td>Aug 3, 2028</td>
-                            <td>Edward Green</td>
-                            <td>Nissan Altima <span class="text-muted ms-1">NX6789</span></td>
-                            <td>8 Days</td>
-                            <td>Start Aug 3 • End Aug 11</td>
-                            <td>$350</td>
-                            <td><span class="pill pill-pending">Pending</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- RIGHT: availability + types + activity -->
-    <div class="col-12 col-lg-4">
-        <!-- Car Availability -->
-        @* <div class="card p-3 mb-3">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <div class="fw-semibold">Car Availability</div>
-                <button class="btn btn-sm btn-light"><i class="bi bi-three-dots"></i></button>
-            </div>
-            <div class="mb-2 small muted">Check rent availability</div>
-            <div class="mb-2">
-                <label class="form-label small">Car Type</label>
-                <select class="form-select form-select-sm">
-                    <option>Sedan</option>
-                    <option>SUV</option>
-                    <option>Hatchback</option>
-                    <option>Convertible</option>
-                    <option>Pickup</option>
-                    <option>Minivan</option>
-                </select>
-            </div>
-            <div class="mb-2">
-                <label class="form-label small">Date</label>
-                <input type="date" class="form-control form-control-sm" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label small">Time</label>
-                <input type="time" class="form-control form-control-sm" />
-            </div>
-            <button class="btn w-100" style="background-color: #0d6efd; color: white;">Check</button>
-
-        </div> *@
-
-        <!-- Car Types -->
-        <div class="card p-3 mb-3" >
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <div class="fw-semibold">Car Types</div>
-                <button class="btn btn-sm btn-light"><i class="bi bi-three-dots"></i></button>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-car-front"></i><span>Sedan</span></div>
-                <span class="small">30</span>
-            </div>
-            <div class="progress mb-2"><div class="progress-bar" style="width:30%"></div></div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-truck"></i><span>SUV</span></div>
-                <span class="small">25</span>
-            </div>
-            <div class="progress mb-2"><div class="progress-bar" style="width:25%"></div></div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-car-front-fill"></i><span>Hatchback</span></div>
-                <span class="small">20</span>
-            </div>
-            <div class="progress mb-2"><div class="progress-bar" style="width:20%"></div></div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-wind"></i><span>Convertible</span></div>
-                <span class="small">10</span>
-            </div>
-            <div class="progress mb-2"><div class="progress-bar" style="width:10%"></div></div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-truck-front"></i><span>Pickup</span></div>
-                <span class="small">10</span>
-            </div>
-            <div class="progress mb-2"><div class="progress-bar" style="width:10%"></div></div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-truck-front"></i><span>Minivan</span></div>
-                <span class="small">5</span>
-            </div>
-            <div class="progress"><div class="progress-bar" style="width:5%"></div></div>
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-truck-front"></i><span>Pickup</span></div>
-                <span class="small">10</span>
-            </div>
-            <div class="progress mb-2"><div class="progress-bar" style="width:10%"></div></div>
-
-            <div class="d-flex align-items-center justify-content-between mb-1">
-                <div class="d-flex align-items-center gap-2"><i class="bi bi-truck-front"></i><span>Minivan</span></div>
-                <span class="small">5</span>
-            </div>
-            <div class="progress"><div class="progress-bar" style="width:5%"></div></div>
-        </div>
-
-        <!-- Recent Activity -->
-        <div class="card p-3">
-            <div class="fw-semibold mb-2">Recent Activity</div>
-            <div class="d-flex gap-3 mb-2">
-                <div class="rounded-circle" style="width:10px;height:10px;background:#1E56A0;margin-top:8px;"></div>
-                <div class="flex-grow-1">
-                    <div><strong>Alice Johnson</strong> completed a booking for Toyota Corolla <span class="text-muted">(TX234)</span></div>
-                    <div class="small muted">09:12 AM • Today</div>
-                </div>
-            </div>
-            <div class="d-flex gap-3 mb-2">
-                <div class="rounded-circle" style="width:10px;height:10px;background:#1E56A0;margin-top:8px;"></div>
-                <div class="flex-grow-1">
-                    <div><strong>Bob Smith</strong> booking for Honda Civic <span class="text-muted">(HK5678)</span> is pending payment</div>
-                    <div class="small muted">08:40 AM • Today</div>
-                </div>
-            </div>
-            <div class="d-flex gap-3 mb-2">
-                <div class="rounded-circle" style="width:10px;height:10px;background:#1E56A0;margin-top:8px;"></div>
-                <div class="flex-grow-1">
-                    <div><strong>Charlie Davis</strong> started a monthly rental for Ford Focus <span class="text-muted">(FX9101)</span></div>
-                    <div class="small muted">Yesterday</div>
-                </div>
-            </div>
-            <div class="d-flex gap-3">
-                <div class="rounded-circle" style="width:10px;height:10px;background:#1E56A0;margin-top:8px;"></div>
-                <div class="flex-grow-1">
-                    <div><strong>Diana White</strong> returned the Chevrolet Malibu <span class="text-muted">(CX2436)</span></div>
-                    <div class="small muted">Yesterday</div>
+            <!-- New Chart: fills remaining space -->
+            <div class="card p-3 flex-grow-1">
+                <div class="fw-semibold mb-2">New Chart</div>
+                <div style="height:300px;">
+                    <canvas id="newChart"></canvas>
                 </div>
             </div>
         </div>
@@ -382,7 +145,7 @@
         new Chart(document.getElementById('rentStatusChart'), {
             type: 'doughnut',
             data: {
-                labels: ["Hired","Pending","Cancelled"],
+                labels: ["Booked","Pending","Cancelled"],
                 datasets: [{
                     data: [58,24,18],
                     backgroundColor: ["#1E56A0","#f59f00","#6c757d"]
@@ -395,26 +158,6 @@
             }
         });
 
-        /* Bar: Bookings Overview */
-        new Chart(document.getElementById('bookingsChart'), {
-            type: 'bar',
-            data: {
-                labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-                datasets: [{
-                    label: "Bookings",
-                    data: [620,740,880,985,820,910,930,950,980,990,1010,1040],
-                    backgroundColor: "#1E56A0",
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color:"rgba(0,0,0,.05)" } },
-                    x: { grid: { display:false } }
-                }
-            }
-        });
+  
     </script>
 }

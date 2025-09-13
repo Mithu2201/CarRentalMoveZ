@@ -1,4 +1,5 @@
-﻿using CarRentalMoveZ.DTOs;
+﻿using CarRentalMoveZ.Data;
+using CarRentalMoveZ.DTOs;
 using CarRentalMoveZ.Enums;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Services.Implementations;
@@ -7,6 +8,7 @@ using CarRentalMoveZ.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalMoveZ.Controllers
 {
@@ -22,8 +24,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IUserService _userService;
         private readonly IDriverService _driverService;
         private readonly IOfferService _offerService;
+        private readonly AppDbContext _context;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,AppDbContext appDbContext)
         {
             _carService = carService;
             _staffService = staffService;
@@ -34,11 +37,23 @@ namespace CarRentalMoveZ.Controllers
             _userService = userService;
             _driverService = driverService;
             _offerService = offerService;
+            _context = appDbContext;
         }
 
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
-            return View();
+            var dashboardDto = new DashboardDTO
+            {
+                TotalBookings = await _context.Bookings.CountAsync(),
+                TotalRevenue = await _context.Payments
+                               .Where(p => p.Status == "Paid")
+                               .SumAsync(p => p.Amount),
+                TotalCars = await _context.Cars.CountAsync(),
+                AvailableCars = await _context.Cars.CountAsync(c => c.Status == "Available"),
+                TotalCustomers = await _context.Customers.CountAsync()
+            };
+
+            return View(dashboardDto);
         }
 
 
@@ -228,7 +243,7 @@ namespace CarRentalMoveZ.Controllers
             if (isSuccess)
             {
                 TempData["SuccessMessage"] = "Staff user created successfully.";
-                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+                return RedirectToAction("ManageStaff", "Admin"); // Optionally redirect to another action
             }
             else
             {
@@ -301,11 +316,12 @@ namespace CarRentalMoveZ.Controllers
             if (isSuccess)
             {
                 TempData["SuccessMessage"] = "Driver user created successfully.";
-                return RedirectToAction("Login", "Account"); // Optionally redirect to another action
+                return RedirectToAction("ManageDriver", "Admin"); // Optionally redirect to another action
             }
             else
             {
                 TempData["ErrorMessage"] = "Email already exists. Please try again.";
+                ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
                 return View(model);
             }
         }
