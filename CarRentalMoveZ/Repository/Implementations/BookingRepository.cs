@@ -61,5 +61,15 @@ namespace CarRentalMoveZ.Repository.Implementations
                 .ToList();
         }
 
+        public void Cancel(int bookingId)
+        {
+            var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == bookingId);
+            if (booking != null)
+            {
+                booking.Status = "Cancelled";
+                _context.SaveChanges();
+            }
+        }
+
     }
 }

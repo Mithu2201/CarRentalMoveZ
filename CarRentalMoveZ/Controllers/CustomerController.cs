@@ -241,5 +241,23 @@ namespace CarRentalMoveZ.Controllers
             var payments = _paymentService.GetPaymentsByUserId(userId.Value);
             return View(payments);
         }
+
+        [HttpPost]
+        public IActionResult CancelBooking(int id)
+        {
+            try
+            {
+                _bookingService.CancelBooking(id);
+                return Json(new { success = true, message = "Booking cancelled successfully." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "An error occurred while cancelling the booking." });
+            }
+        }
     }
 }

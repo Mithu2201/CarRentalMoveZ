@@ -19,5 +19,7 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         IEnumerable<BookingDetailsViewModel> GetAllBookingsDetail();
 
+        void CancelBooking(int bookingId);
+
     }
 }

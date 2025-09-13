@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250912091934_CarUpdated")]
+    [Migration("20250912153454_CarUpdated")]
     partial class CarUpdated
     {
         /// <inheritdoc />
