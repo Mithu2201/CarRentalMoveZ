@@ -832,6 +832,31 @@
                 transform: scale(1.1);
                 box-shadow: 0 5px 15px rgba(30, 86, 160, 0.3);
             }
+
+        #suggestions {
+            position: absolute; /* Take out of the flow */
+            top: 100%; /* Below the input */
+            left: 0;
+            right: 0; /* Make width match input */
+            z-index: 1000;
+            background: #fff;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        /* Individual suggestion item */
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+            .suggestion-item:hover, .suggestion-item.active {
+                background-color: #007bff;
+                color: white;
+            }
     </style>
 </head>
 <body>
@@ -865,12 +890,10 @@
                         <!-- Destination -->
                         <div class="col-md-3 col-12 d-flex flex-column">
                             <label class="form-label text-muted small">Your Destination</label>
-                            <select class="form-select flex-fill">
-                                <option>Colombo</option>
-                                <option>Jaffna</option>
-                                <option>Kandy</option>
-                            </select>
+                            <input type="text" id="autocomplete" class="form-select flex-fill" placeholder="Enter destination" />
+                            <div id="suggestions"></div>
                         </div>
+
                         <!-- Start Date -->
                         <div class="col-md-2 col-6 d-flex flex-column">
                             <label class="form-label text-muted small">When to Start</label>
@@ -884,16 +907,18 @@
                         <!-- People -->
                         <div class="col-md-3 col-12 d-flex flex-column">
                             <label class="form-label text-muted small">People</label>
-                            <select class="form-select flex-fill">
-                                <option>1 Adult, 0 Child</option>
-                                <option>2 Adults, 1 Child</option>
-                                <option>3 Adults</option>
-                            </select>
+                            <input type="number"
+                                   id="People"                                  
+                                   class="form-select flex-fill"
+                                   placeholder="Enter No of Passengers" />                         
                         </div>
                         <!-- Button -->
                         <div class="col-md-2 col-12 d-flex flex-column">
                             <label class="form-label text-muted small d-none d-md-block">&nbsp;</label>
-                            <button class="btn flex-fill fw-bold search-btn">Search</button>
+                            <a asp-controller="Home" asp-action="BrowseCar"
+                               class="btn flex-fill fw-bold search-btn d-flex justify-content-center align-items-center">
+                                Search
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1425,5 +1450,6 @@
             });
         });
     </script>
+
 </body>
 </html>
