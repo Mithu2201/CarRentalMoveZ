@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-md-6">
-        <form asp-action="NewBooking" asp-controller="Customer" method="post">
+        <form asp-action="NewBooking" asp-controller="Customer" method="post" id="bookingForm" novalidate>
             @* Hidden fields for binding *@
             <input type="hidden" asp-for="CarId" />
             <input type="hidden" asp-for="CustomerId" />
@@ -34,18 +34,19 @@
 
             <div class="mb-3">
                 <label>Contact No</label>
-                <input class="form-control" value="@Model.PhoneNumber" 
-                />
+                <input class="form-control" value="@Model.PhoneNumber" required />
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 position-relative">
                 <label asp-for="Location">Pick Up Location</label>
-                <input asp-for="Location" class="form-control" required />
+                <input asp-for="Location" id="autocomplete" class="form-control" required value="Office" />
+                <div id="suggestions"></div>
             </div>
 
             <div class="mb-3">
                 <label>Driver Option</label>
-                <select asp-for="DriverStatus" class="form-control" id="driverStatus">
+                <select asp-for="DriverStatus" class="form-control" id="driverStatus" required>
+                    <option value="">-- Select --</option>
                     <option value="Without Driver">Without Driver</option>
                     <option value="With Driver">With Driver (+LKR 1000/day)</option>
                 </select>
@@ -54,7 +55,7 @@
             <div class="mb-3">
                 <label asp-for="StartDate">Start Date & Time</label>
                 <div class="input-group flatpickr" id="startDateWrapper">
-                    <input asp-for="StartDate" class="form-control" id="startDate" placeholder="Rent Date & Time" readonly data-input />
+                    <input asp-for="StartDate" class="form-control" id="startDate" placeholder="Rent Date & Time" readonly data-input required />
                     <span class="input-group-text" data-toggle>
                         <i class="bi bi-calendar"></i>
                     </span>
@@ -64,7 +65,7 @@
             <div class="mb-3">
                 <label asp-for="EndDate">End Date & Time</label>
                 <div class="input-group flatpickr" id="endDateWrapper">
-                    <input asp-for="EndDate" class="form-control" id="endDate" placeholder="Return Date & Time" readonly data-input />
+                    <input asp-for="EndDate" class="form-control" id="endDate" placeholder="Return Date & Time" readonly data-input required />
                     <span class="input-group-text" data-toggle>
                         <i class="bi bi-calendar"></i>
                     </span>
@@ -73,13 +74,13 @@
 
             <div class="mb-3">
                 <label>Number of Days</label>
-                <input type="text" id="daysDisplay" class="form-control" readonly />
+                <input type="text" id="daysDisplay" class="form-control" readonly required />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label>Total Amount</label>
-                <input type="text" id="amountDisplay" class="form-control" readonly />
+                <input type="text" id="amountDisplay" class="form-control" readonly required />
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
@@ -185,5 +186,98 @@
             }
         });
 
+    </script>
+    <script>
+        const input = document.getElementById('autocomplete');
+        const suggestions = document.getElementById('suggestions');
+        let selectedIndex = -1;
+        let currentSuggestions = [];
+
+        async function fetchSuggestions(query) {
+            if (!query) return [];
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
+        }
+
+        function renderSuggestions(items) {
+            suggestions.innerHTML = '';
+            currentSuggestions = items;
+            selectedIndex = -1;
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.textContent = item.display_name;
+                div.addEventListener('click', () => selectSuggestion(index));
+                suggestions.appendChild(div);
+            });
+        }
+
+        function selectSuggestion(index) {
+            const item = currentSuggestions[index];
+            if (item) {
+                input.value = item.display_name;
+                suggestions.innerHTML = '';
+                console.log('Selected:', item);
+            }
+        }
+
+        input.addEventListener('input', async () => {
+            const query = input.value;
+            const items = await fetchSuggestions(query);
+            renderSuggestions(items);
+        });
+
+        input.addEventListener('keydown', (e) => {
+            const items = suggestions.querySelectorAll('.suggestion-item');
+            if (e.key === 'ArrowDown') {
+                selectedIndex = (selectedIndex + 1) % items.length;
+                updateActive(items);
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                updateActive(items);
+                e.preventDefault();
+            } else if (e.key === 'Enter') {
+                if (selectedIndex >= 0) {
+                    selectSuggestion(selectedIndex);
+                    e.preventDefault();
+                }
+            }
+        });
+
+        function updateActive(items) {
+            items.forEach((item, i) => {
+                item.classList.toggle('active', i === selectedIndex);
+            });
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target !== input) suggestions.innerHTML = '';
+        });
+
+            // Bootstrap-like client-side validation
+        document.getElementById("bookingForm").addEventListener("submit", function (event) {
+            let form = this;
+            let isValid = true;
+
+            // Loop all inputs/selects inside form
+            form.querySelectorAll("input[required], select[required]").forEach(function (input) {
+                if (!input.value || input.value.trim() === "") {
+                    input.classList.add("is-invalid");  // highlight missing
+                    isValid = false;
+                } else {
+                    input.classList.remove("is-invalid");
+                    input.classList.add("is-valid");
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault(); // Stop submission
+                event.stopPropagation();
+            }
+        });
     </script>
 }
