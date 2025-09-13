@@ -8,8 +8,9 @@
 
 
 
-<!-- KPI CARDS -->
+<!-- KPI Cards Row -->
 <div class="row g-3 mb-3">
+    <!-- Card 1 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
             <h6>Total Bookings</h6>
@@ -19,8 +20,14 @@
             </div>
             <div class="muted small">from last week</div>
         </div>
+        <!-- Buttons under Card 1 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="AddCar" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Car</a>
+            <a asp-controller="Admin" asp-action="AddDriver" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Driver</a>
+        </div>
     </div>
 
+    <!-- Card 2 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
             <h6>Total Revenue</h6>
@@ -30,8 +37,14 @@
             </div>
             <div class="muted small">from last week</div>
         </div>
+        <!-- Buttons under Card 2 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="AddOffer" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Offer</a>
+            <a asp-controller="Admin" asp-action="AddStaff" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Staff</a>
+        </div>
     </div>
 
+    <!-- Card 3 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
             <h6>Available Cars / Total Cars</h6>
@@ -41,8 +54,14 @@
             </div>
             <div class="muted small">from last week</div>
         </div>
+        <!-- Buttons under Card 3 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="ManageBookings" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Bookings</a>
+            <a asp-controller="Admin" asp-action="ManageCar" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Cars</a>
+        </div>
     </div>
 
+    <!-- Card 4 -->
     <div class="col-12 col-md-3">
         <div class="card p-3 kpi">
             <h6>Total Customers</h6>
@@ -52,43 +71,43 @@
             </div>
             <div class="muted small">from last week</div>
         </div>
+        <!-- Buttons under Card 4 -->
+        <div class="d-flex gap-2 mt-2">
+            <a asp-controller="Admin" asp-action="ManageCustomer" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Customers</a>
+            <a asp-controller="Admin" asp-action="Cashier" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Cashier</a>
+        </div>
     </div>
 </div>
 
-
 <div class="row g-3">
-    <!-- LEFT: charts + table -->
-    <div class="col-12 col-lg-8">
-        <!-- Earnings + Rent Status -->
-        <div class="row g-3">
-            <div class="col-12 col-xl-8">
-                <div class="card p-3 h-100">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <div class="fw-semibold">Earnings Summary</div>
-                            <div class="small muted">Last 8 Months</div>
-                        </div>
-                        <span class="badge text-bg-light">Apr 2028 • $18,450</span>
-                    </div>
-                    <!-- Same fixed height -->
-                    <div class="mt-2" style="height:300px;">
-                        <canvas id="earningsChart"></canvas>
-                    </div>
+    <div class="col-12">
+        <div class="d-flex" style="gap:1rem;">
+            <!-- Bar Chart: fixed width -->
+            <div class="card p-3" style="width:65%;">
+                <div class="fw-semibold mb-2">Earnings Summary</div>
+                <div style="height:300px;">
+                    <canvas id="earningsChart"></canvas>
                 </div>
             </div>
 
-            <div class="col-12 col-xl-4">
-                <div class="card p-3 h-100">
-                    <div class="fw-semibold mb-2">Rent Status <span class="small text-muted">(This Week)</span></div>
-                    <!-- Same fixed height -->
-                    <div style="height:300px;">
-                        <canvas id="rentStatusChart"></canvas>
-                    </div>
-                    <div class="mt-2 small">
-                        <div class="d-flex justify-content-between"><span>Booked</span><span>58%</span></div>
-                        <div class="d-flex justify-content-between"><span>Pending</span><span>24%</span></div>
-                        <div class="d-flex justify-content-between"><span>Cancelled</span><span>18%</span></div>
-                    </div>
+            <!-- Pie Chart: fixed width -->
+            <div class="card p-3" style="width:25%;">
+                <div class="fw-semibold mb-2">Rent Status <span class="small text-muted">(This Week)</span></div>
+                <div style="height:230px;">
+                    <canvas id="rentStatusChart"></canvas>
+                </div>
+                <div class="mt-2 small">
+                    <div class="d-flex justify-content-between"><span>Booked</span><span>58%</span></div>
+                    <div class="d-flex justify-content-between"><span>Pending</span><span>24%</span></div>
+                    <div class="d-flex justify-content-between"><span>Cancelled</span><span>18%</span></div>
+                </div>
+            </div>
+
+            <!-- New Chart: fills remaining space -->
+            <div class="card p-3 flex-grow-1">
+                <div class="fw-semibold mb-2">New Chart</div>
+                <div style="height:300px;">
+                    <canvas id="newChart"></canvas>
                 </div>
             </div>
         </div>

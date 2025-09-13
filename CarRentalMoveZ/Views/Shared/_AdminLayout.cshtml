@@ -57,7 +57,7 @@
             </a> *@
 
             <!-- Clients -->
-            <a class="side-link @(currentController == "Customers" ? "active" : "")"
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManageCustomer" ? "active" : "")"
                asp-controller="Admin" asp-action="ManageCustomer">
                 <i class="bi bi-people"></i> <span>Customers</span>
             </a>
