@@ -1,4 +1,5 @@
 ﻿@model CarRentalMoveZ.ViewModels.BookingDetailsViewModel
+@using CarRentalMoveZ.DTOs
 
 @using System.Globalization
 
@@ -6,7 +7,6 @@
     ViewData["Title"] = "Booking Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
-    // safe fallbacks / string forms to post
     var safeImgURL = Model.ImgURL ?? "/images/default-car.png";
     var safePhone = Model.PhoneNumber ?? "";
     var safePaymentMethod = Model.PaymentMethod ?? "";
@@ -17,7 +17,9 @@
     var amountPost = Model.Amount.ToString(CultureInfo.InvariantCulture);
     var paymentAmountPost = Model.PaymentAmount.ToString(CultureInfo.InvariantCulture);
     var pricePerDayPost = Model.PricePerDay.ToString(CultureInfo.InvariantCulture);
-    var isPaidPost = (Model.IsPaid ? "true" : "false"); // model binder accepts true/false
+    var isPaidPost = (Model.IsPaid ? "true" : "false");
+    var safeDriverStatus = Model.DriverStatus ?? "Without Driver";
+
 }
 
 <div class="container-fluid py-3">
@@ -65,60 +67,62 @@
                         @Model.BookingStatus
                     </span>
                 </p>
+                <p><strong>Driver Status:</strong> @(Model.DriverStatus ?? "Without Driver")</p>
+
+                @* Assign Driver Form (only if Pending + Paid) *@
+                @if (string.Equals(Model.BookingStatus, "Pending", StringComparison.OrdinalIgnoreCase) && Model.IsPaid)
+                {
+                    <form method="post" asp-controller="Admin" asp-action="BookingDetails" class="mt-3">
+                        @Html.AntiForgeryToken()
+
+                        @Html.HiddenFor(m => m.BookingId)
+                        @Html.HiddenFor(m => m.CarId)
+                        @Html.HiddenFor(m => m.CustomerId)
+                        @Html.HiddenFor(m => m.Location)
+                        @Html.HiddenFor(m => m.BookingStatus)
+                        <input type="hidden" name="StartDate" value="@startDatePost" />
+                        <input type="hidden" name="EndDate" value="@endDatePost" />
+                        <input type="hidden" name="Days" value="@Model.Days" />
+                        <input type="hidden" name="Amount" value="@amountPost" />
+                        <input type="hidden" name="CarName" value="@Model.CarName" />
+                        <input type="hidden" name="ImgURL" value="@safeImgURL" />
+                        <input type="hidden" name="PricePerDay" value="@pricePerDayPost" />
+                        <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
+                        <input type="hidden" name="PhoneNumber" value="@safePhone" />
+                        <input type="hidden" name="IsPaid" value="@isPaidPost" />
+                        <input type="hidden" name="PaymentAmount" value="@paymentAmountPost" />
+                        <input type="hidden" name="PaymentDate" value="@paymentDatePost" />
+                        <input type="hidden" name="PaymentMethod" value="@safePaymentMethod" />
+                        <input type="hidden" name="PaymentStatus" value="@safePaymentStatus" />
+                        <input type="hidden" name="DriverStatus" value="@safeDriverStatus" />
+
+
+
+                        <div class="input-group mb-3">
+                            @* Show dropdown only if location is not Office *@
+                            @if (!string.Equals(Model.Location, "Office", StringComparison.OrdinalIgnoreCase) || Model.DriverStatus == "With Driver")
+                            {
+                                @Html.DropDownListFor(
+                                m => m.DriverId,
+                                                new SelectList(
+                                                (Model.AvailableDrivers ?? Enumerable.Empty<DriverDTO>()).ToList(),
+                                                "DriverId",
+                                                "Name",
+                                                Model.DriverId
+                                                ),
+                                                "-- Select Driver --",
+                                                new { @class = "form-select" }
+                                                )
+                                                }
+
+                            @* Assign button always visible *@
+                            <button type="submit" class="btn btn-primary">Assign</button>
+                        </div>
+
+                        @Html.ValidationMessageFor(m => m.DriverId, "", new { @class = "text-danger" })
+                </form>
+                }
             </div>
         </div>
-    </div>
-
-
-    <div class="d-flex gap-2 flex-wrap mb-4">
-        @* Assign Car: only if Pending *@
-        @if (string.Equals(Model.BookingStatus, "Pending", StringComparison.OrdinalIgnoreCase) && Model.IsPaid)
-        {
-            <form method="post" asp-controller="Admin" asp-action="BookingDetails" class="d-inline">
-                @Html.AntiForgeryToken()
-
-                @* Use HiddenFor where possible; for dates/decimals use invariant string posted values *@
-                @Html.HiddenFor(m => m.BookingId)
-                @Html.HiddenFor(m => m.CarId)
-                @Html.HiddenFor(m => m.CustomerId)
-                @Html.HiddenFor(m => m.Location)
-                @Html.HiddenFor(m => m.BookingStatus)
-
-                <input type="hidden" name="StartDate" value="@startDatePost" />
-                <input type="hidden" name="EndDate" value="@endDatePost" />
-                <input type="hidden" name="Days" value="@Model.Days" />
-                <input type="hidden" name="Amount" value="@amountPost" />
-                <input type="hidden" name="CarName" value="@Model.CarName" />
-                <input type="hidden" name="ImgURL" value="@safeImgURL" />
-                <input type="hidden" name="PricePerDay" value="@pricePerDayPost" />
-                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
-                <input type="hidden" name="PhoneNumber" value="@safePhone" />
-                <input type="hidden" name="IsPaid" value="@isPaidPost" />
-                <input type="hidden" name="PaymentAmount" value="@paymentAmountPost" />
-                <input type="hidden" name="PaymentDate" value="@paymentDatePost" />
-                <input type="hidden" name="PaymentMethod" value="@safePaymentMethod" />
-                <input type="hidden" name="PaymentStatus" value="@safePaymentStatus" />
-
-                <button type="submit" class="btn text-white d-flex align-items-center" style="background-color:#1E56A0;">
-                    <i class="bi bi-car-front me-2"></i> Assign Car
-                </button>
-            </form>
-        }
-
-        @* Push Notification if payment not done *@
-        @if (!Model.IsPaid)
-        {
-            <form method="post" asp-controller="Admin" asp-action="SendPaymentReminder" class="d-inline">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="BookingId" value="@Model.BookingId" />
-                <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
-                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
-                <input type="hidden" name="PhoneNumber" value="@safePhone" />
-
-                <button type="submit" class="btn text-white d-flex align-items-center" style="background-color:#1E56A0;">
-                    <i class="bi bi-bell me-2"></i> Send Payment Reminder
-                </button>
-            </form>
-        }
     </div>
 </div>

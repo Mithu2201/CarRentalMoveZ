@@ -1,4 +1,7 @@
-﻿namespace CarRentalMoveZ.ViewModels
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
+
+namespace CarRentalMoveZ.ViewModels
 {
     public class BookingDetailsViewModel
     {
@@ -17,6 +20,11 @@
         public string CarName { get; set; } = "";       // default empty string
         public string? ImgURL { get; set; }             // nullable, can remain null
         public decimal PricePerDay { get; set; } = 0m;  // default 0
+
+        public string DriverStatus { get; set; }
+
+        public int? DriverId { get; set; }                  // Selected driver
+        public IEnumerable<DriverDTO>? AvailableDrivers { get; set; } // List of available drivers
 
         // Customer Details
         public string CustomerName { get; set; } = "";  // default empty string
