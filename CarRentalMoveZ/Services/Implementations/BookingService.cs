@@ -1,6 +1,7 @@
 ﻿using CarRentalMoveZ.DTOs;
 using CarRentalMoveZ.Mappings;
 using CarRentalMoveZ.Models;
+using CarRentalMoveZ.Repository.Implementations;
 using CarRentalMoveZ.Repository.Interfaces;
 using CarRentalMoveZ.Services.Interfaces;
 using CarRentalMoveZ.ViewModels;
@@ -106,6 +107,28 @@ namespace CarRentalMoveZ.Services.Implementations
         public IEnumerable<Booking> GetBookingsForCar(int carId)
         {
             return _bookingRepo.GetBookingsByCar(carId);
+        }
+
+        public void CancelBooking(int bookingId)
+        {
+            var booking = _bookingRepo.GetBooking(bookingId);
+            if (booking == null)
+                throw new InvalidOperationException("Booking not found");
+
+            // ✅ Check 24-hour rule
+            if ((booking.StartDate - DateTime.Now).TotalHours < 24)
+                throw new InvalidOperationException("Bookings can only be cancelled at least 24 hours before the start date.");
+
+            booking.Status = "Cancelled";
+            _bookingRepo.Cancel(bookingId);
+
+            // ✅ Update related payment
+            var payment = _paymentRepo.GetPaymentByBookingId(bookingId);
+            if (payment != null && payment.Status == "Paid")
+            {
+                payment.Status = "Pending to refund";
+                _paymentRepo.Update(payment);
+            }
         }
 
     }
