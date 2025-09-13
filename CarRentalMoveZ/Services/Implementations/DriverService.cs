@@ -24,6 +24,11 @@ namespace CarRentalMoveZ.Services.Implementations
             return DriversMapper.ToDTOList(drivers);
         }
 
+        public DriverDTO Getbyid(int id)
+        {
+            var driver = driverRepository.Getbyid(id);
+            return DriversMapper.ToDTO(driver);
+        }
 
 
     }

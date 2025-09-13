@@ -24,9 +24,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IUserService _userService;
         private readonly IDriverService _driverService;
         private readonly IOfferService _offerService;
-        private readonly AppDbContext _context;
+        private readonly IDashboardService _dashboardService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,AppDbContext appDbContext)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,IDashboardService dashboardService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -37,24 +37,16 @@ namespace CarRentalMoveZ.Controllers
             _userService = userService;
             _driverService = driverService;
             _offerService = offerService;
-            _context = appDbContext;
+            _dashboardService = dashboardService;
+
         }
 
         public async Task<IActionResult> Dashboard()
         {
-            var dashboardDto = new DashboardDTO
-            {
-                TotalBookings = await _context.Bookings.CountAsync(),
-                TotalRevenue = await _context.Payments
-                               .Where(p => p.Status == "Paid")
-                               .SumAsync(p => p.Amount),
-                TotalCars = await _context.Cars.CountAsync(),
-                AvailableCars = await _context.Cars.CountAsync(c => c.Status == "Available"),
-                TotalCustomers = await _context.Customers.CountAsync()
-            };
-
+            var dashboardDto = await _dashboardService.GetDashboardDataAsync(); // <- await the Task
             return View(dashboardDto);
         }
+
 
 
         public IActionResult ManageCar() => View(_carService.GetAll());
@@ -275,9 +267,19 @@ namespace CarRentalMoveZ.Controllers
         }
 
 
-        public IActionResult StaffDetails()
+        public IActionResult StaffDetails(int id)
         {
-            return View();
+            var staff = _staffService.GetById(id);
+            StaffDTO staffDTO = new StaffDTO
+            {
+                StaffId = staff.Id,
+                Name = staff.Name,
+                Email = staff.Email,
+                Role = staff.Role.ToString(),
+                PhoneNumber = staff.PhoneNumber
+            };
+
+            return View(staffDTO);
         }
 
 
@@ -292,9 +294,10 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult ManageDriver() => View(_driverService.GetAllDriver());
 
-        public IActionResult DriverDetails()
+        public IActionResult DriverDetails(int id)
         {
-            return View();
+            var driver = _driverService.Getbyid(id);
+            return View(driver);
         }
 
         [HttpGet]
@@ -372,8 +375,14 @@ namespace CarRentalMoveZ.Controllers
             {
                 return View(model);
             }
-            model.PaymentStatus = "Paid";
+
+            // Don't override PaymentStatus or IsPaid here.
+            // The values come from the form:
+            //   PaymentStatus = "Confirmed" OR "Refunded"
+            //   IsPaid = true/false
+
             _paymentService.UpdatePayment(model);
+
             return RedirectToAction("Cashier");
         }
 

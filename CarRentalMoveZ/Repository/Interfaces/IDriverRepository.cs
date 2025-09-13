@@ -8,5 +8,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         void Add(Models.Driver driver);
 
+        Driver Getbyid(int id);
+
     }
 }

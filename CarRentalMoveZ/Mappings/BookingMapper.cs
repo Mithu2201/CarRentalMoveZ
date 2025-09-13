@@ -85,7 +85,9 @@ namespace CarRentalMoveZ.Mappings
                 CustomerName = booking.Customer?.Name ?? "",
                 PhoneNumber = booking.Customer?.PhoneNumber ?? "",
 
-                IsPaid = payment != null && payment.Status == "Paid",
+                IsPaid = payment != null &&
+                (payment.Status == "Paid" || payment.Status == "Pending to refund" || payment.Status=="Refunded"),
+
                 PaymentDate = payment?.PaymentDate,
                 PaymentMethod = payment?.PaymentMethod,
                 PaymentAmount = payment?.Amount ?? 0m,

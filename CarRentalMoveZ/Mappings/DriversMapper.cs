@@ -24,5 +24,24 @@ namespace CarRentalMoveZ.Mappings
                     Role = "Driver"
                 });
         }
+
+        public static DriverDTO ToDTO(Driver driver)
+        {
+            if (driver == null || driver.User == null)
+                return null;
+
+            return new DriverDTO
+            {
+                DriverId = driver.DriverId,
+                UserId = driver.UserId,
+                Name = driver.User.Name,
+                Email = driver.User.Email,
+                PhoneNumber = driver.User.PhoneNumber,
+                LicenseNo = driver.LicenseNo,
+                Status = driver.Status,
+                Role = "Driver"
+            };
+        }
+
     }
 }
