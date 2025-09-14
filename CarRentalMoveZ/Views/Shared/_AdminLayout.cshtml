@@ -83,6 +83,12 @@
                asp-controller="Admin" asp-action="Cashier">
                 <i class="bi bi-cash-stack"></i> <span>Cashier</span>
             </a>
+          
+
+            <a class="side-link @(currentController == "Admin" && currentAction == "ManageOffer" ? "active" : "")"
+               asp-controller="Admin" asp-action="ManageOffer">
+                <i class="bi bi-gift"></i> <span>Offers</span>
+            </a>
 
             <!-- Reports -->
             <a class="side-link @(currentController == "Reports" ? "active" : "")"

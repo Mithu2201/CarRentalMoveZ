@@ -126,12 +126,22 @@ body {
     font-weight: 600;
 }
 
-.pill-returned {
+.pill-available {
     background: #eaf6ee;
     color: #198754;
 }
+.pill-cancelled {
+    background: #f8d7da; /* light red/pink background */
+    color: #842029; /* dark red text */
+ 
+}
 
-.pill-ongoing {
+
+.pill-assigned {
+    background: #e7f1ff;
+    color: #1E56A0;
+}
+.pill-booked {
     background: #e7f1ff;
     color: #1E56A0;
 }
@@ -277,4 +287,39 @@ body {
     background-color: #f1f5fb; /* subtle hover effect */
 }
 
+
+
+/* === Themed Buttons === */
+.btn-theme {
+    background-color: #1E56A0;
+    color: #fff;
+    border: none;
+}
+
+    .btn-theme:hover {
+        background-color: #163d73;
+        color: #fff;
+    }
+
+.btn-theme-warning {
+    background-color: #F0AD4E;
+    color: #fff;
+    border: none;
+}
+
+    .btn-theme-warning:hover {
+        background-color: #d99129;
+        color: #fff;
+    }
+
+.btn-theme-danger {
+    background-color: #C62828;
+    color: #fff;
+    border: none;
+}
+
+    .btn-theme-danger:hover {
+        background-color: #a71f1f;
+        color: #fff;
+    }
 
