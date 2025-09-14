@@ -163,27 +163,27 @@
 
         const bookedRanges = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.BookedRanges));
 
-        const endPicker = flatpickr("#endDateWrapper", {
-            wrap: true,
-            enableTime: true,       // enable time picker
-            dateFormat: "Y-m-d H:i",
-            minDate: "today",
-            disable: bookedRanges.map(r => ({ from: r.start, to: r.end })),
-            clickOpens: false
-        });
-
         flatpickr("#startDateWrapper", {
             wrap: true,
-            enableTime: true,       // enable time picker
+            enableTime: true,
             dateFormat: "Y-m-d H:i",
             minDate: "today",
-            disable: bookedRanges.map(r => ({ from: r.start, to: r.end })),
+            disable: bookedRanges.map(r => ({ from: r.start, to: r.end })), // only active bookings
             clickOpens: false,
             onChange: function(selectedDates, dateStr) {
                 if (selectedDates.length > 0) {
                     endPicker.set("minDate", dateStr);
                 }
             }
+        });
+
+        const endPicker = flatpickr("#endDateWrapper", {
+            wrap: true,
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            minDate: "today",
+            disable: bookedRanges.map(r => ({ from: r.start, to: r.end })),
+            clickOpens: false
         });
 
     </script>

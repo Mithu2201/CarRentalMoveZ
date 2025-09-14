@@ -1,0 +1,95 @@
+﻿@model CarRentalMoveZ.ViewModels.CarViewModel
+@{
+    ViewData["Title"] = "Car Details";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<div class="container-fluid py-3" style="background-color:#F6F6F6; min-height:100vh;">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3 class="fw-bold">@Model.CarName Details</h3>
+        <a asp-controller="Home" asp-action="BrowseCar" class="btn" style="background-color:#1E56A0; color:white;">
+            <i class="bi bi-arrow-left me-1"></i> Back to Cars
+        </a>
+    </div>
+
+    <!-- Car Main Card -->
+    <div class="card border-0 shadow-sm mb-4" style="background-color:white; border-radius:12px;">
+        <div class="row g-0">
+            <div class="col-lg-7 p-4 text-center">
+                <img src="@Model.ImgURL" alt="@Model.CarName" class="img-fluid rounded" style="max-height:350px;" />
+            </div>
+            <div class="col-lg-5 p-4 d-flex flex-column justify-content-center">
+                <h4 class="fw-bold">@Model.Brand @Model.CarName</h4>
+                <p class="text-muted">@Model.Year | @Model.Model</p>
+                <h5 class="fw-bold mb-3 text-success">$@Model.PricePerDay /day</h5>
+                <p class="text-secondary">
+                    @Model.CarName is a stylish and reliable car, ideal for both city rides and long journeys.
+                    With refined performance and advanced features, it ensures comfort and safety.
+                </p>
+                <a asp-controller="Account" asp-action="Login" class="btn px-4 py-2 mt-2"
+                   style="background-color:#1E56A0; color:white; border-radius:8px;">
+                    <i class="bi bi-car-front me-2"></i> Book Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity & Specs -->
+    <div class="row mb-4">
+        <!-- Specs -->
+        <div class="col-lg-6 mb-3">
+            <div class="card border-0 shadow-sm p-3" style="background-color:#D6E4F0; border-radius:12px;">
+                <h6 class="fw-bold mb-3">Specifications</h6>
+                <ul class="list-unstyled small">
+                    <li><strong>Transmission:</strong> @Model.Transmission</li>
+                    <li><strong>Seats:</strong> @Model.Seats</li>
+                    <li><strong>Fuel:</strong> @Model.Fuel</li>
+                    <li><strong>Top Speed:</strong> @Model.TopSpeed mph</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-3">
+            <div class="card border-0 shadow-sm p-3" style="background-color:white; border-radius:12px;">
+                <h6 class="fw-bold mb-3">Car Features</h6>
+                <div class="row small">
+                    <div class="col-6">
+                        <p>✔ Air Conditioning</p>
+                        <p>✔ Bluetooth</p>
+                        <p>✔ Backup Camera</p>
+                        <p>✔ Cruise Control</p>
+                    </div>
+                    <div class="col-6">
+                        <p>✔ USB Charging Ports</p>
+                        <p>✔ Spacious Trunk</p>
+                        <p>✔ Safety Assist</p>
+                        <p>✔ Keyless Entry</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('carActivityChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],
+                datasets: [{
+                    label: 'Km Traveled',
+                    data: [50, 65, 40, 75, 80, 60, 95, 100],
+                    borderColor: '#1E56A0',
+                    backgroundColor: 'rgba(30,86,160,0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            }
+        });
+    </script>
+}
+
