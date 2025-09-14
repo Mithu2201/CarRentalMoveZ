@@ -35,6 +35,7 @@ namespace CarRentalMoveZ.Mappings
                 Payment = booking.Amount, // Assuming Amount is the payment
                 CustomerName = booking.Customer?.Name,
                 CarModel = booking.Car?.Model,
+
                 
             };
         }

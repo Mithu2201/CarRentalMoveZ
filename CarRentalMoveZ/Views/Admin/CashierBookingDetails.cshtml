@@ -63,6 +63,7 @@
                         @Html.HiddenFor(m => m.Location)
                         @Html.HiddenFor(m => m.BookingStatus)
                         @Html.HiddenFor(m => m.PaymentAmount)
+						@Html.HiddenFor(m => m.DriverStatus)
                         <input type="hidden" name="PaymentMethod" value="Card" />
                         <input type="hidden" name="PaymentStatus" value="Refunded" />
                         <input type="hidden" name="IsPaid" value="false" />
@@ -84,29 +85,32 @@
                 else if (!Model.IsPaid)
                 {
                     <!-- Payment flow -->
-                    <form id="cashPaymentForm" method="post" asp-action="CashierBookingDetails" asp-controller="Admin">
+                    <form id="cashPaymentForm" method="post" asp-action="ConfirmCash" asp-controller="Admin">
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.BookingId)
                         @Html.HiddenFor(m => m.CarId)
                         @Html.HiddenFor(m => m.CustomerId)
                         @Html.HiddenFor(m => m.Location)
                         @Html.HiddenFor(m => m.BookingStatus)
+                        @Html.HiddenFor(m => m.DriverStatus)
+                        @Html.HiddenFor(m => m.Amount)
                         <input type="hidden" name="PaymentMethod" value="Cash" />
-                        <input type="hidden" name="PaymentStatus" value="Confirmed" />
+                        <input type="hidden" name="PaymentStatus" value="Paid" />
                         <input type="hidden" name="IsPaid" value="true" />
+                        
 
                         <div class="mb-2 text-start">
-                            <button type="button" class="btn btn-primary" id="cash-confirm-btn">
+                            <button type="submit" class="btn btn-primary" id="cash-confirm-btn">
                                 Confirm Cash Payment
                             </button>
                         </div>
 
-                        <div id="cash-otp-section" class="mt-3 d-none text-start">
+                   @*      <div id="cash-otp-section" class="mt-3 d-none text-start">
                             <label for="cash-otp-input" class="form-label fw-semibold">Enter OTP sent:</label>
                             <input type="text" id="cash-otp-input" class="form-control mb-2" />
                             <button type="button" class="btn btn-success" id="cash-otp-verify-btn">Verify OTP</button>
                             <p id="cash-otp-message" class="mt-2"></p>
-                        </div>
+                        </div> *@
                     </form>
                 }
 
@@ -160,18 +164,18 @@
         }
 
         // Init Payment OTP Flow
-        initOtpFlow({
-            type: "Cash Payment",
-            triggerBtnId: "cash-confirm-btn",
-            sectionId: "cash-otp-section",
-            verifyBtnId: "cash-otp-verify-btn",
-            inputId: "cash-otp-input",
-            messageId: "cash-otp-message",
-            formId: "cashPaymentForm",
-            startAlert: "Reservation Confirmed. Pay within 3 days. OTP sent.",
-            successText: "Booking Confirmed!",
-            successAlert: "Your booking has been finalized."
-        });
+        // initOtpFlow({
+        //     type: "Cash Payment",
+        //     triggerBtnId: "cash-confirm-btn",
+        //     sectionId: "cash-otp-section",
+        //     verifyBtnId: "cash-otp-verify-btn",
+        //     inputId: "cash-otp-input",
+        //     messageId: "cash-otp-message",
+        //     formId: "cashPaymentForm",
+        //     startAlert: "Reservation Confirmed. Pay within 3 days. OTP sent.",
+        //     successText: "Booking Confirmed!",
+        //     successAlert: "Your booking has been finalized."
+        // });
 
         // Init Refund OTP Flow
         initOtpFlow({

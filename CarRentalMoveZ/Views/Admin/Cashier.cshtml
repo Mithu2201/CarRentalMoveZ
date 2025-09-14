@@ -43,7 +43,10 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Total Revenue</h5>
-                    <p class="fs-4 fw-bold text-success">@Model.Sum(x => x.PaymentAmount).ToString("C")</p>
+                    <p class="fs-4 fw-bold text-success">
+                        @Model.Where(x => x.IsPaid).Sum(x => x.PaymentAmount).ToString("C")
+                    </p>
+
                 </div>
             </div>
         </div>
@@ -66,8 +69,8 @@
         <div class="col-md-3">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Confirmed Bookings</h5>
-                    <p class="fs-4 fw-bold text-success">@Model.Count(x => x.BookingStatus == "Confirmed")</p>
+                    <h5 class="card-title">Assigned Bookings</h5>
+                    <p class="fs-4 fw-bold text-success">@Model.Count(x => x.BookingStatus == "Assigned")</p>
                 </div>
             </div>
         </div>

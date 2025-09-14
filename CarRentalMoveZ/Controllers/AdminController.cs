@@ -382,6 +382,29 @@ namespace CarRentalMoveZ.Controllers
             return RedirectToAction("Cashier");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmCash(BookingDetailsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            
+            model.PaymentStatus = "Paid";
+            model.IsPaid = true;
+            model.PaymentDate = DateTime.Now;
+            model.PaymentMethod = "Cash";
+            model.PaymentAmount = model.Amount; // assuming full amount is paid in cash
+
+
+
+
+            _paymentService.ConfirmCashPayment(model);
+
+            return RedirectToAction("Cashier");
+        }
+
         public IActionResult Report()
         {
             return View();

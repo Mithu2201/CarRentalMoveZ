@@ -260,4 +260,21 @@ body {
             }
 }
 
+.cashier-thead th {
+    background-color: #1E56A0;
+    color: white;
+}
+
+    .cashier-thead th:first-child {
+        border-top-left-radius: 0.5rem;
+    }
+
+    .cashier-thead th:last-child {
+        border-top-right-radius: 0.5rem;
+    }
+
+.table-hover tbody tr:hover {
+    background-color: #f1f5fb; /* subtle hover effect */
+}
+
 

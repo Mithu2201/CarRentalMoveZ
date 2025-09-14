@@ -100,7 +100,9 @@
 
                         <div class="input-group mb-3">
                             @* Show dropdown only if location is not Office *@
-                            @if (!string.Equals(Model.Location, "Office", StringComparison.OrdinalIgnoreCase) || Model.DriverStatus == "With Driver")
+                            @if (Model.IsPaid)
+                            {
+                            @if ((!string.Equals(Model.Location, "Office", StringComparison.OrdinalIgnoreCase) || Model.DriverStatus == "With Driver"))
                             {
                                 @Html.DropDownListFor(
                                 m => m.DriverId,
@@ -117,6 +119,7 @@
 
                             @* Assign button always visible *@
                             <button type="submit" class="btn btn-primary">Assign</button>
+                            }
                         </div>
 
                         @Html.ValidationMessageFor(m => m.DriverId, "", new { @class = "text-danger" })
