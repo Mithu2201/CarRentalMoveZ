@@ -61,7 +61,20 @@ namespace CarRentalMoveZ.Controllers
                 HttpContext.Session.SetInt32("UserId", userId);
 
                 // Redirect all roles to the same Admin dashboard
-                return RedirectToAction("Dashboard", "Admin");
+                if (role =="Admin" || role=="Staff" || role == "Driver")
+                {
+                    return RedirectToAction("Dashboard", "Admin");
+                }
+                else if (role == "Customer")
+                {
+                    return RedirectToAction("Dashboard", "Customer");
+                }
+                else
+                {
+                    // Unknown role, logout for safety
+                    return RedirectToAction("Logout", "Account");
+                }
+               
             }
 
             ModelState.AddModelError("", "Invalid email or password");
