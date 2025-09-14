@@ -16,25 +16,20 @@ namespace CarRentalMoveZ.Services.Implementations
             _userRepo = userRepo;
             _passwordHasher = new PasswordHasher<User>();
         }
-
-        public bool ValidateUser(LoginViewModel model, out int userId, out bool isAdmin, out string name)
+        public bool ValidateUser(LoginViewModel model, out int userId, out string role, out string name)
         {
             userId = 0;
-            isAdmin = false;
+            role = string.Empty;
             name = string.Empty;
-          
 
-            // 🔹 Hardcoded admin credentials
-            if (model.Email == "" +
-                "admin@movez.com" && model.Password == "Admin@123")
+            // Hardcoded admin credentials
+            if (model.Email == "admin@movez.com" && model.Password == "Admin@123")
             {
-                isAdmin = true;
                 userId = -1; // fake Id for admin
                 name = "Admin";
-             
+                role = "Admin";
                 return true;
             }
-
 
             // get user by email
             var user = _userRepo.GetByEmail(model.Email);
@@ -42,44 +37,15 @@ namespace CarRentalMoveZ.Services.Implementations
 
             // verify password
             var result = _passwordHasher.VerifyHashedPassword(user, user.Password, model.Password);
-            if (result == PasswordVerificationResult.Success && user.Role == "Admin")
-            {
-                userId = user.UserId;
-                name = user.Name;
-                isAdmin = true;
-          
-                return true;
-            }
-            else if (result == PasswordVerificationResult.Success && user.Role == "Customer")
-            {
-                userId = user.UserId;
-                name = user.Name;
-                isAdmin = false;
-            
-                return true;
-            }
-            else if (result == PasswordVerificationResult.Success && user.Role == "Staff")
-            {
-                userId = user.UserId;
-                name = user.Name;
-                isAdmin = true;
-              
-                return true;
-            }
-            else if (result == PasswordVerificationResult.Success && user.Role == "Driver")
-            {
-                userId = user.UserId;
-                name = user.Name;
-                isAdmin = true;
-              
-                return true;
-            }
+            if (result != PasswordVerificationResult.Success) return false;
 
-            return false;
+            userId = user.UserId;
+            name = user.Name;
+            role = user.Role; // "Admin", "Customer", "Staff", "Driver"
 
-
-
+            return true;
         }
+
 
         public bool VerifyEmail(string email)
         {
