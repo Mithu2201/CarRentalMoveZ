@@ -22,17 +22,18 @@
                 <option value="">All Payments</option>
                 <option value="Cash">Cash</option>
                 <option value="Card">Card</option>
-                <option value="Online">Online</option>
-                <option value="Other">Other</option>
+                <option value="Wallet">Wallet</option>
+                <option value="Refunded">Refunded</option>
+                <option value="Pending">Pending</option>
             </select>
 
             <!-- Booking Status Filter -->
             <select id="statusFilter" class="form-select" style="max-width: 150px;">
                 <option value="">All Status</option>
                 <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>
+                <option value="Assigned">Assigned</option>
                 <option value="Cancelled">Cancelled</option>
-                <option value="Completed">Completed</option>
+               @*  <option value="Completed">Completed</option> *@
             </select>
         </div>
     </div>
@@ -43,7 +44,10 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Total Revenue</h5>
-                    <p class="fs-4 fw-bold text-success">@Model.Sum(x => x.PaymentAmount).ToString("C")</p>
+                    <p class="fs-4 fw-bold text-dark">
+                        @Model.Where(x => x.IsPaid).Sum(x => x.PaymentAmount).ToString("C")
+                    </p>
+
                 </div>
             </div>
         </div>
@@ -51,7 +55,7 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Pending Payments</h5>
-                    <p class="fs-4 fw-bold text-warning">@Model.Count(x => !x.IsPaid)</p>
+                    <p class="fs-4 fw-bold text-dark">@Model.Count(x => !x.IsPaid)</p>
                 </div>
             </div>
         </div>
@@ -59,15 +63,15 @@
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Cash Payments</h5>
-                    <p class="fs-4 fw-bold text-primary">@Model.Count(x => x.PaymentMethod == "Cash")</p>
+                    <p class="fs-4 fw-bold text-dark">@Model.Count(x => x.PaymentMethod == "Cash")</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Confirmed Bookings</h5>
-                    <p class="fs-4 fw-bold text-success">@Model.Count(x => x.BookingStatus == "Confirmed")</p>
+                    <h5 class="card-title">Assigned Bookings</h5>
+                    <p class="fs-4 fw-bold text-dark">@Model.Count(x => x.BookingStatus == "Assigned")</p>
                 </div>
             </div>
         </div>
@@ -84,7 +88,7 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="cashier-thead">
                 <tr>
-                    <th>Booking ID</th>
+                    <th>BookingID</th>
                     <th>Customer</th>
                     <th>Car</th>
                     <th>Location</th>
@@ -98,7 +102,14 @@
             <tbody>
                 @foreach (var booking in Model)
                 {
-                    <tr data-payment="@booking.PaymentMethod" data-status="@booking.BookingStatus">
+                    <tr data-payment="@(
+                        booking.PaymentStatus == "Refunded" ? "Refunded" :
+                        booking.IsPaid && booking.PaymentStatus == "Pending to refund" ? "PendingRefund" :
+                        !booking.IsPaid ? "Pending" :
+                        booking.PaymentMethod
+)"
+                    data-status="@booking.BookingStatus">
+
                         <td>@booking.BookingId</td>
                         <td>@booking.CustomerName <br /><small>@booking.PhoneNumber</small></td>
                         <td>
@@ -111,7 +122,7 @@
                         <td>@booking.Location</td>
                         <td>@booking.StartDate.ToShortDateString() - @booking.EndDate.ToShortDateString()</td>
                         <td>
-                            <span class="badge bg-@(booking.BookingStatus == "Pending" ? "warning" : booking.BookingStatus == "Confirmed" ? "success" : "secondary")">
+                            <span class="badge bg-@(booking.BookingStatus == "Pending" ? "warning" : booking.BookingStatus == "Assigned" ? "success" : "secondary")">
                                 @booking.BookingStatus
                             </span>
                         </td>
@@ -189,12 +200,21 @@
             const p = paymentFilter.value;
             const st = statusFilter.value;
             document.querySelectorAll("table tbody tr").forEach(r => {
+				const bid= r.cells[0].innerText.toLowerCase();
                 const customer = r.cells[1].innerText.toLowerCase();
                 const car = r.cells[2].innerText.toLowerCase();
                 const payment = r.getAttribute("data-payment");
                 const status = r.getAttribute("data-status");
-                const matchSearch = customer.includes(s) || car.includes(s);
-                const matchPayment = !p || (p==="Other"?payment!=="Cash" && payment!=="Card" && payment!=="Online":payment===p);
+                const matchSearch = customer.includes(s) || car.includes(s) || bid.includes(s);
+                const standardPayments = ["Cash", "Card", "Wallet", "Refunded"];
+
+               const matchPayment = !p || (
+                     p === "Pending"
+                ? !standardPayments.includes(payment)
+                : payment === p
+                );
+
+
                 const matchStatus = !st || status===st;
                 r.style.display = (matchSearch && matchPayment && matchStatus) ? "" : "none";
             });

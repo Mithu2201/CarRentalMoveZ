@@ -1,7 +1,11 @@
 ﻿@{
     Layout = null;
+   
+
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var role = Context.Session.GetString("Role"); // "Admin", "Staff", "Driver"
+	var name = Context.Session.GetString("UserName");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -32,63 +36,97 @@
             <div class="brand fs-5">MoveZ</div>
         </div>
         <nav>
-            <!-- Dashboard -->
+            <!-- Dashboard: Everyone can access -->
+            @if (role == "Admin" || role == "Staff" || role == "Driver")
+            {
             <a class="side-link @(currentController == "Admin" && currentAction == "Dashboard" ? "active" : "")"
                asp-controller="Admin" asp-action="Dashboard">
                 <i class="bi bi-grid"></i> <span>Dashboard</span>
             </a>
+			}
 
-            <!-- Units -->
-            <a class="side-link @(currentController == "Admin" && currentAction == "ManageCar" ? "active" : "")"
-               asp-controller="Admin" asp-action="ManageCar">
-                <i class="bi bi-car-front"></i> <span>Units</span>
-            </a>
 
-            <!-- Bookings -->
-            <a class="side-link @(currentController == "Admin" && currentAction == "ManageBookings" ? "active" : "")"
-               asp-controller="Admin" asp-action="ManageBookings">
-                <i class="bi bi-calendar2-week"></i> <span>Bookings</span>
-            </a>
+            <!-- Units: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageCar" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageCar">
+                    <i class="bi bi-car-front"></i> <span>Units</span>
+                </a>
+            }
 
-        @*     <!-- Calendar -->
-            <a class="side-link @(currentController == "Calendar" ? "active" : "")"
-               asp-controller="Calendar" asp-action="Index">
-                <i class="bi bi-calendar3"></i> <span>Calendar</span>
-            </a> *@
+            <!-- Bookings: Admin + Staff + Driver -->
+            @if (role == "Admin" || role == "Staff" || role == "Driver")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageBookings" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageBookings">
+                    <i class="bi bi-calendar2-week"></i> <span>Bookings</span>
+                </a>
+            }
 
-            <!-- Clients -->
-            <a class="side-link @(currentController == "Admin" && currentAction == "ManageCustomer" ? "active" : "")"
-               asp-controller="Admin" asp-action="ManageCustomer">
-                <i class="bi bi-people"></i> <span>Customers</span>
-            </a>
+            <!-- Customers: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageCustomer" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageCustomer">
+                    <i class="bi bi-people"></i> <span>Customers</span>
+                </a>
+            }
 
-            <!-- Payments -->
-            <a class="side-link @(currentController == "Admin" && currentAction == "ManagePayment" ? "active" : "")"
-               asp-controller="Admin" asp-action="ManagePayment">
-                <i class="bi-credit-card"></i> <span>Payments</span>
-            </a>
+            <!-- Payments: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManagePayment" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManagePayment">
+                    <i class="bi-credit-card"></i> <span>Payments</span>
+                </a>
+            }
 
-            <!-- Staffs -->
-            <a class="side-link @(currentController == "Admin" && currentAction == "ManageStaff" ? "active" : "")"
-               asp-controller="Admin" asp-action="ManageStaff">
-                <i class="bi bi-person-badge"></i> <span>Staffs</span>
-            </a>
+            <!-- Staffs: Admin only -->
+            @if (role == "Admin")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageStaff" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageStaff">
+                    <i class="bi bi-person-badge"></i> <span>Staffs</span>
+                </a>
+            }
 
-            <!-- Drivers -->
-            <a class="side-link @(currentController == "Admin" && currentAction == "ManageDriver" ? "active" : "")"
-               asp-controller="Admin" asp-action="ManageDriver">
-                <i class="bi bi-sign-turn-right"></i> <span>Drivers</span>
-            </a>
-            <a class="side-link @(currentController == "Admin" && currentAction == "Cashier" ? "active" : "")"
-               asp-controller="Admin" asp-action="Cashier">
-                <i class="bi bi-cash-stack"></i> <span>Cashier</span>
-            </a>
+            <!-- Drivers: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageDriver" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageDriver">
+                    <i class="bi bi-sign-turn-right"></i> <span>Drivers</span>
+                </a>
+            }
 
-            <!-- Reports -->
-            <a class="side-link @(currentController == "Reports" ? "active" : "")"
-               asp-controller="Admin" asp-action="Index">
-                <i class="bi bi-file-earmark-text"></i> <span>Reports</span>
-            </a>
+            <!-- Cashier: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "Cashier" ? "active" : "")"
+                   asp-controller="Admin" asp-action="Cashier">
+                    <i class="bi bi-cash-stack"></i> <span>Cashier</span>
+                </a>
+            }
+
+            <!-- Offers: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageOffer" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageOffer">
+                    <i class="bi bi-gift"></i> <span>Offers</span>
+                </a>
+            }
+
+            <!-- Reports: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "Report" ? "active" : "")"
+                   asp-controller="Admin" asp-action="Report">
+                    <i class="bi bi-file-earmark-text"></i> <span>Reports</span>
+                </a>
+            }
+
 
           
    @*          <!-- Tracking -->
@@ -106,7 +144,7 @@
             <hr class="my-3">
 
             <!-- Logout -->
-            <a asp-controller="Home" asp-action="Index" class="side-link"><i class="bi bi-box-arrow-right"></i> <span>Logout</span></a>
+            <a asp-controller="Home" asp-action="Logout" class="side-link"><i class="bi bi-box-arrow-right"></i> <span>Logout</span></a>
         </nav>
     </aside>
 
@@ -139,9 +177,9 @@
                         <a class="d-flex align-items-center text-decoration-none" href="#" data-bs-toggle="dropdown">
                             <img class="avatar me-2" src="https://i.pravatar.cc/100?img=12" alt="Admin">
                             <div class="small">
-                                <div class="fw-semibold" style="color: #1E56A0;">Abram Schleifer</div>
+                                @* <div class="fw-semibold" style="color: #1E56A0;">Abram Schleifer</div> *@
 
-                                @*    <div class="fw-semibold" style="color: #1E56A0;">@Context.Session.GetString("UserName")</div> *@
+                              <div class="fw-semibold" style="color: #1E56A0;">@name</div>
                                 <div class="text-muted">Admin</div>
                             </div>
                             <i class="bi bi-caret-down ms-2 text-muted"></i>

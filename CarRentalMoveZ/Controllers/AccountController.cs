@@ -54,27 +54,33 @@ namespace CarRentalMoveZ.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            if (_loginService.ValidateUser(model, out int userId, out bool isAdmin, out string name))
+            if (_loginService.ValidateUser(model, out int userId, out string role, out string name))
             {
-                HttpContext.Session.SetString("UserName", name);  // ✅ Store Name instead of Email
-                HttpContext.Session.SetString("Role", isAdmin ? "Admin" : "Customer");
+                HttpContext.Session.SetString("UserName", name);
+                HttpContext.Session.SetString("Role", role); // store the role
                 HttpContext.Session.SetInt32("UserId", userId);
 
-                if (isAdmin)
+                // Redirect all roles to the same Admin dashboard
+                if (role =="Admin" || role=="Staff" || role == "Driver")
                 {
-                    // 🔹 Redirect to Admin layout page
                     return RedirectToAction("Dashboard", "Admin");
+                }
+                else if (role == "Customer")
+                {
+                    return RedirectToAction("Dashboard", "Customer");
                 }
                 else
                 {
-                    // 🔹 Redirect to Customer layout page
-                    return RedirectToAction("Dashboard", "Customer");
+                    // Unknown role, logout for safety
+                    return RedirectToAction("Logout", "Account");
                 }
+               
             }
 
             ModelState.AddModelError("", "Invalid email or password");
             return View(model);
         }
+
 
 
         [HttpGet]

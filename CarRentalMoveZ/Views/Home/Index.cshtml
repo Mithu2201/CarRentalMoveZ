@@ -800,6 +800,18 @@
                 transform: translateX(5px);
             }
 
+
+        .custom-btn {
+            border: 2px solid #1E56A0;
+            color: #1E56A0;
+            background-color: transparent;
+        }
+
+            .custom-btn:hover {
+                background-color: #1E56A0;
+                color: #fff;
+            }
+
         .service-number {
             position: absolute;
             right: 20px;
@@ -1016,7 +1028,7 @@
                     <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
                         <div class="testimonial-card">
                             <img src="/Img/client3.jpg" alt="Client" class="mb-3" />
-                            <p>"Very affordable and easy booking process. Highly recommend CityRide!"</p>
+                            <p>"Very affordable and easy booking process. Highly recommend MoveZ!"</p>
                             <h6 class="fw-bold">Sarah Lee</h6>
                             <div class="service-rating mb-2">
                                 <i class="fa-solid fa-star text-warning"></i>
@@ -1053,6 +1065,10 @@
                 <span class="small fw-bold" style="color: #fff;">How It Works</span>
                 <h2 class="fw-bold display-6 mb-5" style="color: #f6f6f6;">Easy Booking Process</h2>
                 <div class="row g-4">
+                    <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="400">
+                        <div class="step-icon"><i class="fa-solid fa-car"></i></div>
+                        <h6 class="text-light">Pick Your Car</h6>
+                    </div>
                     <div class="col-md-3 step" data-aos="fade-up">
                         <div class="step-icon"><i class="fa-solid fa-mobile-screen"></i></div>
                         <h6 class="text-light">Choose Destination</h6>
@@ -1060,11 +1076,7 @@
                     <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="200">
                         <div class="step-icon"><i class="fa-solid fa-calendar-check"></i></div>
                         <h6 class="text-light">Select Date</h6>
-                    </div>
-                    <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="400">
-                        <div class="step-icon"><i class="fa-solid fa-car"></i></div>
-                        <h6 class="text-light">Pick Your Car</h6>
-                    </div>
+                    </div>            
                     <div class="col-md-3 step" data-aos="fade-up" data-aos-delay="600">
                         <div class="step-icon"><i class="fa-solid fa-credit-card"></i></div>
                         <h6 class="text-light">Confirm & Pay</h6>
@@ -1087,7 +1099,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Economy Car</h5>
                                 <p class="text-muted">Affordable rides, best for daily city travel.</p>
-                                <p class="fw-bold" style="color: #1E56A0;">From $10 / ride</p>
+                                <p class="fw-bold" style="color: #1E56A0;">From LKR 50 / ride</p>
                                 <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
                                     Book Now
                                 </a>
@@ -1101,7 +1113,7 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Premium Sedan</h5>
                                 <p class="text-muted">Luxury comfort with professional service.</p>
-                                <p class="fw-bold" style="color: #1E56A0;">From $25 / ride</p>
+                                <p class="fw-bold" style="color: #1E56A0;">From LKR 60 / ride</p>
                                 <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
                                     Book Now
                                 </a>
@@ -1111,11 +1123,11 @@
                     <!-- Car 3 -->
                     <div class="col-md-4" data-aos="fade-up" data-aos-delay="900">
                         <div class="card car-card shadow-sm h-100 border-0">
-                            <img src="~/Img/bluesuv.png" class="card-img-top" alt="SUV">
+                            <img src="~/Img/family.jpg" class="card-img-top" alt="SUV">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">SUV</h5>
-                                <p class="text-muted">Spacious and powerful, perfect for family trips.</p>
-                                <p class="fw-bold" style="color: #1E56A0;">From $40 / ride</p>
+                                <p class="text-muted">Spacious and powerful for family trips.</p>
+                                <p class="fw-bold" style="color: #1E56A0;">From LKR 30 / ride</p>
                                 <a asp-controller="Home" asp-action="BrowseCar" class="btn book-btn w-100">
                                     Book Now
                                 </a>
@@ -1194,8 +1206,8 @@
                             <div class="position-relative">
                                 <img src="~/Img/people 1.jpeg" class="card-img-top" alt="Blog 1">
                                 <div class="date-badge text-center">
-                                    <span class="day">25</span>
-                                    <small class="month">June</small>
+                                    <span class="day">12</span>
+                                    <small class="month">April</small>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -1216,8 +1228,8 @@
                             <div class="position-relative">
                                 <img src="~/Img/boy.jpeg" class="card-img-top" alt="Blog 2">
                                 <div class="date-badge text-center">
-                                    <span class="day">25</span>
-                                    <small class="month">June</small>
+                                    <span class="day">17</span>
+                                    <small class="month">May</small>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -1342,16 +1354,19 @@
                 <div class="row" id="servicesContainer">
                     <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
                         <div class="service-card">
-                            <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1pYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Airport Transport" class="service-image">
+                            <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1pYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                                 alt="Airport Transport"
+                                 class="service-image">
                             <div class="service-content">
                                 <div class="service-icon">
                                     <i class="fas fa-plane"></i>
                                 </div>
                                 <h3 class="service-title">Airport Transport</h3>
-                                <a href="/Home/Service" class="explore-btn">
+
+                                <!-- ASP.NET Core tag helpers -->
+                                <a asp-controller="Home" asp-action="Service" class="btn custom-btn rounded-2">
                                     Explore More <i class="fas fa-arrow-right"></i>
                                 </a>
-
                             </div>
                         </div>
                     </div>
@@ -1363,7 +1378,7 @@
                                     <i class="fas fa-city"></i>
                                 </div>
                                 <h3 class="service-title">City Transport</h3>
-                                <a href="#" class="explore-btn">
+                                <a asp-controller="Home" asp-action="Service" class="btn custom-btn rounded-2">
                                     Explore More <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>
@@ -1377,12 +1392,13 @@
                                     <i class="fas fa-briefcase"></i>
                                 </div>
                                 <h3 class="service-title">Business Tour</h3>
-                                <a href="#" class="explore-btn">
+                                <a asp-controller="Home" asp-action="Service" class="btn custom-btn rounded-2">
                                     Explore More <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250913153355_BookingUpdated")]
-    partial class BookingUpdated
+    [Migration("20250914141258_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

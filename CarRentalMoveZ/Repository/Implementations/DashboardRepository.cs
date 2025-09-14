@@ -39,6 +39,40 @@ namespace CarRentalMoveZ.Repository.Implementations
         {
             return await _context.Customers.CountAsync();
         }
+
+        public async Task<List<(string Month, decimal Revenue)>> GetMonthlyRevenueAsync()
+        {
+            var result = await _context.Bookings
+            .Join(
+            _context.Payments.Where(p => p.Status == "Paid"),
+            b => b.BookingId,
+            p => p.BookingId,
+            (b, p) => new { p.PaymentDate, p.Amount }
+            )
+            .GroupBy(x => x.PaymentDate.Month)
+        .Select(g => new { Month = g.Key, Revenue = g.Sum(x => x.Amount) })
+        .OrderBy(x => x.Month)
+        .ToListAsync(); // <-- EF Core materializes anonymous type
+
+            // Convert to tuple after querying
+            var monthlyRevenue = result
+                .Select(x => (
+                    Month: System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(x.Month),
+                    Revenue: x.Revenue
+                ))
+                .ToList();
+
+            return monthlyRevenue;
+        }
+
+        public async Task<(int Booked, int Pending, int Cancelled)> GetBookingStatusCountsAsync()
+        {
+            var booked = await _context.Bookings.CountAsync(b => b.Status == "Assigned");
+            var pending = await _context.Bookings.CountAsync(b => b.Status == "Pending");
+            var cancelled = await _context.Bookings.CountAsync(b => b.Status == "Cancelled");
+
+            return (booked, pending, cancelled);
+        }
     }
 
 }

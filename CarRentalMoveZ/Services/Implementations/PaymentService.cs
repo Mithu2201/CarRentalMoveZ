@@ -53,5 +53,24 @@ namespace CarRentalMoveZ.Services.Implementations
          
             _paymentRepository.Update(existingPayment);
         }
+        public void ConfirmCashPayment(BookingDetailsViewModel model)
+        {
+            // Fetch existing booking
+            var existingPayment = _paymentRepository.GetPaymentByBookingId(model.BookingId);
+            if (existingPayment == null)
+            {
+                throw new Exception("Payment not found");
+            }
+         
+
+          
+            existingPayment.PaymentDate = (DateTime)model.PaymentDate;
+            existingPayment.PaymentMethod = model.PaymentMethod;
+            existingPayment.Status = model.PaymentStatus;
+            existingPayment.Amount= model.PaymentAmount;
+         
+
+            _paymentRepository.Update(existingPayment);
+        }
     }
 }

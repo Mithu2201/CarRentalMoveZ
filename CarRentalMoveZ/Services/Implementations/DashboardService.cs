@@ -13,10 +13,10 @@ namespace CarRentalMoveZ.Services.Implementations
         {
             _repo = repo;
         }
-
         public async Task<DashboardDTO> GetDashboardDataAsync()
         {
-            return new DashboardDTO
+            // First, create the basic dashboard object with totals
+            var dashboard = new DashboardDTO
             {
                 TotalBookings = await _repo.GetTotalBookingsAsync(),
                 TotalRevenue = await _repo.GetTotalRevenueAsync(),
@@ -24,6 +24,20 @@ namespace CarRentalMoveZ.Services.Implementations
                 AvailableCars = await _repo.GetAvailableCarsAsync(),
                 TotalCustomers = await _repo.GetTotalCustomersAsync()
             };
+
+            // Earnings chart
+            var monthlyRevenue = await _repo.GetMonthlyRevenueAsync();
+            dashboard.EarningsMonths = monthlyRevenue.Select(x => x.Month).ToList();
+            dashboard.EarningsRevenue = monthlyRevenue.Select(x => x.Revenue).ToList();
+
+            // Rent Status chart
+            var (booked, pending, cancelled) = await _repo.GetBookingStatusCountsAsync();
+            dashboard.BookedCount = booked;
+            dashboard.PendingCount = pending;
+            dashboard.CancelledCount = cancelled;
+
+            return dashboard;
         }
+
     }
 }

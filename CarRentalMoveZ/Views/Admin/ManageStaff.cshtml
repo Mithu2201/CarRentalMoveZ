@@ -10,6 +10,7 @@
     <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
         <h3>Staff Management</h3>
         <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+
             <!-- Search -->
             <div class="input-group" style="max-width: 250px; flex-grow: 1;">
                 <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
@@ -24,24 +25,24 @@
             </select>
 
             <!-- Add Button -->
-            <a class="btn  d-flex align-items-center text-white" style="height: 38px; background-color: #1E56A0;" asp-action="AddStaff">
+            <a class="btn btn-theme d-flex align-items-center" style="height: 38px;" asp-action="AddStaff">
                 <i class="bi bi-plus me-2"></i> Add New Staff
             </a>
 
         </div>
     </div>
 
-    <!-- Staff List -->
-    <div class="table-responsive mt-3">
-        <table class="table align-middle table-hover" id="staffTable">
-            <thead class="table-light">
+    <!-- Staff Table -->
+    <div class="table-responsive shadow-sm rounded-4 mt-3">
+        <table class="table table-hover align-middle mb-0" id="staffTable">
+            <thead class="cashier-thead">
                 <tr>
                     <th>Staff ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
                     <th>Phone</th>
-                    <th>Actions</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody class="small">
@@ -53,17 +54,21 @@
                             <td>@staff.StaffId</td>
                             <td>@staff.Name</td>
                             <td>@staff.Email</td>
-                            <td>@staff.Role</td>
-                            <td>@staff.PhoneNumber</td>
                             <td>
-                                <a asp-action="EditStaff" asp-route-id="@staff.StaffId" class="btn btn-sm btn-warning text-black">
+                                <span class="pill @(staff.Role == "Admin" ? "pill-booked" : "pill-available")">
+                                    @staff.Role
+                                </span>
+                            </td>
+                            <td>@staff.PhoneNumber</td>
+                            <td class="text-center">
+                                <a asp-action="EditStaff" asp-route-id="@staff.StaffId" class="btn btn-sm btn-theme-warning me-1">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>
-                                <a asp-controller="Admin" asp-action="StaffDetails" asp-route-id="@staff.StaffId" class="btn btn-sm btn-primary text-white">
+                                <a asp-controller="Admin" asp-action="StaffDetails" asp-route-id="@staff.StaffId" class="btn btn-sm btn-theme me-1">
                                     <i class="bi bi-eye"></i> View
                                 </a>
                                 <button type="button"
-                                        class="btn btn-sm btn-danger text-black"
+                                        class="btn btn-sm btn-theme-danger"
                                         data-bs-toggle="modal"
                                         data-bs-target="#deleteModal"
                                         data-id="@staff.StaffId"
@@ -99,7 +104,7 @@
                     <form id="deleteForm" method="post">
                         <input type="hidden" name="id" id="staffId" />
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        <button type="submit" class="btn btn-theme-danger">Yes, Delete</button>
                     </form>
                 </div>
             </div>
