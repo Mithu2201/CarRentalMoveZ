@@ -1,5 +1,6 @@
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -43,6 +44,18 @@ namespace CarRentalMoveZ.Controllers
             return View(car);
         }
 
+
+        public IActionResult Logout()
+        {
+            // Clear session
+            HttpContext.Session.Clear();
+
+            // If using authentication cookies, also sign out
+            HttpContext.SignOutAsync();
+
+            // Redirect to login or home page
+            return RedirectToAction("Index", "Home");
+        }
 
     }
 }

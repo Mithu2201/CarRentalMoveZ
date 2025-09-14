@@ -5,6 +5,7 @@
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
     var role = Context.Session.GetString("Role"); // "Admin", "Staff", "Driver"
+	var name = Context.Session.GetString("UserName");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -143,7 +144,7 @@
             <hr class="my-3">
 
             <!-- Logout -->
-            <a asp-controller="Home" asp-action="Index" class="side-link"><i class="bi bi-box-arrow-right"></i> <span>Logout</span></a>
+            <a asp-controller="Home" asp-action="Logout" class="side-link"><i class="bi bi-box-arrow-right"></i> <span>Logout</span></a>
         </nav>
     </aside>
 
@@ -178,7 +179,7 @@
                             <div class="small">
                                 @* <div class="fw-semibold" style="color: #1E56A0;">Abram Schleifer</div> *@
 
-                              <div class="fw-semibold" style="color: #1E56A0;">@Context.Session.GetString("UserName")</div>
+                              <div class="fw-semibold" style="color: #1E56A0;">@name</div>
                                 <div class="text-muted">Admin</div>
                             </div>
                             <i class="bi bi-caret-down ms-2 text-muted"></i>
