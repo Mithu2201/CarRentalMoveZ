@@ -19,8 +19,8 @@
             <!-- Status Filter -->
             <select id="statusFilter" class="form-select" style="max-width: 150px;">
                 <option value="">All Status</option>
-                <option value="Returned">Returned</option>
-                <option value="Ongoing">Ongoing</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Assigned">Assigned</option>
                 <option value="Pending">Pending</option>
             </select>
         </div>
@@ -34,8 +34,8 @@
 
     <!-- Table -->
     <div class="table-responsive mt-3">
-        <table class="table align-middle table-hover" id="bookingsTable">
-            <thead class="table-light">
+        <table class="table align-middle table-hover shadow-sm" id="bookingsTable">
+            <thead class="cashier-thead">
                 <tr>
                     <th>Booking #</th>
                     <th>Client Name</th>
@@ -45,7 +45,10 @@
                     <th>Payment</th>
                     <th>Status</th>
                     <th>Driver Status</th>
-                    <th>Action</th>
+                    @if (Context.Session.GetString("Role") != "Driver")
+                    {
+                        <th class="text-center">Action</th>
+                    }
                 </tr>
             </thead>
             <tbody class="small">
@@ -56,25 +59,45 @@
                         <tr>
                             <td>@booking.BookingId</td>
                             <td>@booking.CustomerName</td>
-                            <td>@booking.CarModel @* <span class="text-muted ms-1">@booking.CarPlate</span> *@</td>
                             <td>
-                                Start @booking.StartDate.ToString("MMM d, yyyy") •
-                                End @booking.EndDate.ToString("MMM d, yyyy")
+                                <strong>@booking.CarModel</strong>
+                                @* <div class="text-muted small">@booking.CarPlate</div> *@
+                            </td>
+                            <td>
+                                <span class="d-block">
+                                    <strong>Start:</strong> @booking.StartDate.ToString("MMM d, yyyy")
+                                </span>
+                                <span class="d-block">
+                                    <strong>End:</strong> @booking.EndDate.ToString("MMM d, yyyy")
+                                </span>
                             </td>
                             <td>@booking.Location</td>
-                            @* <td>@booking.Payment.ToString("C")</td> *@
-                            <td>@booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+
+                            <td>
+                                <span class="fw-semibold">
+                                    @booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))
+                                </span>
+                            </td>
 
                             <td data-status="@booking.Status">
                                 <span class="pill pill-@booking.Status.ToLower()">
                                     @booking.Status
                                 </span>
                             </td>
-                            <td>@booking.DriverStatus</td>
+
                             <td>
-                                <a asp-action="BookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-primary text-white">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
+                                <span class="pill pill-@booking.DriverStatus.ToLower()">
+                                    @booking.DriverStatus
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+                                @if (Context.Session.GetString("Role") != "Driver")
+                                {
+                                    <a asp-action="BookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-theme">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }
@@ -82,12 +105,13 @@
                 else
                 {
                     <tr>
-                        <td colspan="8" class="text-center text-muted">No bookings found.</td>
+                        <td colspan="9" class="text-center text-muted">No bookings found.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
 </div>
 
 @section Scripts {
@@ -135,14 +159,15 @@
             const statusValue = document.getElementById("statusFilter").value;
 
             document.querySelectorAll("#bookingsTable tbody tr").forEach(row => {
-                const client = row.cells[1].innerText.toLowerCase();
+				const bookingid= row.cells[0].innerText.toLowerCase();
+                const client = row.cells[1].innerText.toLowerCase(); 
                 const car = row.cells[2].innerText.toLowerCase();
 				const date = row.cells[3].innerText.toLowerCase();
 				const location = row.cells[4].innerText.toLowerCase();
 				const price = row.cells[5].innerText.toLowerCase();
                 const status = row.cells[6].getAttribute("data-status");
 
-                const matchesSearch = client.includes(searchValue) || car.includes(searchValue) || date.includes(searchValue) || location.includes(searchValue) || price.includes(searchValue);
+                const matchesSearch = bookingid.includes(searchValue)||client.includes(searchValue) || car.includes(searchValue) || date.includes(searchValue) || location.includes(searchValue) || price.includes(searchValue);
                 const matchesStatus = !statusValue || status === statusValue;
 
                 row.style.display = (matchesSearch && matchesStatus) ? "" : "none";

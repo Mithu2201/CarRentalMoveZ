@@ -14,5 +14,7 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         void UpdatePayment(BookingDetailsViewModel model);
 
+        void ConfirmCashPayment(BookingDetailsViewModel model);
+
     }
 }

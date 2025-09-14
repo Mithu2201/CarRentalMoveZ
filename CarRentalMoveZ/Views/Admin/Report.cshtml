@@ -1,6 +1,129 @@
 ﻿@{
+    ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="container-fluid px-4">
+    <!-- Page Header -->
+    <div class="row align-items-center mb-4">
+        <div class="col-12 col-lg-6">
+            <h2 class="mb-0 fw-bold" style="color:#1E56A0;">Reports</h2>
+        </div>
+        <div class="col-12 col-lg-6">
+            <div class="d-flex flex-wrap justify-content-end align-items-center gap-2">
+                <input type="text" class="form-control" placeholder="Search..." style="max-width: 250px;">
+                <input type="date" class="form-control" style="max-width: 180px;">
+                <input type="date" class="form-control" style="max-width: 180px;">
+                <button class="btn btn-outline-dark">Filter</button>
+            </div>
+        </div>
+    </div>
 
-<p>Hi i'm ManageReport-Generate booking/payment/car usage reports</p>
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-3" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="table-tab" data-bs-toggle="tab" data-bs-target="#table-tab-pane" type="button">Table</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="charts-tab" data-bs-toggle="tab" data-bs-target="#charts-tab-pane" type="button">Charts</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="reportTabsContent">
+        <!-- Table Tab -->
+        <div class="tab-pane fade show active" id="table-tab-pane">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead style="background-color:#1E56A0; color:white;">
+                            <tr>
+                                <th>File</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sales Report</td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><button class="btn btn-primary btn-sm">Download</button></td>
+                            </tr>
+                            <tr>
+                                <td>Cost of Sale Report</td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><button class="btn btn-primary btn-sm">Download</button></td>
+                            </tr>
+                            <tr>
+                                <td>Staff Report</td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><input type="date" class="form-control"></td>
+                                <td><button class="btn btn-primary btn-sm">Download</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Tab -->
+        <div class="tab-pane fade" id="charts-tab-pane">
+            <div class="row g-4">
+                <div class="col-12 col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Average Preparation Time</h6>
+                            <canvas id="prepTimeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Orders Completed Over Time</h6>
+                            <canvas id="ordersChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Bar Chart - Average Preparation Time
+        const prepCtx = document.getElementById('prepTimeChart').getContext('2d');
+        new Chart(prepCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Liam','Olivia','Noah','Ava','Ethan'],
+                datasets: [{
+                    label: 'Minutes',
+                    data: [12,15,13,14,11],
+                    backgroundColor: '#1E56A0'
+                }]
+            },
+            options: { responsive:true }
+        });
+
+        // Line Chart - Orders Completed
+        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+        new Chart(ordersCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1','Week 2','Week 3','Week 4'],
+                datasets: [{
+                    label: 'Orders',
+                    data: [30,45,40,50],
+                    borderColor: '#1E56A0',
+                    tension: 0.3
+                }]
+            },
+            options: { responsive:true }
+        });
+    </script>
+}
