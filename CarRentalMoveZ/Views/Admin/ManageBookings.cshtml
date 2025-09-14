@@ -45,7 +45,10 @@
                     <th>Payment</th>
                     <th>Status</th>
                     <th>Driver Status</th>
-                    <th class="text-center">Action</th>
+                    @if (Context.Session.GetString("Role") != "Driver")
+                    {
+                        <th class="text-center">Action</th>
+                    }
                 </tr>
             </thead>
             <tbody class="small">
@@ -89,9 +92,12 @@
                             </td>
 
                             <td class="text-center">
-                                <a asp-action="BookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-theme">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
+                                @if (Context.Session.GetString("Role") != "Driver")
+                                {
+                                    <a asp-action="BookingDetails" asp-route-id="@booking.BookingId" class="btn btn-sm btn-theme">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }
