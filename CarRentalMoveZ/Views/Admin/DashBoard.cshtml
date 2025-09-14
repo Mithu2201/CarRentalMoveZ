@@ -22,9 +22,14 @@
         </div>
         <!-- Buttons under Card 1 -->
         <div class="d-flex gap-2 mt-2">
-            <a asp-controller="Admin" asp-action="AddCar" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Car</a>
-            <a asp-controller="Admin" asp-action="AddDriver" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Driver</a>
+            <a asp-controller="Admin" asp-action="AddCar" class="btn btn-theme btn-sm w-50 py-2">
+                Add Car
+            </a>
+            <a asp-controller="Admin" asp-action="AddDriver" class="btn btn-theme btn-sm w-50 py-2">
+                Add Driver
+            </a>
         </div>
+
     </div>
 
     <!-- Card 2 -->
@@ -39,8 +44,8 @@
         </div>
         <!-- Buttons under Card 2 -->
         <div class="d-flex gap-2 mt-2">
-            <a asp-controller="Admin" asp-action="AddOffer" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Offer</a>
-            <a asp-controller="Admin" asp-action="AddStaff" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Add Staff</a>
+            <a asp-controller="Admin" asp-action="AddOffer" class="btn btn-theme btn-sm w-50 py-2">Add Offer</a>
+            <a asp-controller="Admin" asp-action="AddStaff" class="btn btn-theme btn-sm w-50 py-2">Add Staff</a>
         </div>
     </div>
 
@@ -56,8 +61,8 @@
         </div>
         <!-- Buttons under Card 3 -->
         <div class="d-flex gap-2 mt-2">
-            <a asp-controller="Admin" asp-action="ManageBookings" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Bookings</a>
-            <a asp-controller="Admin" asp-action="ManageCar" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Cars</a>
+            <a asp-controller="Admin" asp-action="ManageBookings" class="btn btn-theme btn-sm w-50 py-2">Bookings</a>
+            <a asp-controller="Admin" asp-action="ManageCar" class="btn btn-theme btn-sm w-50 py-2">Cars</a>
         </div>
     </div>
 
@@ -73,10 +78,11 @@
         </div>
         <!-- Buttons under Card 4 -->
         <div class="d-flex gap-2 mt-2">
-            <a asp-controller="Admin" asp-action="ManageCustomer" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Customers</a>
-            <a asp-controller="Admin" asp-action="Cashier" class="btn btn-sm w-50 py-2" style="background-color:#1E56A0; color:#fff;">Cashier</a>
+            <a asp-controller="Admin" asp-action="ManageCustomer" class="btn btn-theme btn-sm w-50 py-2">Customers</a>
+            <a asp-controller="Admin" asp-action="Cashier" class="btn btn-theme btn-sm w-50 py-2">Cashier</a>
         </div>
     </div>
+
 </div>
 
 <div class="row g-3">
@@ -97,10 +103,17 @@
                     <canvas id="rentStatusChart"></canvas>
                 </div>
                 <div class="mt-2 small">
-                    <div class="d-flex justify-content-between"><span>Booked</span><span>58%</span></div>
-                    <div class="d-flex justify-content-between"><span>Pending</span><span>24%</span></div>
-                    <div class="d-flex justify-content-between"><span>Cancelled</span><span>18%</span></div>
+                    @{
+                        var total = Model.BookedCount + Model.PendingCount + Model.CancelledCount;
+                        var bookedPercent = total > 0 ? (Model.BookedCount * 100 / total) : 0;
+                        var pendingPercent = total > 0 ? (Model.PendingCount * 100 / total) : 0;
+                        var cancelledPercent = total > 0 ? (Model.CancelledCount * 100 / total) : 0;
+                    }
+                    <div class="d-flex justify-content-between"><span>Assigned</span><span>@bookedPercent%</span></div>
+                    <div class="d-flex justify-content-between"><span>Pending</span><span>@pendingPercent%</span></div>
+                    <div class="d-flex justify-content-between"><span>Cancelled</span><span>@cancelledPercent%</span></div>
                 </div>
+
             </div>
 
             <!-- New Chart: fills remaining space -->
@@ -120,10 +133,10 @@
         new Chart(document.getElementById('earningsChart'), {
             type: 'line',
             data: {
-                labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],
+                labels: @Html.Raw(Json.Serialize(Model.EarningsMonths)), // dynamically from DB
                 datasets: [{
                     label: "Revenue",
-                    data: [8000,11000,10000,18450,12000,15000,13000,14000],
+                    data: @Html.Raw(Json.Serialize(Model.EarningsRevenue)), // dynamically from DB
                     borderColor: "#1E56A0",
                     backgroundColor: "rgba(30,86,160,.12)",
                     fill: true,
@@ -145,9 +158,9 @@
         new Chart(document.getElementById('rentStatusChart'), {
             type: 'doughnut',
             data: {
-                labels: ["Booked","Pending","Cancelled"],
+                labels: ["Assigned","Pending","Cancelled"],
                 datasets: [{
-                    data: [58,24,18],
+                    data: [@Model.BookedCount, @Model.PendingCount, @Model.CancelledCount], // dynamically from DB
                     backgroundColor: ["#1E56A0","#f59f00","#6c757d"]
                 }]
             },
@@ -157,7 +170,6 @@
                 plugins: { legend: { position: "bottom" } }
             }
         });
-
-  
     </script>
+
 }

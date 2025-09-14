@@ -91,8 +91,8 @@
             </a>
 
             <!-- Reports -->
-            <a class="side-link @(currentController == "Reports" ? "active" : "")"
-               asp-controller="Admin" asp-action="Index">
+            <a class="side-link @(currentController == "Admin" && currentAction == "Report" ? "active" : "")"
+               asp-controller="Admin" asp-action="Report">
                 <i class="bi bi-file-earmark-text"></i> <span>Reports</span>
             </a>
 
