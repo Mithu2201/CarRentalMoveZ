@@ -4,77 +4,104 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<div class="container py-4">
-
-    <h2 class="mb-4">My Bookings</h2>
+<div class="bookings-container">
+    <h2 class="page-heading">My Bookings</h2>
 
     <!-- Filter + Search Controls -->
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div class="filters-search d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <!-- Status Filter -->
-        <select id="statusFilter" class="form-select w-auto">
-            <option value="ALL">All Statuses</option>
-            <option value="Assigned">Assigned</option>
-            <option value="Pending">Pending</option>
-            <option value="Cancelled">Cancelled</option>
-        </select>
+        <div class="d-flex align-items-center gap-2">
+            <label for="statusFilter" class="form-label me-2">Filter by Status:</label>
+            <select id="statusFilter" class="form-select">
+                    <option value="ALL">All Statuses</option>
+                    <option value="Assigned">Assigned</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
 
         <!-- Search Box -->
-        <div class="input-group w-auto">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search by Car, Location, Driver...">
-            <button class="btn btn-primary" id="searchBtn">
-                <i class="bi bi-search"></i> Search
+        <div class="search-input-group input-group">
+            <input type="text" id="searchInput" class="form-control"
+                       placeholder="Search by Car Model, Location, or Driver..."
+                    aria-label="Search payments">
+            <button class="btn btn-primary" id="searchBtn" onclick="filterTable()">
+                <i class="bi bi-search me-1"></i> Search
             </button>
         </div>
     </div>
 
     <!-- Bookings Table -->
-    <table class="table table-hover" id="bookingsTable">
-        <thead>
-            <tr>
-                <th>Car</th>
-                <th>Dates</th>
-                <th>Location</th>
-                <th>Payment</th>
-                <th>Status</th>
-                <th>Driver Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var booking in Model)
+    <div class="table-container">
+        <table class="table" id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>Car</th>
+                    <th>Dates</th>
+                    <th>Location</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Driver Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
                 {
-                    <tr data-status="@booking.Status.ToUpper()">
-                        <td>@booking.CarModel</td>
-                        <td>
-                            @booking.StartDate.ToString("MMM dd, yyyy") -
-                            @booking.EndDate.ToString("MMM dd, yyyy")
-                        </td>
-                        <td>@booking.Location</td>
-                        <td>@booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
-                        <td>
-                            <span class="badge bg-@(booking.Status == "Confirmed" ? "success" : booking.Status == "Pending" ? "warning" : "secondary")">
-                                @booking.Status
-                            </span>
-                        </td>
-                        <td>@booking.DriverStatus</td>
-                        <td>
-                            @if (booking.Status == "Pending")
-                            {
-                                <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirmCancel(@booking.BookingId)">
-                                    Cancel
-                                </button>
-                            }
+                    foreach (var booking in Model)
+                    {
+                        <tr data-status="@booking.Status.ToUpper()">
+                            <td class="d-flex align-items-center gap-3">
+                                <img src="~/Img/3car.png" alt="@booking.CarModel"
+                                     class="rounded" width="60" height="40" style="object-fit: cover;">
+                                <div>
+                                    <span class="fw-bold">@booking.CarModel</span>
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                @booking.StartDate.ToString("MMM dd, yyyy") -
+                                @booking.EndDate.ToString("MMM dd, yyyy")
+                            </td>
+                            <td>@booking.Location</td>
+                            <td>@booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+                            <td>
+                                <span class="status-badge bg-@(booking.Status == "Confirmed" ? "success" : booking.Status == "Pending" ? "warning" : "secondary")">
+                                    @booking.Status
+                                </span>
+                            </td>
+                            <td>
+                                <span class="driver-status">
+                                    @booking.DriverStatus
+                                </span>
+                            </td>
+                            <td class="booking-actions">
+                                <a asp-controller="Bookings" asp-action="Details" asp-route-id="@booking.BookingId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-info-circle"></i> Details
+                                </a>
+
+                                @if (booking.Status == "Pending")
+                                {
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                            onclick="confirmCancel(@booking.BookingId)">
+                                        <i class="bi bi-x-circle"></i> Cancel
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="bi bi-calendar-x"></i>
+                            <p class="mt-2 mb-0">No bookings yet. Explore our car options and book your first rental!</p>
                         </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr><td colspan="7" class="text-center text-muted">No bookings yet.</td></tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -113,16 +113,16 @@
                             class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Profile">Account</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Booking" ? "active" : "")"
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "BookingDetails" ? "active" : "")"
                                class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="BookingDetails">My Rentals</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Payment" ? "active" : "")"
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "PaymentDetails" ? "active" : "")"
                                class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="PaymentDetails">Transactions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "BrowseCar" ? "active" : "")"
-                                asp-controller="Customer" asp-action="Car">Browse Car</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Car" ? "active" : "")"
+                               class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Car">Browse Car</a>
                         </li>
                     </ul>
                 </div>

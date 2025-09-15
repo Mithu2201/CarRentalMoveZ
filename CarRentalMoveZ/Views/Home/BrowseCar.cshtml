@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CarRentalMoveZ.DTOs.CarDTO>
 
 @{
-    ViewData["Title"] = "Car List";
+    ViewData["Title"] = "Browse car";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 
 }
@@ -143,6 +143,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         const minPriceInput = document.getElementById("minPrice");
         const maxPriceInput = document.getElementById("maxPrice");
