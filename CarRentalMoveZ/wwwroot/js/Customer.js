@@ -61,34 +61,73 @@ function confirmCancel(bookingId) {
     });
 }
 
+//document.addEventListener("DOMContentLoaded", function () {
+//    const statusFilter = document.getElementById("statusFilter");
+//    const searchInput = document.getElementById("searchInput");
+//    const searchBtn = document.getElementById("searchBtn");
+//    const rows = document.querySelectorAll("#bookingsTable tbody tr");
+
+//    function filterTable() {
+//        const selectedStatus = statusFilter.value.toUpperCase();
+//        const searchText = searchInput.value.toLowerCase();
+
+//        rows.forEach(row => {
+//            const status = row.getAttribute("data-status");
+//            const rowText = row.innerText.toLowerCase();
+
+//            const matchesStatus = (selectedStatus === "ALL" || status === selectedStatus);
+//            const matchesSearch = rowText.includes(searchText);
+
+//            row.style.display = (matchesStatus && matchesSearch) ? "" : "none";
+//        });
+//    }
+
+//    statusFilter.addEventListener("change", filterTable);
+//    searchBtn.addEventListener("click", filterTable);
+
+//    // Optional: enable live search on typing
+//    searchInput.addEventListener("keyup", function (e) {
+//        if (e.key === "Enter") filterTable(); // run search on Enter
+//    });
+//});
+
 document.addEventListener("DOMContentLoaded", function () {
     const statusFilter = document.getElementById("statusFilter");
     const searchInput = document.getElementById("searchInput");
-    const searchBtn = document.getElementById("searchBtn");
     const rows = document.querySelectorAll("#bookingsTable tbody tr");
 
     function filterTable() {
         const selectedStatus = statusFilter.value.toUpperCase();
         const searchText = searchInput.value.toLowerCase();
 
+        let anyMatch = false;
+
         rows.forEach(row => {
-            const status = row.getAttribute("data-status");
+            const status = row.getAttribute("data-status")?.toUpperCase() || "";
             const rowText = row.innerText.toLowerCase();
 
             const matchesStatus = (selectedStatus === "ALL" || status === selectedStatus);
-            const matchesSearch = rowText.includes(searchText);
+            const matchesSearch = (searchText === "" || rowText.includes(searchText));
 
-            row.style.display = (matchesStatus && matchesSearch) ? "" : "none";
+            if (matchesStatus && matchesSearch) {
+                row.style.display = "";
+                anyMatch = true;
+            } else {
+                row.style.display = "none";
+            }
         });
+
+        // If no matches → show all rows back
+        if (!anyMatch && searchText !== "") {
+            rows.forEach(row => row.style.display = "");
+        }
     }
 
     statusFilter.addEventListener("change", filterTable);
-    searchBtn.addEventListener("click", filterTable);
+    searchInput.addEventListener("input", filterTable);
 
-    // Optional: enable live search on typing
-    searchInput.addEventListener("keyup", function (e) {
-        if (e.key === "Enter") filterTable(); // run search on Enter
-    });
+    // expose function for button
+    window.filterTable = filterTable;
 });
 
 

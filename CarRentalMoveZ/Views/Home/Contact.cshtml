@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
 <!-- Page Title -->
@@ -177,6 +178,7 @@
 </style>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         // Simple JS form handler
         document.getElementById("contactForm").addEventListener("submit", function (e) {

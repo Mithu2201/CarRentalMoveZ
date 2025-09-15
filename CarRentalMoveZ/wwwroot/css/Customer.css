@@ -76,8 +76,10 @@
     --warning-yellow: #ffc107;
     --danger-red: #dc3545;
     --text-dark: #212529;
+    --danger-red: #dc3545;
     --text-muted: #6c757d;
 }
+
 
 html, body {
     height: 100%;
@@ -589,6 +591,340 @@ footer {
 /* Striping Adjustment (if needed) */
 .table-striped tbody tr:nth-of-type(even) {
     background-color: #f8f9fa; /* Subtle stripe color */
+}
+
+
+
+/* Page Container */
+.bookings-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Page Heading */
+.page-heading {
+    color: var(--primary-blue);
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+    .page-heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(45deg, var(--secondary-blue), var(--light-blue));
+        border-radius: 2px;
+    }
+
+
+/* Search Input Group */
+.search-input-group {
+    width: 100%;
+    max-width: 400px;
+}
+
+#searchInput {
+    border-color: var(--light-blue);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+    #searchInput:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(var(--primary-blue-rgb), 0.1);
+    }
+
+
+    #searchBtn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(var(--primary-blue-rgb), 0.2);
+    }
+
+/* Bookings Table Container */
+.table-container {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+#bookingsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+    #bookingsTable th {
+        background-color: var(--light-blue);
+        color: var(--primary-blue);
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 1.25rem;
+    }
+
+    #bookingsTable td {
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--very-light);
+    }
+
+    #bookingsTable tr:hover {
+        background-color: var(--very-light);
+        transform: translateX(8px);
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+/* Status Badges */
+.status-badge {
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 0.375rem 0.75rem;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+}
+
+.bg-success {
+    background-color: var(--success-green) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning-yellow) !important;
+}
+
+.bg-secondary {
+    background-color: var(--text-muted) !important;
+}
+
+/* Driver Status */
+.driver-status {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+/* Actions Buttons */
+.booking-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-danger {
+    background: var(--danger-red);
+    border: none;
+    border-radius: 8px;
+    padding: 0.375rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+    .btn-danger:hover {
+        transform: translateY(-1px);
+        background-color: var(--danger-red);
+        opacity: 0.9;
+        box-shadow: 0 4px 12px rgba(var(--danger-red-rgb), 0.2);
+    }
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background-color: white;
+    border-radius: 15px;
+}
+
+    .empty-state i {
+        font-size: 2.5rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .filters-search {
+        padding: 1rem;
+    }
+
+    #statusFilter {
+        min-width: auto;
+        font-size: 0.875rem;
+    }
+
+    .search-input-group {
+        max-width: 300px;
+    }
+
+    #bookingsTable th, #bookingsTable td {
+        padding: 1rem;
+    }
+
+    .page-heading {
+        font-size: 1.75rem;
+    }
+}
+
+
+/* Payment Styling */
+
+/* Page Container */
+.payments-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+
+
+/* Filter & Search Container */
+.filters-search {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Filter Select */
+#statusFilter {
+    border-color: var(--light-blue);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    min-width: 150px;
+    background-color: var(--very-light); /* Light background for better visibility */
+}
+
+    #statusFilter:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(var(--primary-blue-rgb), 0.1);
+    }
+
+/* Search Input Group */
+.search-input-group {
+    width: 100%;
+    max-width: 400px;
+}
+
+#searchInput {
+    border-color: var(--light-blue);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background-color: var(--very-light); /* Light background for better visibility */
+}
+
+    #searchInput:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 3px rgba(var(--primary-blue-rgb), 0.1);
+    }
+
+#searchBtn {
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+    #searchBtn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(var(--primary-blue-rgb), 0.2);
+    }
+
+/* Payments Table Container */
+.table-container {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+#paymentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+    #paymentsTable th {
+        background-color: var(--light-blue);
+        color: var(--primary-blue);
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 1.25rem;
+    }
+
+    #paymentsTable td {
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--very-light);
+    }
+
+    #paymentsTable tr:hover {
+        background-color: var(--very-light);
+        transform: translateX(8px);
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+/* Status Badges */
+
+.bg-paid {
+    background-color: var(--success-green) !important;
+}
+
+.bg-pending {
+    background-color: var(--warning-yellow) !important;
+}
+
+.bg-refunded {
+    background-color: var(--danger-red) !important;
+}
+
+.bg-paid, .bg-pending, .bg-refunded {
+    color: white !important;
+}
+
+/* Payment Method Icons */
+.payment-method-icon {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+    .payment-method-icon.bi-credit-card {
+        color: #0d6efd;
+    }
+    /* Bootstrap's primary blue */
+    .payment-method-icon.bi-paypal {
+        color: #0055b4;
+    }
+    /* PayPal's official blue */
+    .payment-method-icon.bi-bank {
+        color: #20c997;
+    }
+    /* Bootstrap's success green for bank transfer */
+    .payment-method-icon.bi-cash {
+        color: #ffc107;
+    }
+/* Yellow for cash */
+
+
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+
+    #searchInput {
+        padding: 0.5rem 0.75rem;
+    }
 }
 
 
