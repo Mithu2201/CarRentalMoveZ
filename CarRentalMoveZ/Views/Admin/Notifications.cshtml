@@ -1,0 +1,51 @@
+﻿@using System.Globalization
+
+@{
+    ViewData["Title"] = "Notify";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var bookings = ViewBag.Bookings as IEnumerable<CarRentalMoveZ.DTOs.BookingDTO>;
+    var payments = ViewBag.Payments as IEnumerable<CarRentalMoveZ.DTOs.PaymentDTO>;
+}
+
+<div class="container py-3">
+
+    <h4 class="mb-3">Recent Booking Requests (Last 5)</h4>
+    @if (bookings == null || !bookings.Any())
+    {
+        <div class="alert alert-info">No new booking requests.</div>
+    }
+    else
+    {
+        @foreach (var note in bookings)
+        {
+            <div class="alert alert-primary mb-2">
+                <strong>@note.CustomerName</strong> requested
+                <strong>@note.CarModel</strong>
+                from <strong>@note.StartDate.ToString("dd MMM yyyy")</strong>
+                to <strong>@note.EndDate.ToString("dd MMM yyyy")</strong>.
+                <span class="badge bg-secondary">@note.DriverStatus</span>
+            </div>
+        }
+    }
+
+    <h4 class="mb-3 mt-4">Recent Paid Payments (Last 5)</h4>
+    @if (payments == null || !payments.Any())
+    {
+        <div class="alert alert-info">No recent paid payments.</div>
+    }
+    else
+    {
+        @foreach (var note in payments)
+        {
+            <div class="alert alert-success mb-2">
+                Payment <strong>@note.PaymentId</strong> for Booking <strong>@note.BookingId</strong>
+                amount <strong>@note.Amount.ToString("C", new CultureInfo("en-LK"))</strong>
+                on <strong>@note.PaymentDate.ToString("dd MMM yyyy hh:mm tt")</strong>
+                via <strong>@note.PaymentMethod</strong>.
+                <span class="badge bg-success">@note.Status</span>
+            </div>
+        }
+    }
+
+</div>

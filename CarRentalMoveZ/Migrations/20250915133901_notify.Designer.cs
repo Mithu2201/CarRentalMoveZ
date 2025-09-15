@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250914141258_init")]
-    partial class init
+    [Migration("20250915133901_notify")]
+    partial class notify
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,9 @@ namespace CarRentalMoveZ.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StatusUpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("BookingId");
 

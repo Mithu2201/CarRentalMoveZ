@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.Data;
+using CarRentalMoveZ.DTOs;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +71,45 @@ namespace CarRentalMoveZ.Repository.Implementations
                 _context.SaveChanges();
             }
         }
+
+        public async Task<List<Booking>> GetRecentAssignedBookingsAsync(int customerId, int hours)
+        {
+            var cutoffTime = DateTime.UtcNow.AddHours(-hours);
+
+            return await _context.Bookings
+                .Include(b => b.Car)
+                .Include(b => b.Driver)
+                .Where(b => b.CustomerId == customerId
+                         && b.Status == "Assigned"
+                         && b.StatusUpdatedAt.HasValue
+                         && b.StatusUpdatedAt.Value >= cutoffTime)
+                .OrderByDescending(b => b.StatusUpdatedAt)
+                .ToListAsync();
+        }
+
+
+        public async Task<List<BookingDTO>> GetLast5BookingsAsync()
+        {
+            return await _context.Bookings
+                .Include(b => b.Car)
+                .Include(b => b.Customer)
+                .OrderByDescending(b => b.BookingId)
+                .Take(5)
+                .Select(b => new BookingDTO
+                {
+                    BookingId = b.BookingId,
+                    StartDate = b.StartDate,
+                    EndDate = b.EndDate,
+                    Status = b.Status,
+                    Location = b.Location,
+                    Payment = b.Amount,
+                    CustomerName = b.Customer.Name,
+                    CarModel = b.Car.CarName,
+                    DriverStatus = b.DriverStatus
+                })
+                .ToListAsync();
+        }
+
 
     }
 }

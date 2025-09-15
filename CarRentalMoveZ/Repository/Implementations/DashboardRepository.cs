@@ -39,31 +39,30 @@ namespace CarRentalMoveZ.Repository.Implementations
         {
             return await _context.Customers.CountAsync();
         }
-
-        public async Task<List<(string Month, decimal Revenue)>> GetMonthlyRevenueAsync()
+        public async Task<List<(string Hour, decimal Revenue)>> GetHourlyRevenueAsync(DateTime date)
         {
-            var result = await _context.Bookings
-            .Join(
-            _context.Payments.Where(p => p.Status == "Paid"),
-            b => b.BookingId,
-            p => p.BookingId,
-            (b, p) => new { p.PaymentDate, p.Amount }
-            )
-            .GroupBy(x => x.PaymentDate.Month)
-        .Select(g => new { Month = g.Key, Revenue = g.Sum(x => x.Amount) })
-        .OrderBy(x => x.Month)
-        .ToListAsync(); // <-- EF Core materializes anonymous type
+            var result = await _context.Payments
+                .Where(p => p.Status == "Paid" && p.PaymentDate.Date == date.Date)
+                .GroupBy(p => p.PaymentDate.Hour)
+                .Select(g => new
+                {
+                    Hour = g.Key,
+                    Revenue = g.Sum(x => x.Amount)
+                })
+                .OrderBy(x => x.Hour)
+                .ToListAsync();
 
             // Convert to tuple after querying
-            var monthlyRevenue = result
+            var hourlyRevenue = result
                 .Select(x => (
-                    Month: System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(x.Month),
+                    Hour: $"{x.Hour}:00", // format as "10:00", "14:00"
                     Revenue: x.Revenue
                 ))
                 .ToList();
 
-            return monthlyRevenue;
+            return hourlyRevenue;
         }
+
 
         public async Task<(int Booked, int Pending, int Cancelled)> GetBookingStatusCountsAsync()
         {
@@ -73,6 +72,29 @@ namespace CarRentalMoveZ.Repository.Implementations
 
             return (booked, pending, cancelled);
         }
+
+        public async Task<List<(string Hour, int Count)>> GetHourlyBookingCountsAsync(DateTime date)
+        {
+            var result = await _context.Bookings
+                .Where(b => b.StartDate.Date == date.Date) // bookings for the given day
+                .GroupBy(b => b.StartDate.Hour)            // group by hour (0-23)
+                .Select(g => new { Hour = g.Key, Count = g.Count() })
+                .OrderBy(x => x.Hour)
+                .ToListAsync();
+
+            // Convert to string format "09:00", "14:00"
+            return result.Select(x => ($"{x.Hour:00}:00", x.Count)).ToList();
+        }
+
+        public async Task<(int Available, int Booked, int Pending)> GetCarStatusCountsAsync()
+        {
+            var availableCar = await _context.Cars.CountAsync(c => c.Status == "Available");
+            var bookedCar = await _context.Cars.CountAsync(c => c.Status == "Booked");
+            var pendingCar = await _context.Cars.CountAsync(c => c.Status == "Pending");
+
+            return (availableCar, bookedCar, pendingCar);
+        }
+
     }
 
 }

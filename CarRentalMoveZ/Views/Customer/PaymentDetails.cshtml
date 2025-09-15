@@ -1,48 +1,85 @@
 ﻿@model IEnumerable<CarRentalMoveZ.DTOs.PaymentDTO>
 
-
 @{
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+<div class="payments-container">
+    <h2 class="page-heading">My Payments</h2>
 
+    <!-- Filter + Search Controls -->
+    <div class="filters-search d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <!-- Status Filter -->
+        <div class="d-flex align-items-center gap-2">
+            <label for="statusFilter" class="form-label me-2">Filter by Status:</label>
+            <select id="statusFilter" class="form-select">
+                <option value="ALL">All</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Refunded">Refunded</option>
+            </select>
+        </div>
 
+        <!-- Search Box -->
+        <div class="search-input-group input-group">
+            <input type="text" id="searchInput" class="form-control"
+                   placeholder="Search by Booking Dates, Amount, or Method..."
+                   aria-label="Search payments">
+            <button class="btn btn-primary" id="searchBtn" onclick="filterTable()">
+                <i class="bi bi-search me-1"></i> Search
+            </button>
+        </div>
+    </div>
 
-<div class="container py-4">
-    <h2>My Payments</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Payment ID</th>
-                <th>Booking Dates</th>
-                <th>Amount</th>
-                <th>Payment Date</th>
-                <th>Method</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var payment in Model)
+    <!-- Payments Table -->
+    <div class="table-container">
+        <table class="table" id="paymentsTable">
+            <thead>
+                <tr>
+                    <th>Booking Dates</th>
+                    <th>Amount</th>
+                    <th>Payment Date</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var payment in Model)
+                    {
+                        <tr data-status="@payment.Status.ToLower()">
+                            <td>
+                                @payment.BookingStartDate.ToString("MMM d, yyyy") –
+                                @payment.BookingEndDate.ToString("MMM d, yyyy")
+                            </td>
+                            <td>@payment.Amount.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+                            <td>@payment.PaymentDate.ToString("MMM d, yyyy HH:mm")</td>
+                            <td>
+                                <i class="bi bi-@(payment.PaymentMethod == "Credit Card" ? "credit-card" : payment.PaymentMethod == "PayPal" ? "paypal" : payment.PaymentMethod == "Bank Transfer" ? "bank" : "cash") payment-method-icon"></i>
+                                <span class="ms-2">@payment.PaymentMethod</span>
+                            </td>
+                            <td>
+                                <span class="status-badge bg-@payment.Status.ToLower()">
+                                    @payment.Status
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@payment.PaymentId</td>
-                        <td>@payment.BookingStartDate.ToString("MMM d, yyyy") – @payment.BookingEndDate.ToString("MMM d, yyyy")</td>
-                        <td>@payment.Amount.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
-                        <td>@payment.PaymentDate.ToString("MMM d, yyyy")</td>
-                        <td>@payment.PaymentMethod</td>
-                        <td>@payment.Status</td>
+                        <td colspan="5" class="empty-state">
+                            <i class="bi bi-credit-card-2-front me-2"></i>
+                            <p class="mt-2 mb-0">No payments found. Check back after your first booking!</p>
+                        </td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-center text-muted">No payments found.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
 
