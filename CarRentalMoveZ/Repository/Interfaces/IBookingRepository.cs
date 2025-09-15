@@ -1,4 +1,5 @@
-﻿using CarRentalMoveZ.Models;
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
 
 namespace CarRentalMoveZ.Repository.Interfaces
 {
@@ -15,6 +16,10 @@ namespace CarRentalMoveZ.Repository.Interfaces
         void Update(Booking booking);
 
         void Cancel(int bookingId);
+
+        Task<List<Booking>> GetRecentAssignedBookingsAsync(int customerId, int hours);
+
+        Task<List<BookingDTO>> GetLast5BookingsAsync();
 
 
 

@@ -1,4 +1,5 @@
-﻿using CarRentalMoveZ.Models;
+﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
 
 namespace CarRentalMoveZ.Repository.Interfaces
 {
@@ -10,6 +11,10 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         IEnumerable<Payment> GetPaymentsByUserId(int userId);
         Payment GetPaymentByBookingId(int bookingId);
+
+        Task<List<PaymentDTO>> GetLast5PaidPaymentsAsync();
+
+        Task<List<PaymentDTO>> GetLast5CashPaymentsAsync(int customerId);
 
         void Update(Payment payment);
 

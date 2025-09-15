@@ -72,5 +72,15 @@ namespace CarRentalMoveZ.Services.Implementations
 
             _paymentRepository.Update(existingPayment);
         }
+
+        public async Task<List<PaymentDTO>> GetLast5PaidPaymentsAsync()
+        {
+            return await _paymentRepository.GetLast5PaidPaymentsAsync();
+        }
+
+        public async Task<List<PaymentDTO>> GetLast5CashPaymentsCustomerNotificationsAsync(int customerId)
+        {
+            return await _paymentRepository.GetLast5CashPaymentsAsync(customerId);
+        }
     }
 }

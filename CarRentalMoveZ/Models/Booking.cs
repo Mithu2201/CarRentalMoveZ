@@ -37,6 +37,8 @@ namespace CarRentalMoveZ.Models
 
         public Driver? Driver { get; set; }  // Navigation property can be null
 
+        public DateTime? StatusUpdatedAt { get; set; } // <-- new property
+
 
     }
 }

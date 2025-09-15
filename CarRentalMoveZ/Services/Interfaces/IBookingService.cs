@@ -19,6 +19,10 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         IEnumerable<BookingDetailsViewModel> GetAllBookingsDetail();
 
+        Task<List<CustomerNotificationDTO>> GetRecentAssignedBookingsAsync(int customerId, int hours = 2);
+
+        Task<List<BookingDTO>> GetLast5BookingsAsync();
+
         void CancelBooking(int bookingId);
 
     }
