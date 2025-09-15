@@ -1,83 +1,246 @@
 ﻿@model CarRentalMoveZ.DTOs.CustomerDashboardDTO
-
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+<!-- Main Container with Modern Spacing -->
 <div class="container mt-5">
+    <!-- Profile & Quick Summary Section -->
+    <div class="row mb-4 justify-content-center">
+        <div class="col-12 col-md-10">
+            <div class="card profile-summary shadow-sm" style="--bs-bg-opacity: 0.9; background: linear-gradient(135deg, #D6E4F0 0%, #F0F6FF 100%);">
+                <div class="card-body d-flex align-items-center p-4">
+                    <!-- Profile Avatar -->
+                    <div class="profile-avatar me-4">
+                        <img src="~/Img/client1.jpg" alt="Profile Picture"
+                             class="rounded-circle border border-3 border-white shadow-sm"
+                             width="120" height="120">
+                        <span class="loyalty-badge">3 Star</span>
+                    </div>
 
-    <!-- Profile Card -->
+                    <!-- Profile Information -->
+                    <div class="flex-grow-1">
+                        <h3 class="text-dark fw-bold mb-2">@Model.Profile.Name</h3>
+                        <div class="mb-3">
+                            <p class="mb-1 text-primary d-flex align-items-center">
+                                <i class="bi bi-envelope-fill me-2"></i>@Model.Profile.Email
+                            </p>
+                            <p class="mb-1 text-primary d-flex align-items-center">
+                                <i class="bi bi-telephone-fill me-2"></i>@Model.Profile.PhoneNumber
+                            </p>
+                        </div>
+
+                        <!-- Key Metrics -->
+                        <div class="quick-metrics d-flex flex-wrap gap-3">
+                            <div class="metric-item">
+                                <p class="text-secondary small mb-0">Total Rentals</p>
+                                <h5 class="text-dark fw-bold">@Model.Bookings?.Count()</h5>
+                            </div>
+                            <div class="metric-item">
+                                <p class="text-secondary small mb-0">Active Now</p>
+                                <h5 class="text-dark fw-bold">@Model.Bookings?.Count(b => b.Status == "Assigned")</h5>
+                            </div>
+                            <div class="metric-item">
+                                <p class="text-secondary small mb-0">Total Spent</p>
+                                <h5 class="text-dark fw-bold">
+                                    @Model.Payments?.Sum(p => p.Amount).ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))
+                                </h5>
+                            </div>
+                        </div>
+
+                        <!-- Edit Button -->
+                        <a asp-controller="Customer" asp-action="EditProfile"
+                           class="btn btn-edit ms-auto mt-3 fw-semibold">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Summary Cards -->
+    <div class="row mb-5">
+        <!-- Booking History Card -->
+        <div class="col-md-4">
+            <div class="card summary-card shadow-sm" style="background: linear-gradient(135deg, #1E56A0 0%, #2C72B4 100%);">
+                <div class="card-body p-4">
+                    <h6 class="text-white-50 mb-0">Booking History</h6>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <h3 class="text-white fw-bolder">@Model.Bookings?.Count()</h3>
+                            <p class="text-white-50 small">Total Bookings</p>
+                        </div>
+                        <div class="booking-stats">
+                            <p class="text-white-50 small">Past:</p>
+                            <h5 class="text-white fw-bold">@Model.Bookings?.Count(b => b.EndDate < DateTime.Now)</h5>
+                        </div>
+                        <div class="booking-stats">
+                            <p class="text-white-50 small">Upcoming:</p>
+                            <h5 class="text-white fw-bold">@Model.Bookings?.Count(b => b.StartDate > DateTime.Now)</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Bookings Card -->
+        <div class="col-md-4">
+            <div class="card summary-card shadow-sm" style="background: linear-gradient(135deg, #1E56A0 0%, #2C72B4 100%);">
+                <div class="card-body p-4">
+                    <h6 class="text-white-50 mb-0">Active Bookings</h6>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <h3 class="text-white fw-bolder">@Model.Bookings?.Count(b => b.Status == "Assigned")</h3>
+                            <p class="text-white-50 small">Current Rentals</p>
+                        </div>
+                        @if (Model.Bookings?.Any(b => b.Status == "Assigned") ?? false)
+                        {
+                            var latestActive = Model.Bookings.First(b => b.Status == "Assigned");
+                            <div class="booking-stats">
+                                <p class="text-white-50 small">Latest Ends:</p>
+                                <h5 class="text-white fw-bold">@latestActive.EndDate.ToString("MMM dd, yyyy")</h5>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="booking-stats text-center">
+                                <p class="text-white-50 small">No active rentals</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Summary Card -->
+        <div class="col-md-4">
+            <div class="card summary-card shadow-sm" style="background: linear-gradient(135deg, #1E56A0 0%, #2C72B4 100%);">
+                <div class="card-body p-4">
+                    <h6 class="text-white-50 mb-0">Payment Summary</h6>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <h4 class="text-white fw-bolder">
+                                @Model.Payments?.Sum(p => p.Amount).ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))
+                            </h4>
+                            <p class="text-white-50 small">Total Paid</p>
+                        </div>
+                        <div class="payment-stats">
+                            <p class="text-white-50 small">Last Payment:</p>
+                            <h5 class="text-white fw-bold">
+                                @if (Model.Payments?.Any() ?? false)
+                                {
+                                    var lastPayment = Model.Payments.OrderByDescending(p => p.PaymentDate).FirstOrDefault();
+                                    @lastPayment.PaymentDate.ToString("MMM dd, yyyy")
+                                }
+                                else
+                                {
+                                    <text>N/A</text>
+                                }
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Account Information -->
     <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="profile-card p-4 d-flex align-items-center"
-                 style="background: #D6E4F0; border-radius:20px; box-shadow:0 8px 25px rgba(0,0,0,0.08); transition: transform 0.3s;">
-                <div class="profile-img me-4">
-                    <img src="~/Img/client1.jpg" alt="Profile Picture" class="rounded-circle" width="100" height="100" />
+        <div class="col-12">
+            <div class="card account-info-card shadow-sm">
+                <div class="card-header" style="background: linear-gradient(135deg, #D6E4F0 0%, #E8F4FF 100%);">
+                    <h5 class="text-dark fw-bold">Account Details</h5>
                 </div>
-                <div>
-                    <h3 class="text-dark fw-bold">@Model.Profile.Name</h3>
-                    <p class="text-primary mb-1"><strong>Email:</strong> @Model.Profile.Email</p>
-                    <p class="text-primary mb-1"><strong>Phone:</strong> @Model.Profile.PhoneNumber</p>
-                    <a asp-controller="Customer" asp-action="EditProfile"
-                       class="btn mt-3 fw-semibold"
-                       style="background-color:#163172; color:#fff; border-radius:12px; padding:8px 20px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-                        ✏️ Edit Profile
-                    </a>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <!-- Account Dates -->
+                        <div class="col-md-4">
+                            <div class="info-group">
+                                <h6 class="text-primary fw-bold mb-3">Account Timeline</h6>
+                                <div class="info-item">
+                                    <i class="bi bi-calendar-event me-2"></i>
+                                    <span class="text-secondary small">Joined:</span>
+                                    <div class="text-dark">12/03/2025</div>
+                                </div>
+                                <div class="info-item mt-2">
+                                    <i class="bi bi-clock-history me-2"></i>
+                                    <span class="text-secondary small">Last Login:</span>
+                                    <div class="text-dark">14/03/2026</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Security Status -->
+                        <div class="col-md-4">
+                            <div class="info-group">
+                                <h6 class="text-primary fw-bold mb-3">Security</h6>
+                                <div class="info-item">
+                                    <i class="bi bi-check-circle-fill me-2 text-success"></i>
+                                    <span class="text-secondary small">Email Verified</span>
+                                </div>
+                                <div class="info-item mt-2">
+                                    <i class="bi bi-check-circle-fill me-2 text-success"></i>
+                                    <span class="text-secondary small">2FA Enabled</span>
+                                </div>
+                                <div class="info-item mt-2">
+                                    <i class="bi bi-shield-lock me-2"></i>
+                                    <span class="text-secondary small">Password Strength:</span>
+                                    <span class="badge bg-success ms-1">Strong</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Preferences -->
+                        <div class="col-md-4">
+                            <div class="info-group">
+                                <h6 class="text-primary fw-bold mb-3">Contact Preferences</h6>
+                                <div class="info-item">
+                                    <i class="bi bi-bell me-2"></i>
+                                    <span class="text-secondary small">Notification:</span>
+                                    <div class="text-dark">#23456 Booking is Confirmed</div>
+                                </div>
+                                <div class="info-item mt-2">
+                                    <i class="bi bi-geo-alt me-2"></i>
+                                    <span class="text-secondary small">Default Location:</span>
+                                    <div class="text-dark">Jaffna</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="row mb-4 g-3">
-        @* Summary Card Template *@
-        <div class="col-md-4">
-            <div class="card text-white" style="background-color:#1E56A0; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                <div class="card-body text-center py-4">
-                    <h6 class="text-light fw-semibold">Total Bookings</h6>
-                    <h3 class="fw-bold">@Model.Bookings?.Count()</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white" style="background-color:#1E56A0; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1);">
-                <div class="card-body text-center py-4">
-                    <h6 class="text-light fw-semibold">Active Bookings</h6>
-                    <h3 class="fw-bold">@Model.Bookings?.Count(b => b.Status == "Confirmed")</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white" style="background-color:#1E56A0; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1);">
-                <div class="card-body text-center py-4">
-                    <h6 class="text-light fw-semibold">Total Payments</h6>
-                    <h3 class="fw-bold">
-                        @Model.Payments?.Sum(p => p.Amount).ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))
-                    </h3>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Bookings Table -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card" style="border-radius:20px; box-shadow:0 8px 20px rgba(0,0,0,0.05);">
-                <div class="card-header" style="background-color:#163172; color:#fff; border-radius:20px 20px 0 0;">
-                    <h5 class="mb-0 fw-bold">My Bookings</h5>
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bookings-card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="text-white fw-bold">My Bookings</h5>
+                    <!-- Filter Dropdown (adjusted for consistency) -->
+                    <select class="form-select form-select-sm w-auto bg-white border-light"
+                            aria-label="Filter by status">
+                        <option selected>All Statuses</option>
+                        <option value="ASSIGNED">ASSIGNED</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                    </select>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table mb-0 table-hover align-middle">
-                            <thead style="background-color:#D6E4F0; color:#163172; font-weight:600;">
+                    <div class="table-responsive" style="border-radius: 0 0 20px 20px; overflow: hidden;">
+                        <table class="table table-borderless align-middle mb-0" style="background-color: #fff;">
+                            <thead style="background-color: #D6E4F0; color: #163172; font-weight: 600;">
                                 <tr>
-                                    <th>#</th>
                                     <th>Car</th>
                                     <th>Dates</th>
                                     <th>Location</th>
-                                    <th>Payment</th>
+                                    <th>Total Cost</th>
                                     <th>Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,25 +248,39 @@
                                 {
                                     foreach (var booking in Model.Bookings)
                                     {
-                                        <tr>
-                                            <td>@booking.BookingId</td>
-                                            <td>@booking.CarModel</td>
+                                        <tr data-status="@booking.Status.ToUpper()">
+                                            <td class="d-flex align-items-center gap-3">
+                                                <img src="~/Img/3car.png" alt="@booking.CarModel"
+                                                     class="img-fluid rounded" width="60" height="40">
+                                                <div>
+                                                    <span class="fw-bold">@booking.CarModel</span>
+                                                    
+                                                </div>
+                                            </td>
                                             <td>@booking.StartDate.ToString("MMM dd, yyyy") - @booking.EndDate.ToString("MMM dd, yyyy")</td>
                                             <td>@booking.Location</td>
                                             <td>@booking.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
                                             <td>
-                                                <span class="badge" style="
-                                                            background-color:@(booking.Status == "Confirmed" ? "#28a745" : booking.Status == "Pending" ? "#ffc107" : "#6c757d");
-                                                            color:#fff; padding:5px 10px; border-radius:12px;">
+                                                <span class="badge @(booking.Status == "Confirmed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-secondary") text-uppercase p-1 px-2 rounded-3">
                                                     @booking.Status
                                                 </span>
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Customer" asp-action="BookingDetails" asp-route-id="@booking.BookingId"
+                                                   class="btn btn-sm btn-outline-dark text-black me-2">
+                                                    <i class="bi bi-eye"></i> View
+                                                </a>
                                             </td>
                                         </tr>
                                     }
                                 }
                                 else
                                 {
-                                    <tr><td colspan="6" class="text-center text-muted py-3">No bookings yet.</td></tr>
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-5" style="background-color: #fff;">
+                                            <i class="bi bi-exclamation-circle me-2"></i>No bookings found
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -114,23 +291,31 @@
     </div>
 
     <!-- Payments Table -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card" style="border-radius:20px; box-shadow:0 8px 20px rgba(0,0,0,0.05);">
-                <div class="card-header" style="background-color:#163172; color:#fff; border-radius:20px 20px 0 0;">
-                    <h5 class="mb-0 fw-bold">My Payments</h5>
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card payments-card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="text-white fw-bold">My Payments</h5>
+                    <!-- Filter Dropdown (adjusted for consistency) -->
+                    <select class="form-select form-select-sm w-auto bg-white border-light"
+                            aria-label="Filter by status">
+                        <option selected>All Payments</option>
+                        <option value="PAID">PAID</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="REFUND">REFUND</option>
+                    </select>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table mb-0 table-hover align-middle">
-                            <thead style="background-color:#D6E4F0; color:#163172; font-weight:600;">
+                    <div class="table-responsive" style="border-radius: 0 0 20px 20px; overflow: hidden;">
+                        <table class="table table-borderless align-middle mb-0" style="background-color: #fff;">
+                            <thead style="background-color: #D6E4F0; color: #163172; font-weight: 600;">
                                 <tr>
-                                    <th>#</th>
-                                    <th>Booking Dates</th>
+                                    <th>Booking Period</th>
                                     <th>Amount</th>
                                     <th>Payment Date</th>
                                     <th>Method</th>
                                     <th>Status</th>
+                                    <th>Action</a>
                                 </tr>
                             </thead>
                             <tbody>
@@ -138,25 +323,34 @@
                                 {
                                     foreach (var payment in Model.Payments)
                                     {
-                                        <tr>
-                                            <td>@payment.PaymentId</td>
+                                        <tr data-status="@payment.Status.ToUpper()">
                                             <td>@payment.BookingStartDate.ToString("MMM dd, yyyy") - @payment.BookingEndDate.ToString("MMM dd, yyyy")</td>
                                             <td>@payment.Amount.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
-                                            <td>@payment.PaymentDate.ToString("MMM dd, yyyy")</td>
-                                            <td>@payment.PaymentMethod</td>
+                                            <td>@payment.PaymentDate.ToString("MMM dd, yyyy HH:mm")</td>
                                             <td>
-                                                <span class="badge" style="
-                                                            background-color:@(payment.Status == "Paid" ? "#28a745" : payment.Status == "Pending" ? "#ffc107" : "#dc3545");
-                                                            color:#fff; padding:5px 10px; border-radius:12px;">
+                                                <i class="bi bi-@(payment.PaymentMethod == "CreditCard" ? "credit-card" : payment.PaymentMethod == "PayPal" ? "paypal" : "bank") fs-5 text-secondary"></i>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(payment.Status == "Paid" ? "bg-success" : payment.Status == "Pending" ? "bg-warning" : "bg-danger") text-uppercase p-1 px-2 rounded-3">
                                                     @payment.Status
                                                 </span>
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Customer" asp-action="PaymentDetails"
+                                                   class="btn btn-sm btn-outline-dark text-black me-2">
+                                                    <i class="bi bi-eye"></i> View
+                                                </a>
                                             </td>
                                         </tr>
                                     }
                                 }
                                 else
                                 {
-                                    <tr><td colspan="6" class="text-center text-muted py-3">No payments found.</td></tr>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-5" style="background-color: #fff;">
+                                            <i class="bi bi-exclamation-circle me-2"></i>No payment records
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -165,24 +359,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
-<style>
-    /* Hover effect for cards */
-    .profile-card:hover, .card:hover {
-        transform: translateY(-5px);
-    }
 
-    /* Table row hover */
-    .table-hover tbody tr:hover {
-        background-color: #F6F6F6;
-        transition: background-color 0.3s;
-    }
-
-    /* Responsive tables rounded corners */
-    .table-responsive {
-        border-radius: 0 0 20px 20px;
-        overflow: hidden;
-    }
-</style>
