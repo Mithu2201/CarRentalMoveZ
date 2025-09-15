@@ -32,11 +32,13 @@ namespace CarRentalMoveZ.Mappings
                 EndDate = booking.EndDate,
                 Status = booking.Status,
                 Location = booking.Location,
-                Payment = booking.Amount, // Assuming Amount is the payment
+                Payment = booking.Amount,
                 CustomerName = booking.Customer?.Name,
                 CarModel = booking.Car?.Model,
+                Image = booking.Car?.ImgURL,        // <-- get image from Car entity
+                DriverStatus = booking.DriverStatus
 
-                
+
             };
         }
 

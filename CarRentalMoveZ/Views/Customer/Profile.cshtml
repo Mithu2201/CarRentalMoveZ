@@ -1,59 +1,97 @@
-﻿@{
+﻿@model CarRentalMoveZ.DTOs.UserProfileDTO
+
+@{
     ViewData["Title"] = "Customer Profile";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
-
+<div class="profile-page">
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-10">
                 <div class="profile-card">
-                    <h2 class="text-center mb-4 profile-header">My Profile</h2>
+                    <!-- Profile Header -->
+                    <div class="text-center profile-header">
+                        <div class="avatar-wrapper">
+                            <img src="~/Img/client1.jpg"
+                                 alt="Profile Picture" class="avatar" />
+                            <div class="avatar-overlay">
+                                <i class="bi bi-camera"></i> Update Photo
+                            </div>
+                        </div>
+                        <h2 class="mt-3 profile-title" style="color: var(--primary-blue);">Account Overview</h2>
+                    </div>
 
+                    <!-- Editable Information -->
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label class="profile-label">Full Name</label>
-                            <p class="profile-value">@Model.Name</p>
+                            <label class="profile-label"><i class="bi bi-person me-1"></i> Full Name</label>
+                            <p class="profile-value" id="name-static">@Model.Name</p>
+            
                         </div>
 
                         <div class="col-md-6">
-                            <label class="profile-label">Email</label>
-                            <p class="profile-value">@Model.Email</p>
+                            <label class="profile-label"><i class="bi bi-envelope me-1"></i> Email</label>
+                            <p class="profile-value" id="email-static">@Model.Email</p>
+            
                         </div>
 
                         <div class="col-md-6">
-                            <label class="profile-label">Phone Number</label>
-                            <p class="profile-value">@Model.PhoneNumber</p>
+                            <label class="profile-label"><i class="bi bi-phone me-1"></i> Phone</label>
+                            <p class="profile-value" id="phone-static">@Model.PhoneNumber</p>
+            
                         </div>
 
                         <div class="col-md-6">
-                            <label class="profile-label">Date of Birth</label>
-                            <p class="profile-value">@Model.DateOfBirth?.ToString("yyyy-MM-dd")</p>
+                            <label class="profile-label"><i class="bi bi-calendar me-1"></i> Date of Birth</label>
+                            <p class="profile-value" id="dob-static">@Model.DateOfBirth?.ToString("MMM dd, yyyy")</p>
+            
                         </div>
 
                         <div class="col-md-6">
-                            <label class="profile-label">Gender</label>
-                            <p class="profile-value">@Model.Gender</p>
+                            <label class="profile-label"><i class="bi bi-gender-trans me-1"></i> Gender</label>
+                            <p class="profile-value" id="gender-static">@Model.Gender</p>
+            
                         </div>
 
                         <div class="col-md-6">
-                            <label class="profile-label">Do you change Password..?</label>
-                            <a asp-controller="Account" asp-action="VerifyEmail" class="btn edit-btn">
-                                Change Password
-                            </a>
+                            <label class="profile-label"><i class="bi bi-trophy me-1"></i> Loyalty Status</label>
+                            <p class="profile-value" id="loyalty-static">3 Star Customer</p>
+            
                         </div>
                     </div>
 
+                    <!-- Static Information -->
+                    <div class="row g-4 static-info mt-4">
+                        <div class="col-md-6">
+                            <label class="profile-label"><i class="bi bi-calendar-event me-1"></i> Account Joined</label>
+                            <p class="profile-value-static">12/05/2025</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="profile-label"><i class="bi bi-clock-history me-1"></i> Last Login</label>
+                            <p class="profile-value-static">15/06/2025</p>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="profile-label"><i class="bi bi-shield-lock me-1"></i> Account Security</label>
+                            <p class="profile-value-static" style="background-color: var(--light-blue); color: var(--primary-blue);">
+                                Verified Email & Active 2FA
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
                     <div class="text-center mt-5">
-                        
-                        <a asp-controller="Customer" asp-action="EditProfile" class="btn edit-btn">
-                            ✏️ Edit Profile
-                        </a>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-pill btn-outline-custom">
+                                <i class="bi bi-key me-1"></i> Change Password
+                            </a>
+                            <a asp-controller="Customer" asp-action="EditProfile" class="btn btn-pill btn-outline-custom">
+                                <i class="bi bi-pencil-square me-1"></i> Edit Profile
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-    
+</div>
 

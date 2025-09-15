@@ -36,6 +36,12 @@
                 Welcome @Context.Session.GetString("UserName")
             </span>
 
+            <!-- Bell Icon with Compact Notification Badge -->
+            <a class="text-white flex-shrink-0 position-relative p-1 border border-white border-1 rounded-circle hover-shadow" href="#">
+                <i class="bi bi-bell fs-6"></i> <!-- Reduced icon size -->
+
+            </a>
+
             <!-- Compact Account Dropdown -->
             <div class="dropdown flex-shrink-1">
                 <a class="d-flex align-items-center text-decoration-none text-white p-1 border border-white border-1 rounded-3 hover-shadow"
@@ -88,15 +94,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Profile" ? "active" : "")"
-                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Profile">Profile</a>
+                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Profile">Account</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Booking" ? "active" : "")"
-                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="BookingDetails">My Book</a>
+                               class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="BookingDetails">My Rentals</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Payment" ? "active" : "")"
-                            class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="PaymentDetails">Payment</a>
+                               class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="PaymentDetails">Transactions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "BrowseCar" ? "active" : "")"
@@ -229,6 +235,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Customer.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
