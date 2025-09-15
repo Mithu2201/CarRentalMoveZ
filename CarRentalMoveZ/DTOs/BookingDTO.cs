@@ -15,5 +15,7 @@
         public string CarModel { get; set; }
         public string DriverStatus { get; set; }
 
+        public string Image { get; set; }
+
     }
 }
