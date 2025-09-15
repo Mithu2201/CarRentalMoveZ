@@ -7,14 +7,14 @@
     <!-- Page Header -->
     <div class="row align-items-center mb-4">
         <div class="col-12 col-lg-6">
-            <h2 class="mb-0 fw-bold" style="color:#1E56A0;">Reports</h2>
+            <h2 class="mb-0 fw-bold text-dark">Reports</h2>
         </div>
         <div class="col-12 col-lg-6">
             <div class="d-flex flex-wrap justify-content-end align-items-center gap-2">
-                <input type="text" class="form-control" placeholder="Search..." style="max-width: 250px;">
-                <input type="date" class="form-control" style="max-width: 180px;">
-                <input type="date" class="form-control" style="max-width: 180px;">
-                <button class="btn btn-outline-dark">Filter</button>
+                <input type="text" class="form-control form-control-sm" placeholder="Search..." style="max-width: 250px;">
+                <input type="date" class="form-control form-control-sm" style="max-width: 180px;">
+                <input type="date" class="form-control form-control-sm" style="max-width: 180px;">
+                <button class="btn btn-theme btn-sm">Filter</button>
             </div>
         </div>
     </div>
@@ -22,10 +22,10 @@
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-3" id="reportTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="table-tab" data-bs-toggle="tab" data-bs-target="#table-tab-pane" type="button">Table</button>
+            <button class="nav-link active text-dark fw-semibold" id="table-tab" data-bs-toggle="tab" data-bs-target="#table-tab-pane" type="button">Table</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="charts-tab" data-bs-toggle="tab" data-bs-target="#charts-tab-pane" type="button">Charts</button>
+            <button class="nav-link text-dark fw-semibold" id="charts-tab" data-bs-toggle="tab" data-bs-target="#charts-tab-pane" type="button">Charts</button>
         </li>
     </ul>
 
@@ -35,7 +35,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body table-responsive">
                     <table class="table table-hover align-middle">
-                        <thead style="background-color:#1E56A0; color:white;">
+                        <thead class="table-primary text-white">
                             <tr>
                                 <th>File</th>
                                 <th>Start Date</th>
@@ -45,22 +45,22 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Sales Report</td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><button class="btn btn-primary btn-sm">Download</button></td>
+                                <td>Cars Report</td>
+                                <td><input type="date" class="form-control form-control-sm"></td>
+                                <td><input type="date" class="form-control form-control-sm"></td>
+                                <td><button class="btn btn-theme btn-sm">Download</button></td>
                             </tr>
                             <tr>
-                                <td>Cost of Sale Report</td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><button class="btn btn-primary btn-sm">Download</button></td>
+                                <td>Bookings Report</td>
+                                <td><input type="date" class="form-control form-control-sm"></td>
+                                <td><input type="date" class="form-control form-control-sm"></td>
+                                <td><button class="btn btn-theme btn-sm">Download</button></td>
                             </tr>
                             <tr>
                                 <td>Staff Report</td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><input type="date" class="form-control"></td>
-                                <td><button class="btn btn-primary btn-sm">Download</button></td>
+                                <td><input type="date" class="form-control form-control-sm"></td>
+                                <td><input type="date" class="form-control form-control-sm"></td>
+                                <td><button class="btn btn-theme btn-sm">Download</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -74,16 +74,16 @@
                 <div class="col-12 col-lg-6">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h6>Average Preparation Time</h6>
-                            <canvas id="prepTimeChart"></canvas>
+                            <h6>Average Rental Duration per Driver</h6>
+                            <canvas id="rentalDurationChart"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h6>Orders Completed Over Time</h6>
-                            <canvas id="ordersChart"></canvas>
+                            <h6>Weekly Rentals Completed</h6>
+                            <canvas id="rentalsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -95,35 +95,52 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Bar Chart - Average Preparation Time
-        const prepCtx = document.getElementById('prepTimeChart').getContext('2d');
-        new Chart(prepCtx, {
+        // Bar Chart - Average Rental Duration per Driver
+        const rentalDurCtx = document.getElementById('rentalDurationChart').getContext('2d');
+        new Chart(rentalDurCtx, {
             type: 'bar',
             data: {
                 labels: ['Liam','Olivia','Noah','Ava','Ethan'],
                 datasets: [{
-                    label: 'Minutes',
-                    data: [12,15,13,14,11],
+                    label: 'Hours',
+                    data: [5, 7, 6, 8, 4],
                     backgroundColor: '#1E56A0'
                 }]
             },
-            options: { responsive:true }
+            options: {
+                responsive: true,
+                plugins: { legend: { display: true }, title: { display: true, text: 'Average Rental Duration per Driver' } },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Hours' } },
+                    x: { title: { display: true, text: 'Drivers' } }
+                }
+            }
         });
 
-        // Line Chart - Orders Completed
-        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-        new Chart(ordersCtx, {
+        // Line Chart - Rentals Completed per Week
+        const rentalsCtx = document.getElementById('rentalsChart').getContext('2d');
+        new Chart(rentalsCtx, {
             type: 'line',
             data: {
                 labels: ['Week 1','Week 2','Week 3','Week 4'],
                 datasets: [{
-                    label: 'Orders',
-                    data: [30,45,40,50],
+                    label: 'Rentals',
+                    data: [25, 40, 35, 50],
                     borderColor: '#1E56A0',
-                    tension: 0.3
+                    backgroundColor: 'rgba(30, 86, 160, 0.2)',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 5
                 }]
             },
-            options: { responsive:true }
+            options: {
+                responsive: true,
+                plugins: { legend: { display: true }, title: { display: true, text: 'Weekly Rentals Completed' } },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Number of Rentals' } },
+                    x: { title: { display: true, text: 'Weeks' } }
+                }
+            }
         });
     </script>
 }

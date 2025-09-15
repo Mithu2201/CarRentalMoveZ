@@ -86,46 +86,72 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-12">
-        <div class="d-flex" style="gap:1rem;">
-            <!-- Bar Chart: fixed width -->
-            <div class="card p-3" style="width:65%;">
-                <div class="fw-semibold mb-2">Earnings Summary</div>
-                <div style="height:300px;">
-                    <canvas id="earningsChart"></canvas>
-                </div>
+    <!-- Earnings Summary: takes 65% -->
+    <div class="col-md-7">
+        <div class="card p-3 h-100">
+            <div class="fw-semibold mb-2">Earnings Summary</div>
+            <div style="height:300px;">
+                <canvas id="earningsChart"></canvas>
             </div>
+        </div>
+    </div>
 
-            <!-- Pie Chart: fixed width -->
-            <div class="card p-3" style="width:25%;">
-                <div class="fw-semibold mb-2">Rent Status <span class="small text-muted">(This Week)</span></div>
-                <div style="height:230px;">
-                    <canvas id="rentStatusChart"></canvas>
-                </div>
-                <div class="mt-2 small">
-                    @{
-                        var total = Model.BookedCount + Model.PendingCount + Model.CancelledCount;
-                        var bookedPercent = total > 0 ? (Model.BookedCount * 100 / total) : 0;
-                        var pendingPercent = total > 0 ? (Model.PendingCount * 100 / total) : 0;
-                        var cancelledPercent = total > 0 ? (Model.CancelledCount * 100 / total) : 0;
-                    }
-                    <div class="d-flex justify-content-between"><span>Assigned</span><span>@bookedPercent%</span></div>
-                    <div class="d-flex justify-content-between"><span>Pending</span><span>@pendingPercent%</span></div>
-                    <div class="d-flex justify-content-between"><span>Cancelled</span><span>@cancelledPercent%</span></div>
-                </div>
-
+    <!-- Rent Status Pie Chart -->
+    <div class="col-md-3">
+        <div class="card p-3 h-100">
+            <div class="fw-semibold mb-2">Rent Status <span class="small text-muted">(This Week)</span></div>
+            <div style="height:230px;">
+                <canvas id="rentStatusChart"></canvas>
             </div>
+            <div class="mt-2 small">
+                @{
+                    var total = Model.BookedCount + Model.PendingCount + Model.CancelledCount;
+                    var bookedPercent = total > 0 ? (Model.BookedCount * 100 / total) : 0;
+                    var pendingPercent = total > 0 ? (Model.PendingCount * 100 / total) : 0;
+                    var cancelledPercent = total > 0 ? (Model.CancelledCount * 100 / total) : 0;
+                }
+                <div class="d-flex justify-content-between"><span>Assigned</span><span>@bookedPercent%</span></div>
+                <div class="d-flex justify-content-between"><span>Pending</span><span>@pendingPercent%</span></div>
+                <div class="d-flex justify-content-between"><span>Cancelled</span><span>@cancelledPercent%</span></div>
+            </div>
+        </div>
+    </div>
 
-            <!-- New Chart: fills remaining space -->
-            <div class="card p-3 flex-grow-1">
-                <div class="fw-semibold mb-2">New Chart</div>
-                <div style="height:300px;">
-                    <canvas id="newChart"></canvas>
-                </div>
+    <!-- Car Status Pie Chart -->
+    <div class="col-md-2">
+        <div class="card p-3 h-100">
+            <div class="fw-semibold mb-2">Car Status Overview</div>
+            <div style="height:230px;">
+                <canvas id="carStatusChart"></canvas>
+            </div>
+            <div class="mt-2 small">
+                @{
+                    var totalCars = Model.AvailableCarCount + Model.BookedCarCount + Model.PendingCarCount;
+                    var availablePercent = totalCars > 0 ? (Model.AvailableCarCount * 100 / totalCars) : 0;
+                    var bookedPercentCar = totalCars > 0 ? (Model.BookedCarCount * 100 / totalCars) : 0;
+                    var pendingPercentCar = totalCars > 0 ? (Model.PendingCarCount * 100 / totalCars) : 0;
+                }
+                <div class="d-flex justify-content-between"><span>Available</span><span>@availablePercent%</span></div>
+                <div class="d-flex justify-content-between"><span>Booked</span><span>@bookedPercentCar%</span></div>
+                <div class="d-flex justify-content-between"><span>Pending</span><span>@pendingPercentCar%</span></div>
             </div>
         </div>
     </div>
 </div>
+
+
+<div class="row g-3 mt-3">
+    <div class="col-12">
+        <div class="card p-3">
+            <div class="fw-semibold mb-2">Hourly Booking Overview (Today)</div>
+            <div style="height:300px;">
+                <canvas id="hourlyBookingChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @section Scripts {
     <script>
@@ -133,10 +159,10 @@
         new Chart(document.getElementById('earningsChart'), {
             type: 'line',
             data: {
-                labels: @Html.Raw(Json.Serialize(Model.EarningsMonths)), // dynamically from DB
+                labels: @Html.Raw(Json.Serialize(Model.EarningsHours)), // ⬅️ now hourly labels
                 datasets: [{
                     label: "Revenue",
-                    data: @Html.Raw(Json.Serialize(Model.EarningsRevenue)), // dynamically from DB
+                    data: @Html.Raw(Json.Serialize(Model.EarningsRevenue)), // ⬅️ now hourly revenue
                     borderColor: "#1E56A0",
                     backgroundColor: "rgba(30,86,160,.12)",
                     fill: true,
@@ -154,6 +180,7 @@
             }
         });
 
+
         /* Doughnut: Rent Status */
         new Chart(document.getElementById('rentStatusChart'), {
             type: 'doughnut',
@@ -170,6 +197,47 @@
                 plugins: { legend: { position: "bottom" } }
             }
         });
+
+        /* Hourly Booking Overview */
+        new Chart(document.getElementById('hourlyBookingChart'), {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.BookingHours)),    // "09:00", "10:00", ...
+                datasets: [{
+                    label: "Bookings",
+                    data: @Html.Raw(Json.Serialize(Model.BookingCounts)), // counts per hour
+                    backgroundColor: "#1E56A0"
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: "rgba(0,0,0,.05)" } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+                /* Car Status Pie Chart */
+        new Chart(document.getElementById('carStatusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ["Available", "Booked", "Pending"],
+                datasets: [{
+                    data: [@Model.AvailableCarCount, @Model.BookedCarCount, @Model.PendingCarCount],
+                    backgroundColor: ["#28a745", "#1E56A0", "#f59f00"]
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                cutout: "65%",
+                plugins: { legend: { position: "bottom" } }
+            }
+        });
+
+
+
     </script>
 
 }

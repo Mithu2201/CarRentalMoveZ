@@ -25,16 +25,29 @@ namespace CarRentalMoveZ.Services.Implementations
                 TotalCustomers = await _repo.GetTotalCustomersAsync()
             };
 
-            // Earnings chart
-            var monthlyRevenue = await _repo.GetMonthlyRevenueAsync();
-            dashboard.EarningsMonths = monthlyRevenue.Select(x => x.Month).ToList();
-            dashboard.EarningsRevenue = monthlyRevenue.Select(x => x.Revenue).ToList();
+            // Earnings chart (Hourly)
+            var hourlyRevenue = await _repo.GetHourlyRevenueAsync(DateTime.Now);
+            dashboard.EarningsHours = hourlyRevenue.Select(x => x.Hour).ToList();
+            dashboard.EarningsRevenue = hourlyRevenue.Select(x => x.Revenue).ToList();
 
             // Rent Status chart
             var (booked, pending, cancelled) = await _repo.GetBookingStatusCountsAsync();
             dashboard.BookedCount = booked;
             dashboard.PendingCount = pending;
             dashboard.CancelledCount = cancelled;
+
+            var today = DateTime.Today;
+            var hourlyBookings = await _repo.GetHourlyBookingCountsAsync(today);
+
+            dashboard.BookingHours = hourlyBookings.Select(x => x.Hour).ToList();
+            dashboard.BookingCounts = hourlyBookings.Select(x => x.Count).ToList();
+
+       
+            // Car Status Pie Chart
+            var (availablecar, bookedcar, pendingcar) = await _repo.GetCarStatusCountsAsync();
+            dashboard.AvailableCarCount = availablecar;
+            dashboard.BookedCarCount = bookedcar;
+            dashboard.PendingCarCount = pendingcar;
 
             return dashboard;
         }
