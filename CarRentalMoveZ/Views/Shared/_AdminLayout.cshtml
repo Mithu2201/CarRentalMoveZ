@@ -173,9 +173,11 @@
                         <input class="form-control form-control-sm border-0" placeholder="Search…" />
                     </div>
                     <a class="text-secondary" href="#"><i class="bi bi-gear"></i></a>
-                    <a class="text-secondary position-relative" href="#">
-                        <i class="bi bi-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    <a class="text-secondary position-relative" href="@Url.Action("Notifications", "Admin")">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span id="notif-dot"
+                              class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none">
+                        </span>
                     </a>
                     <div class="dropdown">
                         <a class="d-flex align-items-center text-decoration-none" href="#" data-bs-toggle="dropdown">
@@ -231,6 +233,27 @@
                 document.body.classList.remove('sidebar-open');
             }
         });
+    </script>
+
+    <script>
+        async function fetchNotificationDot() {
+            try {
+                const response = await fetch('/Admin/GetNotificationCount');
+                const hasNotifications = await response.json();
+                const dot = document.getElementById('notif-dot');
+
+                if (hasNotifications) {
+                    dot.classList.remove("d-none"); // show red dot
+                } else {
+                    dot.classList.add("d-none"); // hide if none
+                }
+            } catch (e) {
+                console.error("Error fetching notifications:", e);
+            }
+        }
+
+        setInterval(fetchNotificationDot, 10000); // check every 10s
+        fetchNotificationDot(); // run immediately
     </script>
 
     @RenderSection("Scripts", required: false)

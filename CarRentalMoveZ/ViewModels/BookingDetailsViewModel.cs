@@ -37,6 +37,8 @@ namespace CarRentalMoveZ.ViewModels
         public string? PaymentMethod { get; set; }      // nullable
         public string? PaymentStatus { get; set; }      // nullable
 
+        public DateTime? StatusUpdatedAt { get; set; } // <-- new property
+
     }
 }
 

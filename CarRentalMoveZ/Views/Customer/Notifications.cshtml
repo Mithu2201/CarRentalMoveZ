@@ -1,0 +1,68 @@
+﻿@using System.Globalization
+
+<h4>Recent Notifications</h4>
+
+@{
+    var bookings = ViewBag.BookingNotifications as IEnumerable<CarRentalMoveZ.DTOs.CustomerNotificationDTO>;
+    var payments = ViewBag.PaymentNotifications as IEnumerable<CarRentalMoveZ.DTOs.PaymentDTO>;
+}
+
+@if ((bookings == null || !bookings.Any()) && (payments == null || !payments.Any()))
+{
+    <div class="alert alert-info">No new notifications.</div>
+}
+else
+{
+    @* Booking notifications *@
+    @if (bookings != null)
+    {
+        @foreach (var note in bookings)
+        {
+            <div class="alert alert-success mb-2">
+                Booking <strong>@note.BookingId</strong> for car <strong>@note.CarName</strong>
+                assigned to driver <strong>@note.DriverName</strong>
+                at @note.AssignedAt?.ToLocalTime().ToString("hh:mm tt").
+            </div>
+        }
+    }
+
+    @* Payment notifications *@
+    @if (payments != null)
+    {
+        @foreach (var note in payments)
+        {
+            <div class="alert alert-warning mb-2">
+                Payment <strong>@note.PaymentId</strong> for Booking <strong>@note.BookingId</strong>
+                amount <strong>@note.Amount.ToString("C", new CultureInfo("en-LK"))</strong>
+                received as <strong>@note.PaymentMethod</strong>
+                on @note.PaymentDate.ToLocalTime().ToString("dd MMM yyyy hh:mm tt").
+            </div>
+        }
+    }
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    @if (bookings != null)
+    {
+            foreach (var note in bookings)
+            {
+                    <text>
+                        toastr.success("Booking ID @note.BookingId for car @note.CarName assigned to driver @note.DriverName");
+                    </text>
+            }
+    }
+
+    @if (payments != null)
+    {
+            foreach (var note in payments)
+            {
+                    <text>
+                        toastr.info('Payment ID @note.PaymentId of @note.Amount.ToString("C", new System.Globalization.CultureInfo("en-LK")) received via @note.PaymentMethod');
+                    </text>
+            }
+    }
+
+</script>

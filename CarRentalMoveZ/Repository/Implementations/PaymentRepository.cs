@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.Data;
+using CarRentalMoveZ.DTOs;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,49 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.SaveChanges();
         }
 
+
+        public async Task<List<PaymentDTO>> GetLast5PaidPaymentsAsync()
+        {
+            return await _context.Payments
+                .Where(p => p.Status == "Paid")
+                .OrderByDescending(p => p.PaymentDate)
+                .Take(5)
+                .Select(p => new PaymentDTO
+                {
+                    PaymentId = p.PaymentId,
+                    BookingId = p.BookingId,
+                    BookingStartDate = p.Booking.StartDate,
+                    BookingEndDate = p.Booking.EndDate,
+                    Amount = p.Amount,
+                    PaymentDate = p.PaymentDate,
+                    PaymentMethod = p.PaymentMethod,
+                    Status = p.Status
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<PaymentDTO>> GetLast5CashPaymentsAsync(int customerId)
+        {
+            return await _context.Payments
+                .Include(p => p.Booking)
+                .Where(p => p.Status == "Paid"
+                            && p.PaymentMethod == "Cash"
+                            && p.Booking.CustomerId == customerId)
+                .OrderByDescending(p => p.PaymentDate)
+                .Take(5)
+                .Select(p => new PaymentDTO
+                {
+                    PaymentId = p.PaymentId,
+                    BookingId = p.BookingId,
+                    BookingStartDate = p.Booking.StartDate,
+                    BookingEndDate = p.Booking.EndDate,
+                    Amount = p.Amount,
+                    PaymentDate = p.PaymentDate,
+                    PaymentMethod = p.PaymentMethod,
+                    Status = p.Status
+                })
+                .ToListAsync();
+        }
 
     }
 }

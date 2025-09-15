@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@{
+    // Get current customer ID from session
+
+    // Get unread notifications count from ViewBag, default to 0
+    var unreadCount = ViewBag.UnreadCount ?? 0;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -37,10 +44,19 @@
             </span>
 
             <!-- Bell Icon with Compact Notification Badge -->
-            <a class="text-white flex-shrink-0 position-relative p-1 border border-white border-1 rounded-circle hover-shadow" href="#">
+            <a class="text-white flex-shrink-0 position-relative p-1 border border-white border-1 rounded-circle hover-shadow" href="@Url.Action("Notifications", "Customer")">
                 <i class="bi bi-bell fs-6"></i> <!-- Reduced icon size -->
-
+                <!-- Notification Badge -->
+                @if (unreadCount > 0)
+                {
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.65rem; padding:0.2em 0.4em;">
+                        @unreadCount
+                        <span class="visually-hidden">unread notifications</span>
+                    </span>
+                }
             </a>
+
+
 
             <!-- Compact Account Dropdown -->
             <div class="dropdown flex-shrink-1">

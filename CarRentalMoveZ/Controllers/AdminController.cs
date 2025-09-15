@@ -142,7 +142,9 @@ namespace CarRentalMoveZ.Controllers
           
             
             model.BookingStatus = "Assigned"; // update status in ViewModel
+            model.StatusUpdatedAt = DateTime.Now; // set status update time
             
+
 
             // Update booking in database
             _bookingService.UpdateBooking(model);
@@ -416,5 +418,32 @@ namespace CarRentalMoveZ.Controllers
             ViewBag.RoleList = new SelectList(Enum.GetValues(typeof(Role)));
             return View();
         }
+
+
+        // Notifications page (both bookings and payments)
+        public async Task<IActionResult> Notifications()
+        {
+            var booking = await _bookingService.GetLast5BookingsAsync();
+            var payments = await _paymentService.GetLast5PaidPaymentsAsync();
+
+            ViewBag.Bookings = booking;
+            ViewBag.Payments = payments;
+
+            return View();
+        }
+
+        // JSON endpoint for bell icon
+        [HttpGet]
+        public async Task<JsonResult> GetNotificationCount()
+        {
+            var booking = await _bookingService.GetLast5BookingsAsync();
+            var payments = await _paymentService.GetLast5PaidPaymentsAsync();
+
+            // Show red dot if there are any recent bookings OR payments
+            bool hasNotifications = booking.Any() || payments.Any();
+
+            return Json(hasNotifications);
+        }
+
     }
 }

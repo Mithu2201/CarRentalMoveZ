@@ -102,6 +102,7 @@ namespace CarRentalMoveZ.Services.Implementations
             existingBooking.Status = model.BookingStatus;
             existingBooking.DriverStatus = model.DriverStatus;
             existingBooking.DriverId = model.DriverId;
+            existingBooking.StatusUpdatedAt = model.StatusUpdatedAt; // <-- update timestamp
 
 
             // Save changes
@@ -135,5 +136,22 @@ namespace CarRentalMoveZ.Services.Implementations
             }
         }
 
+        public async Task<List<CustomerNotificationDTO>> GetRecentAssignedBookingsAsync(int customerId, int hours = 2)
+        {
+            var bookings = await _bookingRepo.GetRecentAssignedBookingsAsync(customerId, hours);
+
+            return bookings.Select(b => new CustomerNotificationDTO
+            {
+                BookingId = b.BookingId,
+                CarName = b.Car.CarName,
+                DriverName = b.Driver?.Name ?? "N/A",
+                AssignedAt = b.StatusUpdatedAt
+            }).ToList();
+        }
+
+        public async Task<List<BookingDTO>> GetLast5BookingsAsync()
+        {
+            return await _bookingRepo.GetLast5BookingsAsync();
+        }
     }
 }
