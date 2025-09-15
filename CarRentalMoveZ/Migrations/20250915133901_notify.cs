@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarRentalMoveZ.Migrations
 {
     /// <inheritdoc />
-    public partial class Date : Migration
+    public partial class notify : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
