@@ -16,5 +16,9 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         void ConfirmCashPayment(BookingDetailsViewModel model);
 
+        Task<List<PaymentDTO>> GetLast5CashPaymentsCustomerNotificationsAsync(int customerId);
+
+        Task<List<PaymentDTO>> GetLast5PaidPaymentsAsync();
+
     }
 }

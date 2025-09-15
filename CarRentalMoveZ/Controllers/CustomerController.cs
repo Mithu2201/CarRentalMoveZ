@@ -264,5 +264,33 @@ namespace CarRentalMoveZ.Controllers
                 return Json(new { success = false, message = "An error occurred while cancelling the booking." });
             }
         }
+        public async Task<IActionResult> Notifications()
+        {
+            // 1. Get logged-in user ID from session
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (!userId.HasValue)
+                return RedirectToAction("Login", "Account");
+
+            // 2. Get the customer record
+            var customer = _customerService.GetCustomerByUserId(userId.Value);
+            if (customer == null)
+                return NotFound();
+
+            // 3a. Fetch bookings assigned in last 2 hours
+            var bookingNotifications = await _bookingService.GetRecentAssignedBookingsAsync(customer.CustomerId, 2);
+
+            // 3b. Fetch last 5 cash payments for this customer
+            var paymentNotifications = await _paymentService.GetLast5CashPaymentsCustomerNotificationsAsync(customer.CustomerId);
+
+            // 4. Combine unread count for badge
+            ViewBag.UnreadCount = bookingNotifications.Count + paymentNotifications.Count;
+
+            // 5. Pass both lists to the view via ViewBag
+            ViewBag.BookingNotifications = bookingNotifications;
+            ViewBag.PaymentNotifications = paymentNotifications;
+
+            return View();
+        }
+
     }
 }

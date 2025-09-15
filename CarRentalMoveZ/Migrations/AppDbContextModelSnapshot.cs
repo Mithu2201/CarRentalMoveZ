@@ -63,6 +63,9 @@ namespace CarRentalMoveZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("StatusUpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("BookingId");
 
                     b.HasIndex("CarId");
