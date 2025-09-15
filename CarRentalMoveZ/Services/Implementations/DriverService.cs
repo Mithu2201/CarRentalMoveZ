@@ -38,6 +38,14 @@ namespace CarRentalMoveZ.Services.Implementations
             driver.Status = "On Duty";
             driverRepository.Update(driver);
         }
+        public void SetDriverOffDuty(int driverId)
+        {
+            var driver = driverRepository.Getbyid(driverId);
+            if (driver == null) return;
+
+            driver.Status = "Active";
+            driverRepository.Update(driver);
+        }
 
         public IEnumerable<DriverDTO> GetAvailableDrivers()
         {
