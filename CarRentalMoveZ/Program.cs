@@ -47,6 +47,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<IOfferService, OfferService>();
             builder.Services.AddScoped<IDashboardService,DashboardService>();
+            builder.Services.AddHostedService<DriverStatusBackgroundService>();
 
 
 

@@ -1,6 +1,5 @@
 ﻿@model CarRentalMoveZ.ViewModels.BookingDetailsViewModel
 @using CarRentalMoveZ.DTOs
-
 @using System.Globalization
 
 @{
@@ -19,30 +18,31 @@
     var pricePerDayPost = Model.PricePerDay.ToString(CultureInfo.InvariantCulture);
     var isPaidPost = (Model.IsPaid ? "true" : "false");
     var safeDriverStatus = Model.DriverStatus ?? "Without Driver";
-
 }
 
 <div class="container-fluid py-3">
-    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
-        <h3>Booking Details</h3>
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4 gap-2">
+        <h3 class="mb-2 mb-md-0">Booking Details</h3>
         <a href="@Url.Action("ManageBookings", "Admin")" class="btn btn-secondary d-flex align-items-center">
             <i class="bi bi-arrow-left me-2"></i> Back to Bookings
         </a>
     </div>
 
-    <div class="card p-4 mb-4">
-        <div class="row g-3 align-items-start">
-            <!-- Left Side: Car Image -->
-            <div class="col-md-4 d-flex justify-content-start">
+    <!-- Card -->
+    <div class="card p-3 p-md-4 mb-4">
+        <div class="row g-3">
+            <!-- Car Image -->
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-start">
                 <img src="@safeImgURL"
                      alt="@Model.CarName"
                      class="rounded border img-fluid"
-                     style="max-width: 500px; height: auto;" />
+                     style="max-width: 100%; height: auto;" />
             </div>
 
-            <!-- Right Side: Booking Info -->
-            <div class="col-md-8">
-                <h5 class="fw-semibold mb-3">Booking # @Model.BookingId</h5>
+            <!-- Booking Info -->
+            <div class="col-12 col-md-8">
+                <h5 class="fw-semibold mb-3">Booking #@Model.BookingId</h5>
                 <p><strong>Client Name:</strong> @Model.CustomerName</p>
                 <p><strong>Phone:</strong> @(string.IsNullOrWhiteSpace(safePhone) ? "N/A" : safePhone)</p>
                 <p><strong>Car Model:</strong> @Model.CarName</p>
@@ -63,18 +63,19 @@
                 <p><strong>Payment Date:</strong> @(Model.PaymentDate.HasValue? Model.PaymentDate.Value.ToString("MMM d, yyyy") : "N/A")</p>
                 <p>
                     <strong>Status:</strong>
-                    <span class="pill @(Model.BookingStatus?.ToLowerInvariant() ?? "pending")">
-                        @Model.BookingStatus
-                    </span>
+                    <span class="badge text-bg-secondary">@Model.BookingStatus</span>
                 </p>
                 <p><strong>Driver Status:</strong> @(Model.DriverStatus ?? "Without Driver")</p>
+                <p>
+                    <strong>Driver:</strong> @(Model.DriverId.HasValue? Model.DriverId.ToString() : "Not Assigned")
+                </p>
 
-                @* Assign Driver Form (only if Pending + Paid) *@
+                <!-- Assign Driver Form -->
                 @if (string.Equals(Model.BookingStatus, "Pending", StringComparison.OrdinalIgnoreCase) && Model.IsPaid)
                 {
                     <form method="post" asp-controller="Admin" asp-action="BookingDetails" class="mt-3">
                         @Html.AntiForgeryToken()
-
+                        @* Hidden Inputs *@
                         @Html.HiddenFor(m => m.BookingId)
                         @Html.HiddenFor(m => m.CarId)
                         @Html.HiddenFor(m => m.CustomerId)
@@ -96,34 +97,30 @@
                         <input type="hidden" name="PaymentStatus" value="@safePaymentStatus" />
                         <input type="hidden" name="DriverStatus" value="@safeDriverStatus" />
 
-
-
-                        <div class="input-group mb-3">
-                            @* Show dropdown only if location is not Office *@
-                            @if (Model.IsPaid)
+                        <div class="row g-2 align-items-center">
+                            @if (Model.IsPaid && ((!string.Equals(Model.Location, "Office", StringComparison.OrdinalIgnoreCase)) || Model.DriverStatus == "With Driver"))
                             {
-                            @if ((!string.Equals(Model.Location, "Office", StringComparison.OrdinalIgnoreCase) || Model.DriverStatus == "With Driver"))
-                            {
-                                @Html.DropDownListFor(
-                                m => m.DriverId,
-                                                new SelectList(
-                                                (Model.AvailableDrivers ?? Enumerable.Empty<DriverDTO>()).ToList(),
-                                                "DriverId",
-                                                "Name",
-                                                Model.DriverId
-                                                ),
-                                                "-- Select Driver --",
-                                                new { @class = "form-select" }
-                                                )
+                                <div class="col-12 col-md-8">
+                                    @Html.DropDownListFor(
+                                    m => m.DriverId,
+                                                        new SelectList(
+                                                        (Model.AvailableDrivers ?? Enumerable.Empty<DriverDTO>()).ToList(),
+                                                        "DriverId",
+                                                        "Name",
+                                                        Model.DriverId
+                                                        ),
+                                                        "-- Select Driver --",
+                                                        new { @class = "form-select" }
+                                                        )
+                        </div>
                                                 }
-
-                            @* Assign button always visible *@
-                            <button type="submit" class="btn btn-primary">Assign</button>
-                            }
+                            <div class="col-12 col-md-4 d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Assign</button>
+                            </div>
                         </div>
 
                         @Html.ValidationMessageFor(m => m.DriverId, "", new { @class = "text-danger" })
-                </form>
+                    </form>
                 }
             </div>
         </div>

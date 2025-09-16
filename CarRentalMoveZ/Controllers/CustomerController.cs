@@ -16,14 +16,16 @@ namespace CarRentalMoveZ.Controllers
         private readonly IBookingService _bookingService;
         private readonly ICustomerService _customerService;
         private readonly IPaymentService _paymentService;
+        private readonly IDriverService _driverService;
 
-        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService)
+        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService,IDriverService driverService)
         {
             _userService = userService;
             _carService = carService;
             _bookingService = bookingService;
             _customerService = customerService;
             _paymentService = paymentService;
+            _driverService = driverService;
         }
 
         public IActionResult Home()
@@ -252,7 +254,12 @@ namespace CarRentalMoveZ.Controllers
         {
             try
             {
+                var booking = _bookingService.GetBookingById(id);
                 _bookingService.CancelBooking(id);
+                if (booking.DriverId.HasValue)
+                {
+                    _driverService.SetDriverOffDuty(booking.DriverId.Value);
+                }
                 return Json(new { success = true, message = "Booking cancelled successfully." });
             }
             catch (InvalidOperationException ex)

@@ -13,5 +13,7 @@ namespace CarRentalMoveZ.Services.Interfaces
 
         IEnumerable<DriverDTO> GetAvailableDrivers();
         void SetDriverOnDuty(int driverId);
+
+        public void SetDriverOffDuty(int driverId);
     }
 }

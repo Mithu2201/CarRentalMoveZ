@@ -5,6 +5,8 @@
 @{
     var bookings = ViewBag.BookingNotifications as IEnumerable<CarRentalMoveZ.DTOs.CustomerNotificationDTO>;
     var payments = ViewBag.PaymentNotifications as IEnumerable<CarRentalMoveZ.DTOs.PaymentDTO>;
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+
 }
 
 @if ((bookings == null || !bookings.Any()) && (payments == null || !payments.Any()))

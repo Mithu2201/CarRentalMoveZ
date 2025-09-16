@@ -28,6 +28,7 @@ namespace CarRentalMoveZ.ViewModels
 
         // Customer Details
         public string CustomerName { get; set; } = "";  // default empty string
+
         public string? PhoneNumber { get; set; }        // nullable
 
         // Payment Details
