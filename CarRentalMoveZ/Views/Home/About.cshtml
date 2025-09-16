@@ -15,7 +15,9 @@
         --color-primary-dark: #163172;
         --color-yellow: #1E56A0; /* Use this for the yellow #FABB00 or similar */
         --color-yellow-custom: #1E56A0;
+
     }
+
 
     body {
         background-color: white;
@@ -506,6 +508,9 @@
         flex-direction: column;
         position: relative;
         padding: 1.8rem 1.6rem 5.8rem 1.6rem;
+        justify-content: space-between; /* pushes footer to bottom */
+        height: 100%; /* let container control equal height */
+        min-height: 320px; /* optional: set a baseline height */
     }
 
     /* Top right corner black/yellow check pattern */
@@ -570,6 +575,24 @@
         padding-left: 1.3rem;
         clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
         box-sizing: border-box;
+        margin-top: auto;
+    }
+
+    /* Bottom yellow trapezoid area */
+    .testimonial-footer1 {
+        background: linear-gradient(135deg, #D6E4F0 0%, #1E56A0 100%);
+        color: #000;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 94%;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        padding-left: 1.3rem;
+        clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
+        box-sizing: border-box;
+        margin-top: auto;
     }
 
     .footer-image {
@@ -669,25 +692,31 @@
             <!-- Left Images with Ribbon -->
             <div class="col-lg-5 position-relative">
                 <div class="ribbon-container">
-                    <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=600&q=80"
+                <img src="~/Img/About/Travel.jfif"
                          alt="Woman smiling with car"
                          class="main-img" />
                     <div class="ribbon">
                         <div>
-                            <div>25,000</div>
                             <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 700; margin-top: 6px;">
-                                Customer Worldwide
+                                25,0000 Customer Worldwide
                             </div>
                         </div>
                     </div>
                     <div class="video-thumb" id="videoThumb" role="button" aria-label="Play video">
                     <img src="~/Img/About/Frame.jpg"
                              alt="Girl in car" />
+                    <a href="https://www.youtube.com/watch?v=qrBGk07iSLY"
+                       target="_blank"
+                       aria-label="Watch on YouTube"
+                       class="play-button-link">
+
                         <div class="play-button">
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polygon points="9,7 16,12 9,17" />
+                                <polygon points="9,7 16,12 9,17" fill="currentColor" />
                             </svg>
                         </div>
+
+                    </a>
                     </div>
                 </div>
             </div>
@@ -737,12 +766,12 @@
                              alt="Brooklyn Simmons"
                              class="ceo-photo" />
                         <div>
-                            <div class="ceo-text">cityride, CEO</div>
-                            <div class="ceo-name">Brooklyn Simmons</div>
+                            <div class="ceo-text">MoveZ, CEO</div>
+                            <div class="ceo-name">Vijay Mithu</div>
                         </div>
                     </div>
 
-                    <div class="signature" aria-label="Signature">Ribat</div>
+                    <div class="signature" aria-label="Signature">Mithu</div>
                 </div>
 
                 <!-- Wavy yellow line as SVG -->
@@ -823,7 +852,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <div class="testimonial-subtitle">OUR TESTIMONIAL</div>
-                <h2 class="testimonial-title">Peoples Talk About Cityride Service</h2>
+                <h2 class="testimonial-title">Peoples Talk About MoveZ Service</h2>
             </div>
 
             <div class="slider-controls">
@@ -840,7 +869,7 @@
             <div class="carousel-track" id="carouselTrack">
                 <!-- Card 1 -->
                 <div class="testimonial-card">
-                    <div class="corner-checker"></div>
+                    
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="quote-icon">“</div>
                         <div class="star-rating">
@@ -857,15 +886,15 @@
                     <div class="testimonial-footer">
                         <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mike Hardson" class="footer-image" />
                         <div>
-                            <div class="footer-text">MIKE HARDSON</div>
-                            <div class="footer-subtext">MANAGING DIRECTOR</div>
+                            <div class="footer-text">M.Sujeevan</div>
+                            <div class="footer-subtext">Manager</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 2 -->
                 <div class="testimonial-card">
-                    <div class="corner-checker"></div>
+                    
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="quote-icon">“</div>
                         <div class="star-rating">
@@ -882,15 +911,15 @@
                     <div class="testimonial-footer">
                         <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Michael G. Ware" class="footer-image" />
                         <div>
-                            <div class="footer-text">MICHAEL G. WARE</div>
-                            <div class="footer-subtext">MANAGING DIRECTOR</div>
+                            <div class="footer-text">M.Thilaxsan</div>
+                            <div class="footer-subtext">Shop Owner</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 3 -->
                 <div class="testimonial-card">
-                    <div class="corner-checker"></div>
+                    
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="quote-icon">“</div>
                         <div class="star-rating">
@@ -898,17 +927,17 @@
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
+                            
                         </div>
                     </div>
                     <div class="review-text">
                         Car Service Company Also Impressed Us With Their Transparency Regarding Costs.
                     </div>
-                    <div class="testimonial-footer">
+                    <div class="testimonial-footer1">
                         <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Judith White" class="footer-image" />
                         <div>
-                            <div class="footer-text">JUDITH WHITE</div>
-                            <div class="footer-subtext">MANAGING DIRECTOR</div>
+                            <div class="footer-text">N.Lakshiga</div>
+                            <div class="footer-subtext">Account Executive</div>
                         </div>
                     </div>
                 </div>
@@ -934,22 +963,22 @@
         <div class="row justify-content-center gx-4 gy-4">
             <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
                 <img src="~/Img/About/Exe1.jpg"
-                     alt="Driver 1"
+                     alt="Staff 1"
+                     class="driver-img" />
+            </div>
+            <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
+                <img src="~/Img/About/Sta5.jpg"
+                     alt="Staff 2"
                      class="driver-img" />
             </div>
             <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
                 <img src="~/Img/About/exe2.jpg"
-                     alt="Driver 2"
+                     alt="Staff 3"
                      class="driver-img" />
             </div>
             <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
-                <img src="~/Img/About/exe3.jfif"
-                     alt="Driver 3"
-                     class="driver-img" />
-            </div>
-            <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
-                <img src="~/Img/About/exe4.jpg"
-                     alt="Driver 4"
+                <img src="~/Img/About/Sta4.jpg"
+                     alt="Staff 4"
                      class="driver-img" />
             </div>
         </div>
@@ -960,10 +989,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Basic play button click: here you might open a modal or play a video
-        document.getElementById('videoThumb').addEventListener('click', () => {
-          alert('Play video clicked! Implement your video player here.');
-        });
+        
 
     (function(){
       const track = document.getElementById('carouselTrack');
