@@ -65,7 +65,9 @@ namespace CarRentalMoveZ.Services.Implementations
                 return true;
             }
         }
-        public bool RegisterDriver(RegisterDriverViewModel model)
+        public 
+            
+            bool RegisterDriver(RegisterDriverViewModel model)
         {
             var checkuser = _userRepo.GetByEmail(model.Email);
             if (checkuser != null || model.Email == "admin@movez.com")
