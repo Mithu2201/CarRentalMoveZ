@@ -15,6 +15,13 @@ namespace CarRentalMoveZ.Repository.Implementations
         }
         public void AddPayment(Payment payment)
         {
+            var booking = _context.Bookings.Find(payment.BookingId);
+            if (booking == null)
+            {
+                throw new Exception("Booking not found");
+            }
+            booking.Amount= payment.Amount;
+            _context.Bookings.Update(booking);
             _context.Payments.Add(payment);
             _context.SaveChanges();
         }

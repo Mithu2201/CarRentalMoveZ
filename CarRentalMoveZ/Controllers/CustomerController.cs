@@ -17,8 +17,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly ICustomerService _customerService;
         private readonly IPaymentService _paymentService;
         private readonly IDriverService _driverService;
+        private readonly IOfferService _offerService;
 
-        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService,IDriverService driverService)
+        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService,IDriverService driverService,IOfferService offerService)
         {
             _userService = userService;
             _carService = carService;
@@ -26,6 +27,7 @@ namespace CarRentalMoveZ.Controllers
             _customerService = customerService;
             _paymentService = paymentService;
             _driverService = driverService;
+            _offerService = offerService;
         }
 
         public IActionResult Home()
@@ -189,7 +191,7 @@ namespace CarRentalMoveZ.Controllers
         }
 
         [HttpGet]
-        public IActionResult Payment()
+        public async Task<IActionResult> Payment()
         {
             if (TempData["BookingId"] == null || TempData["Amount"] == null)
             {
@@ -212,12 +214,16 @@ namespace CarRentalMoveZ.Controllers
                 Amount = amount
             };
 
+            // ✅ Await service method
+            var activeOffers = await _offerService.GetActiveOffersAsync();
+            ViewBag.ActiveOffers = activeOffers;
+
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Payment(PaymentViewModel model)
+        public async Task<IActionResult> Payment(PaymentViewModel model)
         {
             if (TempData["BookingId"] == null || TempData["Amount"] == null)
             {
@@ -229,11 +235,17 @@ namespace CarRentalMoveZ.Controllers
                 ViewBag.BookingID = TempData["BookingId"].ToString();
                 TempData.Keep("BookingId");
                 TempData.Keep("Amount");
+                // ✅ Await service method
+                var activeOffers = await _offerService.GetActiveOffersAsync();
+                ViewBag.ActiveOffers = activeOffers;
                 return View(model);
+
+              
             }
             // Process payment (mock)
             // In real scenario, integrate with payment gateway here
             // Update booking status to Confirmed
+         
             _paymentService.addPayment(model);
             return RedirectToAction("Car");
         }

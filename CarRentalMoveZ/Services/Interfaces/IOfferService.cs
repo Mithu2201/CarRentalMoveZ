@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.Models;
 using CarRentalMoveZ.ViewModels;
 
 namespace CarRentalMoveZ.Services.Interfaces
@@ -8,5 +9,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         void Add(OfferViewModel offer);
 
         IEnumerable<OfferDTO> GetAll();
+
+        Task<List<OfferDTO>> GetActiveOffersAsync();
     }
 }

@@ -7,5 +7,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
         void Add(Models.Offer offer);
 
         IEnumerable<Offer> GetAllOffers();
+
+        Task<List<Offer>> GetActiveOffersAsync();
     }
 }
