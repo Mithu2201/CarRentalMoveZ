@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250915133901_notify")]
-    partial class notify
+    [Migration("20250915145537_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
