@@ -4,6 +4,8 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+@Html.AntiForgeryToken()
+
 <div class="bookings-container">
     <h2 class="page-heading">My Bookings</h2>
 
@@ -81,7 +83,7 @@
                                     <i class="bi bi-info-circle"></i> Details
                                 </a>
 
-                                @if (booking.Status == "Pending")
+                                @if ((booking.Status == "Pending" || booking.Status == "Assigned") && booking.StartDate > DateTime.Now)
                                 {
                                     <button type="button" class="btn btn-sm btn-danger"
                                             onclick="confirmCancel(@booking.BookingId)">
@@ -105,3 +107,4 @@
         </table>
     </div>
 </div>
+
