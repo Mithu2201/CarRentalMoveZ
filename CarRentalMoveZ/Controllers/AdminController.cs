@@ -357,6 +357,10 @@ namespace CarRentalMoveZ.Controllers
         public IActionResult CashierBookingDetails(int id)
         {
             var booking = _bookingService.GetBookingById(id);
+            var customer = _customerService.GetCustomerById(booking.CustomerId);
+            booking.CustomerName = customer.Name;
+            booking.PhoneNumber = customer.PhoneNumber; 
+            booking.CustomerEmail= customer.Email;
             if (booking == null)
             {
                 return NotFound();

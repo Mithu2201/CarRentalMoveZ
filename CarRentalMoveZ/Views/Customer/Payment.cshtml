@@ -176,12 +176,25 @@
         const discountAmountEl = document.getElementById("discount-amount");
         const netAmountEl = document.getElementById("net-amount");
 
+           // ✅ Replace hardcoded promoCodes with dynamic offers from OfferDTO
         const promoCodes = {
-            "DISCOUNT10": 0.10,
-            "SAVE500": 500
+            @if (ViewBag.ActiveOffers != null)
+            {
+                    var offers = ViewBag.ActiveOffers as List<CarRentalMoveZ.DTOs.OfferDTO>;
+                    for (int i = 0; i < offers.Count; i++)
+                    {
+                            var offer = offers[i];
+                            <text>"@offer.PromoCode.ToUpper()": @((double)offer.DiscountPercentage / 100)</text>
+                    ;
+                            if (i < offers.Count - 1)
+                            {
+                                    <text>,</text>
+                            }
+                    }
+            }
         };
 
-        // ✅ Promo apply
+               // ✅ Promo apply
         document.getElementById("apply-promo").addEventListener("click", function () {
             const code = document.getElementById("promo-code").value.trim().toUpperCase();
             let discount = 0;
@@ -190,9 +203,14 @@
                 discount = promoCodes[code] < 1 ? totalAmount * promoCodes[code] : promoCodes[code];
                 discount = Math.min(discount, totalAmount);
 
+                const netAmount = totalAmount - discount;
+
                 discountAmountEl.textContent = "- Rs. " + discount.toFixed(2);
                 discountRow.classList.remove("d-none");
-                netAmountEl.textContent = "Rs. " + (totalAmount - discount).toFixed(2);
+                netAmountEl.textContent = "Rs. " + netAmount.toFixed(2);
+
+                // ✅ update hidden form field
+                document.getElementById("form-amount").value = netAmount.toFixed(2);
 
                 alert("Promo applied successfully!");
             } else {
@@ -200,9 +218,13 @@
                 discountAmountEl.textContent = "- Rs. 0.00";
                 netAmountEl.textContent = "Rs. " + totalAmount.toFixed(2);
 
+                // ✅ reset back to original
+                document.getElementById("form-amount").value = totalAmount.toFixed(2);
+
                 alert("Invalid promo code!");
             }
         });
+
 
         // ✅ Tab switching
         const options = document.querySelectorAll('.payment-option');

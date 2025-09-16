@@ -8,43 +8,52 @@
 
 <div class="account-container">
     <div class="account-box">
-        <h2 class="text-center" mb-4>Login</h2>
-            <form asp-action="Login" method="post">
-                @Html.AntiForgeryToken()
-                <div asp-validation-summary="ModelOnly" class="text-danger"> </div>
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" type="password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="float-end">
-                    <a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">
-                        Forget Password?
-                    </a> 
-                </div> 
-                <div class="mb-3 form-check">
-                    <label class="form-check-label">
-                        <input asp-for="RememberMe" class="form-check-input"/>
-                        @Html.DisplayNameFor(m => m.RememberMe)
-                    </label>
-                </div>
+        <h2 class="text-center mb-4">Login</h2>
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
 
-            <input type="submit" value="Login" class="btn w-100 p-2" style="background-color: #1E56A0; color: white;" />
-                <p class="text-center mt-2">
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
 
-                    Don't have an account? <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Register</a>
-                </p>
+            <div class="float-end">
+                <a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">
+                    Forget Password?
+                </a>
+            </div>
 
-                <div class="text-center mt-2">
-                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Back to Home</a>
-                </div>
-            </form>
+            <div class="mb-3 form-check">
+                <label class="form-check-label">
+                    <input asp-for="RememberMe" class="form-check-input" />
+                    @Html.DisplayNameFor(m => m.RememberMe)
+                </label>
+            </div>
+
+            <input type="submit" value="Login" class="btn w-100 p-2 mb-2" style="background-color: #1E56A0; color: white;" />
+
+            <!-- =================== Google Login Button =================== -->
+            <a class="btn w-100 p-2 mb-3" href="@Url.Action("GoogleLogin", "Account")" style="background-color: #DB4437; color: white;">
+                <i class="fab fa-google me-2"></i> Login with Google
+            </a>
+            <!-- ========================================================== -->
+
+            <p class="text-center mt-2">
+                Don't have an account? <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Register</a>
+            </p>
+
+            <div class="text-center mt-2">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none">Back to Home</a>
+            </div>
+        </form>
     </div>
 </div>
 

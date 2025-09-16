@@ -29,7 +29,9 @@ namespace CarRentalMoveZ.ViewModels
         // Customer Details
         public string CustomerName { get; set; } = "";  // default empty string
 
+
         public string? PhoneNumber { get; set; }        // nullable
+        public string? CustomerEmail { get; set; }        // nullable
 
         // Payment Details
         public bool IsPaid { get; set; } = false;       // default false
