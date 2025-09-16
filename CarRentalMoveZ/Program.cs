@@ -1,6 +1,7 @@
 using CarRentalMoveZ.Data;
 using CarRentalMoveZ.Repository.Implementations;
 using CarRentalMoveZ.Repository.Interfaces;
+using CarRentalMoveZ.Services;
 using CarRentalMoveZ.Services.Implementations;
 using CarRentalMoveZ.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,8 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IOfferService, OfferService>();
             builder.Services.AddScoped<IDashboardService,DashboardService>();
             builder.Services.AddHostedService<DriverStatusBackgroundService>();
+            // Register EmailService as singleton (or scoped)
+            builder.Services.AddSingleton<EmailService>();
 
 
 

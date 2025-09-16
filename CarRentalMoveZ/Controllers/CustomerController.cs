@@ -256,6 +256,7 @@ namespace CarRentalMoveZ.Controllers
             {
                 var booking = _bookingService.GetBookingById(id);
                 _bookingService.CancelBooking(id);
+                
                 if (booking.DriverId.HasValue)
                 {
                     _driverService.SetDriverOffDuty(booking.DriverId.Value);
