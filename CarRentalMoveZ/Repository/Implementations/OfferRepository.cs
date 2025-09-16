@@ -1,6 +1,7 @@
 ﻿using CarRentalMoveZ.Data;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalMoveZ.Repository.Implementations
 {
@@ -25,6 +26,13 @@ namespace CarRentalMoveZ.Repository.Implementations
         public IEnumerable<Offer> GetAllOffers()
         {
             return _context.Offers.ToList();
+        }
+
+        public async Task<List<Offer>> GetActiveOffersAsync()
+        {
+            return await _context.Offers
+                .Where(o => o.Status == "Active" && o.StartDate <= DateTime.Now && o.EndDate >= DateTime.Now)
+                .ToListAsync();
         }
     }
 }

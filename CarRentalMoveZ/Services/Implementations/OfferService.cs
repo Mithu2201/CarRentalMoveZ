@@ -28,6 +28,12 @@ namespace CarRentalMoveZ.Services.Implementations
             return OfferMapper.ToDTOList(offers);
 
         }
+
+        public async Task<List<OfferDTO>> GetActiveOffersAsync()
+        {
+            var entities = await offerRepository.GetActiveOffersAsync();
+            return entities.Select(o => o.ToDTO()).ToList();
+        }
     }
 }
 

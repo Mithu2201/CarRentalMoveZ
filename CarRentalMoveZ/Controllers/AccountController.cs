@@ -1,8 +1,12 @@
 ﻿using CarRentalMoveZ.Enums;
 using CarRentalMoveZ.Services.Interfaces;
 using CarRentalMoveZ.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace CarRentalMoveZ.Controllers
 {
@@ -135,7 +139,54 @@ namespace CarRentalMoveZ.Controllers
             return View(model);
         }
 
+        // -------------------- Trigger Google Login --------------------
+        [HttpGet]
+        public IActionResult GoogleLogin(string returnUrl = "/")
+        {
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleResponse", new { returnUrl })
+            };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
 
+        // -------------------- Handle Google Callback --------------------
+        [HttpGet]
+        public async Task<IActionResult> GoogleResponse(string returnUrl = "/")
+        {
+            // Get user info from Google
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+                return RedirectToAction("Login");
+
+            var claims = result.Principal.Identities.FirstOrDefault()?.Claims;
+            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Login");
+
+            // Check if user exists
+            var user = _loginService.GetUserByEmail(email);
+            if (user == null)
+            {
+                // Create new user for Google login
+                user = _loginService.CreateGoogleUser(email, name);
+            }
+
+            // Set session
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+            HttpContext.Session.SetString("UserName", user.Name);
+            HttpContext.Session.SetString("Role", user.Role);
+
+            // Redirect by role
+            return user.Role switch
+            {
+                "Admin" or "Staff" or "Driver" => RedirectToAction("Dashboard", "Admin"),
+                "Customer" => RedirectToAction("Dashboard", "Customer"),
+                _ => RedirectToAction("Logout", "Account"),
+            };
+        }
 
     }   
 }

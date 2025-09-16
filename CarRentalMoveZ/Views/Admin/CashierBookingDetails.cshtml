@@ -51,7 +51,7 @@
                 </p>
                 <p><strong>Amount:</strong> @Model.Amount.ToString("C")</p>
 
-                @* Single form that handles payment confirmation and posts to CashierBookingDetails *@
+                @* Unified Email OTP Flow for Payment & Refund *@
                 @if (Model.IsPaid && Model.PaymentStatus == "Pending to refund")
                 {
                     <!-- Refund flow -->
@@ -63,23 +63,23 @@
                         @Html.HiddenFor(m => m.Location)
                         @Html.HiddenFor(m => m.BookingStatus)
                         @Html.HiddenFor(m => m.PaymentAmount)
-						@Html.HiddenFor(m => m.DriverStatus)
+                        @Html.HiddenFor(m => m.DriverStatus)
                         <input type="hidden" name="PaymentMethod" value="Card" />
                         <input type="hidden" name="PaymentStatus" value="Refunded" />
                         <input type="hidden" name="IsPaid" value="false" />
 
-                        <div class="mb-2 text-start">
-                            <button type="button" class="btn btn-danger" id="cash-refund-btn">
-                                Initiate Refund
-                            </button>
-                        </div>
+                   @*      <div class="mb-2 text-start">
+                            <button type="button" class="btn btn-danger" id="cash-refund-btn">Initiate Refund</button>
+                        </div> *@
 
                         <div id="cash-refund-otp-section" class="mt-3 d-none text-start">
-                            <label for="cash-refund-otp-input" class="form-label fw-semibold">Enter Refund OTP sent:</label>
+                            <label for="cash-refund-otp-input" class="form-label fw-semibold">Enter Refund OTP sent to Email:</label>
                             <input type="text" id="cash-refund-otp-input" class="form-control mb-2" />
                             <button type="button" class="btn btn-success" id="cash-refund-verify-btn">Verify OTP</button>
                             <p id="cash-refund-otp-message" class="mt-2"></p>
                         </div>
+
+                        <button type="button" class="btn btn-primary mt-2" id="send-refund-otp-btn">Send OTP For Refund</button>
                     </form>
                 }
                 else if (!Model.IsPaid)
@@ -97,29 +97,25 @@
                         <input type="hidden" name="PaymentMethod" value="Cash" />
                         <input type="hidden" name="PaymentStatus" value="Paid" />
                         <input type="hidden" name="IsPaid" value="true" />
-                        
 
-                        <div class="mb-2 text-start">
-                            <button type="submit" class="btn btn-primary" id="cash-confirm-btn">
-                                Confirm Cash Payment
-                            </button>
+                        <div id="otp-section" class="mt-3 text-start">
+                            <label for="otp-input" class="form-label fw-semibold">Enter Payment OTP sent to Email:</label>
+                            <input type="text" id="otp-input" class="form-control mb-2" />
+                            <button type="button" class="btn btn-success" id="verify-otp-btn">Verify OTP</button>
+                            <p id="otp-message" class="mt-2"></p>
                         </div>
 
-                   @*      <div id="cash-otp-section" class="mt-3 d-none text-start">
-                            <label for="cash-otp-input" class="form-label fw-semibold">Enter OTP sent:</label>
-                            <input type="text" id="cash-otp-input" class="form-control mb-2" />
-                            <button type="button" class="btn btn-success" id="cash-otp-verify-btn">Verify OTP</button>
-                            <p id="cash-otp-message" class="mt-2"></p>
-                        </div> *@
+                        <button type="button" class="btn btn-primary mt-2" id="send-otp-btn">Send OTP for Cash Payment</button>
                     </form>
                 }
+
 
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
+@* @section Scripts {
     <script>
         function initOtpFlow(config) {
             let currentOTP = '';
@@ -192,4 +188,111 @@
         });
     </script>
 }
+ *@
 
+@section Scripts {
+<script>
+    // ----------------- PAYMENT OTP -----------------
+    const paymentSendBtn = document.getElementById("send-otp-btn");
+    const paymentVerifyBtn = document.getElementById("verify-otp-btn");
+
+    if(paymentSendBtn){
+        paymentSendBtn.addEventListener("click", function () {
+            fetch("/Otp/SendOtp", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "email=@Model.CustomerEmail" // dynamic email from model
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("OTP sent to email for payment!");
+                    document.getElementById("otp-section").classList.remove("d-none");
+                }
+            });
+        });
+    }
+
+    if(paymentVerifyBtn){
+        paymentVerifyBtn.addEventListener("click", function () {
+            var enteredOtp = document.getElementById("otp-input").value;
+            fetch("/Otp/VerifyOtp", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "enteredOtp=" + enteredOtp
+            })
+            .then(res => res.json())
+            .then(data => {
+                var msg = document.getElementById("otp-message");
+                msg.textContent = data.message;
+                msg.className = data.success ? "text-success" : "text-danger";
+
+                if (data.success) {
+                    document.getElementById("cashPaymentForm").submit();
+                }
+            });
+        });
+    }
+
+    // ----------------- REFUND OTP -----------------
+    const refundSendBtn = document.getElementById("cash-refund-btn");
+    const refundVerifyBtn = document.getElementById("cash-refund-verify-btn");
+
+    if(refundSendBtn){
+        refundSendBtn.addEventListener("click", function () {
+            fetch("/Otp/SendOtp", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "email=Shesanth2005@gmail.com"
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("OTP sent to email for refund!");
+                    document.getElementById("cash-refund-otp-section").classList.remove("d-none");
+                }
+            });
+        });
+    }
+
+    if(refundVerifyBtn){
+        refundVerifyBtn.addEventListener("click", function () {
+            var enteredOtp = document.getElementById("cash-refund-otp-input").value;
+            fetch("/Otp/VerifyOtp", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "enteredOtp=" + enteredOtp
+            })
+            .then(res => res.json())
+            .then(data => {
+                var msg = document.getElementById("cash-refund-otp-message");
+                msg.textContent = data.message;
+                msg.className = data.success ? "text-success" : "text-danger";
+
+                if (data.success) {
+                    document.getElementById("cashRefundForm").submit();
+                }
+            });
+        });
+    }
+</script>
+}
+
+
+
+
+
+
+
+@*       <div class="mb-2 text-start">
+                            <button type="submit" class="btn btn-primary" id="cash-confirm-btn">
+                                Confirm Cash Payment
+                            </button>
+                        </div>
+ *@
+@*      <div id="cash-otp-section" class="mt-3 d-none text-start">
+                            <label for="cash-otp-input" class="form-label fw-semibold">Enter OTP sent:</label>
+                            <input type="text" id="cash-otp-input" class="form-control mb-2" />
+                            <button type="button" class="btn btn-success" id="cash-otp-verify-btn">Verify OTP</button>
+                            <p id="cash-otp-message" class="mt-2"></p>
+                        </div> *@
