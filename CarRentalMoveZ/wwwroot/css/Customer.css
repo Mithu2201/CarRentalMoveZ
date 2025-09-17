@@ -1,71 +1,114 @@
 ﻿
 /* Booking Page Styling */
 .booking-form-container {
-    background-color: #F6F6F6;
-    padding: 30px;
+    background-color: var(--very-light);
+    padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin: 30px auto;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .page-title {
-    color: #163172;
-    font-weight: bold;
+    color: var(--primary-blue);
+    font-weight: 700;
     margin-bottom: 20px;
     text-align: center;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
 .form-label {
-    color: #1E56A0;
+    color: var(--secondary-blue);
     font-weight: 600;
 }
 
 .form-control {
-    border: 1px solid #D6E4F0;
+    border: 1px solid var(--light-blue);
     border-radius: 6px;
     padding: 8px 12px;
 }
 
     .form-control:focus {
-        border-color: #1E56A0;
+        border-color: var(--secondary-blue);
         box-shadow: 0 0 5px rgba(30,86,160,0.4);
     }
 
 .btn-primary-custom {
-    background-color: #1E56A0;
+    background-color: var(--secondary-blue);
     color: #fff;
-    padding: 10px 18px;
-    border: none;
+    padding: 10px;
     border-radius: 8px;
     font-weight: bold;
-    transition: 0.3s ease;
     width: 100%;
+    transition: 0.3s;
 }
 
     .btn-primary-custom:hover {
-        background-color: #163172;
+        background-color: var(--primary-blue);
     }
 
 .flatpickr-input.form-control {
-    background-color: #ffffff !important;
-    color: #000000;
+    background-color: #fff !important;
 }
 
 .is-invalid {
-    border: 2px solid #dc3545 !important;
+    border: 2px solid var(--danger-red) !important;
     background-color: #fff5f5;
 }
 
 .is-valid {
-    border: 2px solid #28a745 !important;
+    border: 2px solid var(--success-green) !important;
     background-color: #f5fff5;
 }
 
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--light-blue);
+    border-radius: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .suggestion-item.active, .suggestion-item:hover {
+        background-color: var(--light-blue);
+    }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.car-column {
+    background-color: #D6E4F0;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking-image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
 
 :root {
     --primary-blue: #163172;
@@ -271,13 +314,13 @@ footer {
     }
 
     .btn-primary-custom {
-      background: var(--primary-blue);
+      background: var(--secondary-blue);
       color: #fff;
       border: none;
     }
 
     .btn-primary-custom:hover {
-      background: var(--secondary-blue);
+      background: var(--light-blue);
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }

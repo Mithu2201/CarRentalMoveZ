@@ -343,6 +343,7 @@
         .taxi-image {
             position: static;
             width: 100%;
+            height: 100%;
             transform: none;
             margin-top: 30px;
         }
@@ -689,7 +690,7 @@
             right: 0px;
             top: 0.001%;
             width: 35%;
-            height: auto;
+            height: 100%;
             z-index: 3;
             clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
         }
@@ -871,6 +872,7 @@
                 color: white;
             }
 
+
         .faq-float {
             position: fixed;
             bottom: 25px;
@@ -921,6 +923,11 @@
             box-shadow: 0 0 0 0 rgba(30, 86, 160, 0);
         }
 
+
+        .is-invalid {
+            border: 2px solid red !important;
+            background-color: #ffecec !important;
+
         }
     </style>
 </head>
@@ -949,41 +956,41 @@
                 </div>
             </div>
             <!-- Search Box -->
-            <div class="container position-absolute start-50 translate-middle-x search-box" style="bottom: -10px; z-index: 10; max-width: 1200px;">
+            <div class="container position-absolute start-50 translate-middle-x search-box"
+                 style="bottom: -10px; z-index: 10; max-width: 1200px;">
                 <div class="bg-white shadow-lg p-4" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
                     <div class="row g-3 align-items-stretch">
                         <!-- Destination -->
                         <div class="col-md-3 col-12 d-flex flex-column">
                             <label class="form-label text-muted small">Your Destination</label>
-                            <input type="text" id="autocomplete" class="form-select flex-fill" placeholder="Enter destination" />
+                            <input type="text" id="autocomplete" class="form-control flex-fill" placeholder="Enter destination" />
                             <div id="suggestions"></div>
                         </div>
 
                         <!-- Start Date -->
                         <div class="col-md-2 col-6 d-flex flex-column">
                             <label class="form-label text-muted small">When to Start</label>
-                            <input type="date" class="form-control flex-fill" />
+                            <input type="date" id="startDate" class="form-control flex-fill" />
                         </div>
                         <!-- End Date -->
                         <div class="col-md-2 col-6 d-flex flex-column">
                             <label class="form-label text-muted small">When to Finish</label>
-                            <input type="date" class="form-control flex-fill" />
+                            <input type="date" id="endDate" class="form-control flex-fill" />
                         </div>
                         <!-- People -->
                         <div class="col-md-3 col-12 d-flex flex-column">
                             <label class="form-label text-muted small">People</label>
                             <input type="number"
-                                   id="People"                                  
-                                   class="form-select flex-fill"
-                                   placeholder="Enter No of Passengers" />                         
+                                   id="people"
+                                   class="form-control flex-fill"
+                                   placeholder="Enter No of Passengers" />
                         </div>
                         <!-- Button -->
                         <div class="col-md-2 col-12 d-flex flex-column">
                             <label class="form-label text-muted small d-none d-md-block">&nbsp;</label>
-                            <a asp-controller="Home" asp-action="BrowseCar"
-                               class="btn flex-fill fw-bold search-btn d-flex justify-content-center align-items-center">
+                            <button id="searchBtn" class="btn flex-fill fw-bold search-btn d-flex justify-content-center align-items-center">
                                 Search
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1049,7 +1056,7 @@
                             <img src="/Img/staff-woman.png" class="rounded-circle me-3" style="width: 50px; height: 50px;" alt="Agent" />
                             <div>
                                 <small class="text-muted d-block">Emergency Call Us</small>
-                                <h5 class="fw-bold mb-0" style="color: #1E56A0;">+91 2569 003 452</h5>
+                                <h5 class="fw-bold mb-0" style="color: #1E56A0;">+94 77 177 2092</h5>
                             </div>
                         </div>
                         <a asp-controller="Home" asp-action="About" class="btn book-btn">
@@ -1362,28 +1369,28 @@
                                         <div class="feature-icon">
                                             <i class="fas fa-clock"></i>
                                         </div>
-                                        <div class="feature-title">Easier & Faster</div>
-                                        <div class="feature-subtitle">Bookings</div>
+                                        <div class="feature-title">Easier & Faster Bookings</div>
+                                        
                                     </div>
                                     <div class="col-md-4 feature-item" data-aos="fade-up" data-aos-delay="400">
                                         <div class="feature-icon">
                                             <i class="fas fa-map-marker-alt"></i>
                                         </div>
-                                        <div class="feature-title">Too Many Pickup</div>
-                                        <div class="feature-subtitle">Locations</div>
+                                        <div class="feature-title">Too Many Pickup Locations</div>
+                                        
                                     </div>
                                     <div class="col-md-4 feature-item" data-aos="fade-up" data-aos-delay="600">
                                         <div class="feature-icon">
                                             <i class="fas fa-users"></i>
                                         </div>
-                                        <div class="feature-title">Customers 100%</div>
-                                        <div class="feature-subtitle">Satisfied</div>
+                                        <div class="feature-title">Customers 100% Satisfied</div>
+                                        <div class="feature-subtitle"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Taxi Street" class="taxi-image" data-aos="fade-left" data-aos-delay="800">
+                    <img src="~/Img/Add.png" alt="Taxi Street" class="taxi-image" data-aos="fade-left" data-aos-delay="800">
                 </div>
             </div>
         </section>
@@ -1521,6 +1528,36 @@
                     }
                 });
             });
+        });
+
+
+            document.getElementById("searchBtn").addEventListener("click", function (e) {
+            e.preventDefault(); // prevent default redirect
+
+            let valid = true;
+
+            // Get fields
+            const fields = [
+                document.getElementById("autocomplete"),
+                document.getElementById("startDate"),
+                document.getElementById("endDate"),
+                document.getElementById("people")
+            ];
+
+            // Validate
+            fields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add("is-invalid"); // highlight in red
+                    valid = false;
+                } else {
+                    field.classList.remove("is-invalid");
+                }
+            });
+
+            if (valid) {
+                // ✅ All filled -> Redirect
+                window.location.href = "/Home/BrowseCar";
+            }
         });
     </script>
 

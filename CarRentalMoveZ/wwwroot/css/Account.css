@@ -1,28 +1,108 @@
-﻿html, body {
+﻿/* Reset & Font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: url('../Img/loginbanner.png') no-repeat center center fixed;
+    background: linear-gradient(rgba(30, 86, 160, 0.85)),
+                url('../Img/loginbanner.png') no-repeat center center;
     background-size: cover;
 }
 
-
+/* Container */
 .account-container {
     min-height: 100vh;
-    justify-content: center;
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 2rem 0;
+    padding: 1rem;
 }
 
+/* Form Box */
 .account-box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 3);
-    max-width: 500px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
+    max-width: 420px;
     width: 100%;
-    opacity: .9;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
+/* Title */
+.account-box h2 {
+    font-weight: 600;
+    color: #1E56A0;
+    margin-bottom: 1.5rem;
+}
 
+/* Input Fields */
+.account-box .form-control {
+    border-radius: 12px;
+    padding: 12px 15px;
+    border: 1px solid #d6e4f0;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.account-box .form-control:focus {
+    border-color: #1E56A0;
+    box-shadow: 0 0 6px rgba(30, 86, 160, 0.3);
+    outline: none;
+}
+
+/* Labels */
+.account-box .form-label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+/* Validation */
+.text-danger {
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+/* Buttons */
+.account-box .btn {
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.account-box .btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Links */
+.account-box a {
+    color: #1E56A0;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.account-box a:hover {
+    color: #163172;
+    text-decoration: underline;
+}
+
+/* Checkbox */
+.form-check-label {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}

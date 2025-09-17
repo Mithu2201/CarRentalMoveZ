@@ -5,86 +5,91 @@
     ViewData["Title"] = "New Booking";
 }
 
+<div class="container mt-5">
+    <h2 class="page-heading">Booking for @Model.CarName</h2>
 
-<h2>Booking for @Model.CarName</h2>
-
-<div class="row">
-    <div class="col-md-6">
-        <img src="@Model.ImgURL" class="img-fluid rounded" />
-        <p><strong>Price Per Day:</strong> $@Model.PricePerDay</p>
-    </div>
-
-    <div class="col-md-6">
-        <form asp-action="NewBooking" asp-controller="Customer" method="post" id="bookingForm" novalidate>
-            @* Hidden fields for binding *@
-            <input type="hidden" asp-for="CarId" />
-            <input type="hidden" asp-for="CustomerId" />
-            <input type="hidden" asp-for="CarName" />
-            <input type="hidden" asp-for="ImgURL" />
-            <input type="hidden" asp-for="PricePerDay" />
-            <input type="hidden" asp-for="CustomerName" />
-            <input type="hidden" asp-for="PhoneNumber" />
-            <input type="hidden" asp-for="Days" id="days" />
-            <input type="hidden" asp-for="Amount" id="amount" />
-
-            <div class="mb-3">
-                <label>Customer</label>
-                <input class="form-control" value="@Model.CustomerName" required />
+    <div class="row g-4">
+        <div class="col-lg-6 col-12 text-center car-column">
+            <div class="booking-image-container">
+                <p><strong>Price Per Day:</strong> Rs.@Model.PricePerDay</p>
+                <img src="@Model.ImgURL" class="img-fluid rounded mb-3" />
+               
             </div>
+        </div>
 
-            <div class="mb-3">
-                <label>Contact No</label>
-                <input class="form-control" value="@Model.PhoneNumber" required />
+        <div class="col-lg-6 col-12">
+            <div class="booking-form-container">
+                <form asp-action="NewBooking" asp-controller="Customer" method="post" id="bookingForm" novalidate>
+                    @* Hidden fields *@
+                    <input type="hidden" asp-for="CarId" />
+                    <input type="hidden" asp-for="CustomerId" />
+                    <input type="hidden" asp-for="CarName" />
+                    <input type="hidden" asp-for="ImgURL" />
+                    <input type="hidden" asp-for="PricePerDay" />
+                    <input type="hidden" asp-for="CustomerName" />
+                    <input type="hidden" asp-for="PhoneNumber" />
+                    <input type="hidden" asp-for="Days" id="days" />
+                    <input type="hidden" asp-for="Amount" id="amount" />
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Customer</label>
+                        <input class="form-control" value="@Model.CustomerName" readonly />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Contact No</label>
+                        <input class="form-control" value="@Model.PhoneNumber" readonly />
+                    </div>
+
+                    <div class="form-group mb-3 position-relative">
+                        <label class="form-label" asp-for="Location">Pick Up Location</label>
+                        <input asp-for="Location" id="autocomplete" class="form-control" value="Office" required />
+                        <div id="suggestions" class="autocomplete-suggestions"></div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Driver Option</label>
+                        <select asp-for="DriverStatus" class="form-control" id="driverStatus" required>
+                            <option value="">-- Select --</option>
+                            <option value="Without Driver">Without Driver</option>
+                            <option value="With Driver">With Driver (+LKR 1000/day)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label"><i class="bi bi-calendar2-event"></i> Start Date & Time</label>
+                        <div class="input-group flatpickr" id="startDateWrapper">
+                            <input asp-for="StartDate" class="form-control" id="startDate" placeholder="Rent Date & Time" readonly data-input required />
+                            <span class="input-group-text" data-toggle>
+                                <i class="bi bi-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label"><i class="bi bi-calendar2-event"></i> End Date & Time</label>
+                        <div class="input-group flatpickr" id="endDateWrapper">
+                            <input asp-for="EndDate" class="form-control" id="endDate" placeholder="Return Date & Time" readonly data-input required />
+                            <span class="input-group-text" data-toggle>
+                                <i class="bi bi-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label"><i class="bi bi-calendar2-day"></i> Number of Days</label>
+                        <input type="text" id="daysDisplay" class="form-control" readonly required aria-live="polite" />
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label"><i class="bi bi-cash-stack"></i> Total Amount</label>
+                        <input type="text" id="amountDisplay" class="form-control" readonly required aria-live="polite" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom">Confirm Booking</button>
+                </form>
             </div>
-
-            <div class="mb-3 position-relative">
-                <label asp-for="Location">Pick Up Location</label>
-                <input asp-for="Location" id="autocomplete" class="form-control" required value="Office" />
-                <div id="suggestions"></div>
-            </div>
-
-            <div class="mb-3">
-                <label>Driver Option</label>
-                <select asp-for="DriverStatus" class="form-control" id="driverStatus" required>
-                    <option value="">-- Select --</option>
-                    <option value="Without Driver">Without Driver</option>
-                    <option value="With Driver">With Driver (+LKR 1000/day)</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="StartDate">Start Date & Time</label>
-                <div class="input-group flatpickr" id="startDateWrapper">
-                    <input asp-for="StartDate" class="form-control" id="startDate" placeholder="Rent Date & Time" readonly data-input required />
-                    <span class="input-group-text" data-toggle>
-                        <i class="bi bi-calendar"></i>
-                    </span>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="EndDate">End Date & Time</label>
-                <div class="input-group flatpickr" id="endDateWrapper">
-                    <input asp-for="EndDate" class="form-control" id="endDate" placeholder="Return Date & Time" readonly data-input required />
-                    <span class="input-group-text" data-toggle>
-                        <i class="bi bi-calendar"></i>
-                    </span>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label>Number of Days</label>
-                <input type="text" id="daysDisplay" class="form-control" readonly required />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label>Total Amount</label>
-                <input type="text" id="amountDisplay" class="form-control" readonly required />
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
-        </form>
+        </div>
     </div>
 </div>
 
