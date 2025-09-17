@@ -43,12 +43,13 @@
         <div class="col-md-3">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Total Revenue</h5>
+                    <h5 class="card-title">Total Received</h5>
                     <p class="fs-4 fw-bold text-dark">
-                        @Model.Where(x => x.IsPaid).Sum(x => x.PaymentAmount).ToString("C")
+                        @(Model.Where(x => x.BookingStatus=="Assigned").Sum(x => x.PaymentAmount)
+                                                .ToString("C", new System.Globalization.CultureInfo("en-LK")))
                     </p>
-
                 </div>
+
             </div>
         </div>
         <div class="col-md-3">
@@ -126,7 +127,8 @@
                                 @booking.BookingStatus
                             </span>
                         </td>
-                        <td>@booking.Amount.ToString("C")</td>
+                        <td>@booking.Amount.ToString("C", new System.Globalization.CultureInfo("en-LK"))</td>
+
                         <td>
                             @if (booking.IsPaid && booking.PaymentStatus == "Pending to refund")
                             {

@@ -49,7 +49,8 @@
                     }
 
                 </p>
-                <p><strong>Amount:</strong> @Model.Amount.ToString("C")</p>
+                <p><strong>Amount:</strong> @Model.Amount.ToString("C", new System.Globalization.CultureInfo("en-LK") { NumberFormat = { CurrencySymbol = "LKR " } })</p>
+
 
                 @* Unified Email OTP Flow for Payment & Refund *@
                 @if (Model.IsPaid && Model.PaymentStatus == "Pending to refund")
@@ -79,7 +80,7 @@
                             <p id="cash-refund-otp-message" class="mt-2"></p>
                         </div>
 
-                        <button type="button" class="btn btn-primary mt-2" id="send-refund-otp-btn">Send OTP For Refund</button>
+                       @*  <button type="button" class="btn btn-primary mt-2" id="send-refund-otp-btn">Send OTP For Refund</button> *@
                     </form>
                 }
                 else if (!Model.IsPaid)
@@ -243,7 +244,7 @@
             fetch("/Otp/SendOtp", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: "email=Shesanth2005@gmail.com"
+                body: "email=shesanth2005@gmail.com"
             })
             .then(res => res.json())
             .then(data => {

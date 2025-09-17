@@ -2,25 +2,33 @@
 
 @{
     ViewData["Title"] = "Frequently Asked Questions";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = null; // Prevent full layout when loading in modal via AJAX
 }
 
 <h2 class="faq-title">@ViewData["Title"]</h2>
 
 <div class="faq-container">
-    @foreach (var faq in Model)
+    @if (Model != null && Model.Any())
     {
-        <div class="faq-item">
-            <div class="faq-question">
-                @faq.Question
-                <span class="faq-toggle">+</span>
+        @foreach (var faq in Model)
+        {
+            <div class="faq-item">
+                <div class="faq-question">
+                    @faq.Question
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>@faq.Answer</p>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>@faq.Answer</p>
-            </div>
-        </div>
+        }
+    }
+    else
+    {
+        <p>No FAQs available at the moment.</p>
     }
 </div>
+
 
 <style>
     .faq-container {
