@@ -7,685 +7,6 @@
 <!-- Page Title -->
 <div><img src="~/Img/About/AboutUS.png" alt="banner" class="img-fluid w-100" /></div>
 
-<style>
-    :root {
-        --color-bg-light: #F6F6F6;
-        --color-bg-secondary: #D6E4F0;
-        --color-primary: #1E56A0;
-        --color-primary-dark: #163172;
-        --color-yellow: #1E56A0; /* Use this for the yellow #FABB00 or similar */
-        --color-yellow-custom: #1E56A0;
-
-    }
-
-
-    body {
-        background-color: white;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #222222;
-    }
-
-    .ribbon-container {
-        position: relative;
-        width: 250px;
-        max-width: 250px;
-    }
-
-    .ribbon {
-        position: absolute;
-        left: -50px;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: #1E56A0;
-        width: 50px;
-        height: 230px;
-        clip-path: polygon( 0 0, 100% 0, 100% 70%, 100% 100%, 15% 100%, 0 85% );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: white;
-        line-height: 1.2;
-        user-select: none;
-        letter-spacing: -0.03em;
-    }
-
-    /* Rounded corners and shadow for left main image */
-    .main-img {
-        border-radius: 1rem;
-        box-shadow: 0 6px 20px rgb(22 49 114 / 0.3);
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
-
-    /* Small video container */
-    .video-thumb {
-        position: absolute;
-        bottom: -25px;
-        left: 20px;
-        border-radius: 0.5rem;
-        width: 170px;
-        height: 120px;
-        box-shadow: 0 6px 20px rgb(22 49 114 / 0.3);
-        overflow: hidden;
-        background: white;
-        cursor: pointer;
-        border: 5px solid white;
-    }
-
-        .video-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            border-radius: 0.5rem;
-        }
-
-    /* Play button circle */
-    .play-button {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(255 255 255 / 0.9);
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.3s;
-        box-shadow: 0 2px 10px rgb(22 49 114 / 0.18);
-    }
-
-        .play-button:hover {
-            background-color: #1E56A0;
-        }
-
-        /* Play triangle */
-        .play-button svg {
-            fill: #1E56A0;
-            width: 15px;
-            height: 15px;
-        }
-
-    /* Right side content */
-    .about-tag {
-        font-weight: 600;
-        font-size: 0.8rem;
-        color: var(--color-primary);
-        letter-spacing: 1.5px;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        user-select: none;
-    }
-
-        .about-tag > span {
-            width: 15px;
-            height: 5px;
-            background-color: #1E56A0;
-            display: inline-block;
-            border-radius: 2px;
-            margin-right: 4px;
-        }
-
-    .heading-primary {
-        font-weight: 900;
-        font-size: 2.6rem;
-        line-height: 1.1;
-        color: #111;
-        margin-bottom: 1rem;
-    }
-
-    .text-muted-custom {
-        color: #666;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        margin-bottom: 2rem;
-        max-width: 540px;
-    }
-
-    /* Yellow vertical bar on left of bullet points */
-    .yellow-bar {
-        width: 6px;
-        background-color: #1E56A0;
-        border-radius: 3px;
-        margin-right: 12px;
-        flex-shrink: 0;
-    }
-
-    .feature-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-
-    /* Check circle in yellow */
-    .check-circle {
-        width: 28px;
-        height: 28px;
-        background-color: #1E56A0;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        margin-right: 1rem;
-        flex-shrink: 0;
-        box-shadow: 0 2px 5px rgb(22 49 114 / 0.25);
-    }
-
-        .check-circle svg {
-            width: 14px;
-            height: 14px;
-            fill: white;
-        }
-
-    .feature-text {
-        font-weight: 600;
-        font-size: 1rem;
-        color: #222;
-    }
-
-    /* Bottom signature part */
-    .signature-section {
-        margin-top: 3.5rem;
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        flex-wrap: wrap;
-    }
-
-    .ceo-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .ceo-photo {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        box-shadow: 0 2px 10px rgb(22 49 114 / 0.3);
-    }
-
-    .ceo-text {
-        font-size: 0.85rem;
-        color: #666;
-        font-weight: 500;
-    }
-
-    .ceo-name {
-        font-weight: 700;
-        font-size: 1.05rem;
-        color: #111;
-    }
-
-    .signature {
-        font-family: 'Dancing Script', cursive;
-        font-size: 2.4rem;
-        color: var(--color-primary-dark);
-        margin-left: auto;
-        user-select: none;
-    }
-
-    /* Vertical yellow bar on right side of the left image */
-    .vertical-yellow-bar {
-        width: 12px;
-        height: 100px;
-        background-color: #1E56A0;
-        border-radius: 6px;
-        margin-left: 24px;
-        user-select: none;
-    }
-
-    /* Wavy yellow line on right side text */
-    .wavy-line {
-        margin-top: 1rem;
-        width: 40px;
-        height: 40px;
-    }
-
-    .wavy-line {
-        display: none
-    }
-
-    /* Colors */
-    :root {
-        --light-gray: #f6f6f6;
-        --lighter-blue: #d6e4f0;
-        --blue-dark: #1e56a0;
-        --blue-darker: #163172;
-        --yellow: #ffd500;
-    }
-
-    .special-benefits-section {
-        background: #1e56a0 url('https://www.transparenttextures.com/patterns/asfalt-light.png') repeat;
-        color: var(--light-gray);
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .special-benefits-section {
-        padding: 4rem 2rem;
-        text-align: center;
-        position: relative;
-    }
-
-    .download-text {
-        color: #D6E4F0;
-        font-weight: 600;
-        font-size: 0.9rem;
-        letter-spacing: 0.07em;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-    }
-
-        .download-text::before,
-        .download-text::after {
-            content: "▮▮";
-            font-weight: 900;
-            font-size: 1.2rem;
-            color: #D6E4F0;
-            margin: 0 0.4rem;
-        }
-
-    .benefits-title {
-        font-weight: 700;
-        font-size: 2.75rem;
-        color: white;
-        margin-bottom: 5rem;
-    }
-
-    .benefits-wrapper {
-        max-width: 1280px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 3rem;
-        flex-wrap: wrap;
-        position: relative;
-    }
-
-    .benefits-list {
-        flex: 1 1 320px;
-        max-width: 400px;
-    }
-
-    .benefit-item {
-        display: flex;
-        align-items: center; /* center everything vertically */
-        gap: 1.1rem;
-        margin-bottom: 2.5rem;
-        text-align: left;
-        border-bottom: 1px solid rgba(255 255 255 / 0.1);
-        padding-bottom: 1.5rem;
-    }
-
-    .benefit-icon {
-        background-color: #D6E4F0;
-        color: #121212;
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-shrink: 0;
-    }
-
-    .benefit-text h5 {
-        margin: 0 0 0.4rem 0;
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: var(--light-gray);
-    }
-
-    .benefit-text p {
-        font-weight: 400;
-        font-size: 0.9rem;
-        color: #999999;
-        line-height: 1.5;
-        margin: 0;
-    }
-
-
-    .yellow-circle {
-        background-color: #D6E4F0;
-        width: 360px;
-        height: 360px;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        filter: brightness(1);
-        z-index: 0;
-        overflow: hidden;
-        clip-path: ellipse(180px 180px at center);
-    }
-
-        .yellow-circle img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.15;
-            mix-blend-mode: multiply;
-        }
-
-    /* Colors */
-    :root {
-        --bg-light: #F6F6F6;
-        --bg-light-2: #D6E4F0;
-        --primary-dark: #1E56A0;
-        --primary-dark-alt: #163172;
-        
-    }
-
-    body {
-        background-color: #D6E4F0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .testimonial-section {
-        padding: 4rem 2rem;
-        background-image: url('https://www.transparenttextures.com/patterns/diamonds.png'); /* subtle pattern */
-        background-repeat: repeat;
-        background-color: #D6E4F0;
-    }
-
-    /* Subtitle "OUR TESTIMONIAL" with yellow squares */
-    .testimonial-subtitle {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--primary-dark-alt);
-        letter-spacing: 1.5px;
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 0.3rem;
-    }
-
-        .testimonial-subtitle::before {
-            content: "";
-            display: inline-block;
-            width: 14px;
-            height: 12px;
-            background-color: #1E56A0;
-            margin-right: 6px;
-            clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%);
-        }
-
-        .testimonial-subtitle::after {
-            content: "";
-            display: inline-block;
-            width: 14px;
-            height: 12px;
-            background-color: #1E56A0;
-            margin-left: 4px;
-            clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%);
-        }
-
-    .testimonial-title {
-        font-weight: 900;
-        font-size: 2.5rem;
-        line-height: 1.1;
-        color: #000;
-        margin-bottom: 3rem;
-        max-width: 450px;
-    }
-
-    /* Slider controls arrows in diamond shape */
-    .slider-controls {
-        position: absolute;
-        top: 3rem;
-        right: 2rem;
-        display: flex;
-        gap: 1rem;
-        z-index: 10;
-    }
-
-    .slider-arrow {
-        background-color: #1E56A0;
-        width: 50px;
-        height: 50px;
-        clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.3s ease;
-        box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
-    }
-
-        .slider-arrow:hover {
-            background-color: var(--yellow-dark);
-        }
-
-        .slider-arrow svg {
-            fill: #000;
-            width: 18px;
-            height: 18px;
-            user-select: none;
-        }
-
-        .slider-arrow.left {
-            clip-path: polygon(0 0, 85% 0%, 100% 100%, 15% 100%);
-        }
-
-    /* Carousel container */
-    .carousel-inner {
-        overflow: hidden;
-        position: relative;
-    }
-
-    .carousel-track {
-        display: flex;
-        gap: 1.5rem;
-        transition: transform 0.5s ease;
-    }
-
-    /* Testimonial Cards */
-    .testimonial-card {
-        background: #fff;
-        box-shadow: 0 6px 15px rgb(22 49 114 / 0.15);
-        border-radius: 3px;
-        flex: 0 0 320px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        padding: 1.8rem 1.6rem 5.8rem 1.6rem;
-        justify-content: space-between; /* pushes footer to bottom */
-        height: 100%; /* let container control equal height */
-        min-height: 320px; /* optional: set a baseline height */
-    }
-
-    /* Top right corner black/yellow check pattern */
-    .corner-checker {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 55px;
-        height: 55px;
-        background: linear-gradient(45deg, black 25%, transparent 25%) -10px 0, linear-gradient(-45deg, black 25%, transparent 25%) -10px 0, linear-gradient(45deg, transparent 75%, black 75%), linear-gradient(-45deg, transparent 75%, black 75%);
-        background-size: 20px 20px;
-        background-repeat: repeat;
-        clip-path: polygon(100% 0, 100% 100%, 40% 100%, 0% 60%, 0 0);
-        background-color: #1E56A0;
-        z-index: 5;
-    }
-
-    /* Quotation icon */
-    .quote-icon {
-        border: 2px solid #1E56A0;
-        border-right: none;
-        border-bottom: none;
-        width: 40px;
-        height: 40px;
-        font-size: 2.5rem;
-        line-height: 1;
-        font-weight: 700;
-        color: #1E56A0;
-        margin-bottom: 1rem;
-        transform: translateY(-3px);
-        user-select: none;
-    }
-
-    /* Stars rating */
-    .star-rating {
-        color: #111;
-        font-size: 1.1rem;
-        letter-spacing: 1.5px;
-        margin-left: auto;
-    }
-
-    /* Review text */
-    .review-text {
-        font-weight: 600;
-        color: #222;
-        margin-bottom: 3.5rem;
-        font-size: 0.95rem;
-        line-height: 1.4;
-    }
-
-    /* Bottom yellow trapezoid area */
-    .testimonial-footer {
-        background: linear-gradient(135deg, #D6E4F0 0%, #1E56A0 100%);
-        color: #000;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 90px;
-        display: flex;
-        align-items: center;
-        padding-left: 1.3rem;
-        clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
-        box-sizing: border-box;
-        margin-top: auto;
-    }
-
-    /* Bottom yellow trapezoid area */
-    .testimonial-footer1 {
-        background: linear-gradient(135deg, #D6E4F0 0%, #1E56A0 100%);
-        color: #000;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 94%;
-        height: 90px;
-        display: flex;
-        align-items: center;
-        padding-left: 1.3rem;
-        clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
-        box-sizing: border-box;
-        margin-top: auto;
-    }
-
-    .footer-image {
-        width: 55px;
-        height: 55px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 1rem;
-        border: 2px solid #1E56A0;
-        flex-shrink: 0;
-        background: #fff;
-    }
-
-    .footer-text {
-        font-weight: 700;
-        font-size: 1.0rem;
-        color: var(--primary-dark-alt);
-        text-transform: uppercase;
-        margin-bottom: 0.1rem;
-    }
-
-    .footer-subtext {
-        font-weight: 400;
-        font-size: 0.75rem;
-        letter-spacing: 0.02em;
-        color: #333;
-    }
-
-    .slider-controls {
-        top: 1rem;
-        right: 1rem;
-    }
-
-    .testimonial-card {
-        flex: 0 0 33%;
-    }
-
-    .carousel-track {
-        gap: 1rem;
-    }
-
-    .expert-driver-label {
-        color: #1e56a0;
-        font-weight: 600;
-        font-size: 0.9rem;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.3rem;
-    }
-
-        .expert-driver-label .icon {
-            width: 20px;
-            height: 10px;
-            background-color: #1e56a0;
-            clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
-            display: inline-block;
-        }
-
-            .expert-driver-label .icon.right {
-                clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
-            }
-
-    h1.driver-title {
-        font-weight: 700;
-        font-size: 2.5rem;
-        color: #163172;
-        text-align: center;
-        margin-bottom: 3rem;
-    }
-
-    .driver-img {
-        width: 100%;
-        max-width: 280px;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgb(30 86 160 / 0.2);
-        margin: 0 auto;
-        display: block;
-    }
-
-    .driver-col {
-        padding-bottom: 2rem;
-    }
-
-</style>
-
-<!-- Google Fonts for Signature -->
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
 
     <section class="container py-5">
         <div class="row align-items-center justify-content-center">
@@ -721,7 +42,7 @@
                 </div>
             </div>
 
-            <!-- Vertical yellow bar between image and text -->
+            <!-- Vertical bar between image and text -->
             <div class="col-auto d-none d-lg-flex">
                 <div class="vertical-yellow-bar"></div>
             </div>
@@ -767,14 +88,14 @@
                              class="ceo-photo" />
                         <div>
                             <div class="ceo-text">MoveZ, CEO</div>
-                            <div class="ceo-name">Vijay Mithu</div>
+                            <div class="ceo-name">Sheshanth Mithu</div>
                         </div>
                     </div>
 
-                    <div class="signature" aria-label="Signature">Mithu</div>
+                    <div class="signature" aria-label="Signature">Sheshanth Mithu</div>
                 </div>
 
-                <!-- Wavy yellow line as SVG -->
+                <!-- Wavy line as SVG -->
                 <div class="wavy-line" aria-hidden="true">
                     <svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 45 Q 20 30 35 45 T 55 45" stroke="#FABB00" stroke-width="3" fill="none" />
@@ -785,8 +106,10 @@
     </section>
 
 <section class="special-benefits-section">
+    
     <p class="download-text">ENJOY OUR SERVICES</p>
     <h2 class="benefits-title">Get Special Benefits</h2>
+    
 
     <div class="benefits-wrapper">
         <!-- Left benefits -->
@@ -953,7 +276,7 @@
         <div class="text-center mb-4">
             <div class="expert-driver-label mx-auto">
                 <span class="icon"></span>
-                <span>OUR EXPERT DRIVER</span>
+                <span>OUR EXPERT LINE UP</span>
                 <span class="icon right"></span>
             </div>
             <h1 class="driver-title">Our Skilled Staffs</h1>
@@ -961,22 +284,22 @@
 
         <!-- Driver Images Grid -->
         <div class="row justify-content-center gx-4 gy-4">
-            <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
+            <div class="col-12 col-md-3 driver-col d-flex justify-content-center">
                 <img src="~/Img/About/Exe1.jpg"
                      alt="Staff 1"
                      class="driver-img" />
             </div>
-            <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
+            <div class="col-12 col-md-3 driver-col d-flex justify-content-center">
                 <img src="~/Img/About/Sta5.jpg"
                      alt="Staff 2"
                      class="driver-img" />
             </div>
-            <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
+            <div class="col-12 col-md-3 driver-col d-flex justify-content-center">
                 <img src="~/Img/About/exe2.jpg"
                      alt="Staff 3"
                      class="driver-img" />
             </div>
-            <div class="col-6 col-md-3 driver-col d-flex justify-content-center">
+            <div class="col-12 col-md-3 driver-col d-flex justify-content-center">
                 <img src="~/Img/About/Sta4.jpg"
                      alt="Staff 4"
                      class="driver-img" />
@@ -985,24 +308,34 @@
     </div>
 </section>
 
-    <!-- Bootstrap 5 JS & Popper for any Bootstrap functionality -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        
-
+<script>
     (function(){
       const track = document.getElementById('carouselTrack');
       const prevBtn = document.getElementById('prevBtn');
       const nextBtn = document.getElementById('nextBtn');
       const cards = track.children;
-      const cardWidth = cards[0].getBoundingClientRect().width + 24; // card width + gap (1.5rem = 24px)
+
+      let cardWidth = 0;
+      let cardsPerView = 1;
       let currentIndex = 0;
-      const maxIndex = cards.length - 1;
+      let maxIndex = 0;
+
+      function calculateSizes() {
+        cardWidth = cards[0].getBoundingClientRect().width + 24; // include gap
+        // If screen >= 768px show 2–3 cards, else only 1 card
+        if (window.innerWidth >= 992) {
+          cardsPerView = 3;
+        } else if (window.innerWidth >= 768) {
+          cardsPerView = 2;
+        } else {
+          cardsPerView = 1;
+        }
+        maxIndex = cards.length - cardsPerView;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+      }
 
       function updateCarousel() {
         track.style.transform = `translateX(${-currentIndex * cardWidth}px)`;
-        // Disable buttons if at ends
         prevBtn.style.opacity = currentIndex === 0 ? 0.4 : 1;
         nextBtn.style.opacity = currentIndex === maxIndex ? 0.4 : 1;
         prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
@@ -1024,16 +357,15 @@
       });
 
       // Init
+      calculateSizes();
       updateCarousel();
 
-      // On window resize to update cardWidth accordingly
+      // Recalculate on resize
       window.addEventListener('resize', () => {
-        const newCardWidth = cards[0].getBoundingClientRect().width + 24;
-        if (newCardWidth !== cardWidth) {
-          updateCarousel();
-        }
+        calculateSizes();
+        updateCarousel();
       });
 
     })();
-    </script>
+</script>
 
