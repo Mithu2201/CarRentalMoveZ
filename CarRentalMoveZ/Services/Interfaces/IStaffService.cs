@@ -10,5 +10,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         StaffViewModel GetById(int id);
 
         void Update(StaffViewModel model);
+
+        void Delete(int id);
     }
 }

@@ -63,5 +63,15 @@ namespace CarRentalMoveZ.Services.Implementations
             _staffRepo.Update(user, staff);
         }
 
+        public void Delete(int id)
+        {
+            var staff = _staffRepo.GetById(id);
+            if (staff != null)
+            {
+                _staffRepo.Delete(staff.StaffId);
+            }
+
+        }
+
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalMoveZ.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250915145537_init")]
-    partial class init
+    [Migration("20250917064658_faq")]
+    partial class faq
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,6 +221,29 @@ namespace CarRentalMoveZ.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Drivers");
+                });
+
+            modelBuilder.Entity("CarRentalMoveZ.Models.Faq", b =>
+                {
+                    b.Property<int>("FaqId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FaqId"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("FaqId");
+
+                    b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("CarRentalMoveZ.Models.Offer", b =>

@@ -220,6 +220,29 @@ namespace CarRentalMoveZ.Migrations
                     b.ToTable("Drivers");
                 });
 
+            modelBuilder.Entity("CarRentalMoveZ.Models.Faq", b =>
+                {
+                    b.Property<int>("FaqId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FaqId"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("FaqId");
+
+                    b.ToTable("Faqs");
+                });
+
             modelBuilder.Entity("CarRentalMoveZ.Models.Offer", b =>
                 {
                     b.Property<int>("OfferId")

@@ -25,8 +25,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IDriverService _driverService;
         private readonly IOfferService _offerService;
         private readonly IDashboardService _dashboardService;
+        private readonly IFaqService _faqService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,IDashboardService dashboardService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,IDashboardService dashboardService, IFaqService faqService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -38,7 +39,7 @@ namespace CarRentalMoveZ.Controllers
             _driverService = driverService;
             _offerService = offerService;
             _dashboardService = dashboardService;
-
+            _faqService = faqService;
         }
 
         public async Task<IActionResult> Dashboard()
@@ -447,6 +448,41 @@ namespace CarRentalMoveZ.Controllers
             bool hasNotifications = booking.Any() || payments.Any();
 
             return Json(hasNotifications);
+        }
+
+        // GET: /Admin/ManageFaq
+        public async Task<IActionResult> ManageFaq()
+        {
+            var faqs = await _faqService.GetAllAsync();
+            return View(faqs); // returns IEnumerable<FaqDTO>
+        }
+
+        // GET: /Admin/AddFaq
+        public IActionResult AddFaq()
+        {
+            var model = new FaqViewModel();
+            return View(model);
+        }
+
+        // POST: /Admin/AddFaq
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFaq(FaqViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var faqDto = new FaqDTO
+            {
+                Question = model.Question,
+                Answer = model.Answer
+            };
+
+            await _faqService.AddAsync(faqDto);
+            TempData["SuccessMessage"] = "FAQ added successfully!";
+            return RedirectToAction("ManageFaq");
         }
 
     }

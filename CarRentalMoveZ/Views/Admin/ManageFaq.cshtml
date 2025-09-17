@@ -1,0 +1,152 @@
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.FaqDTO>
+
+@{
+    ViewData["Title"] = "Manage FAQs";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-3">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h3>FAQ Management</h3>
+        <div class="d-flex gap-2 flex-grow-1 justify-content-end flex-wrap mb-2">
+
+            <!-- Search -->
+            <div class="input-group" style="max-width: 250px; flex-grow: 1;">
+                <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search question..." />
+            </div>
+
+            <!-- Add FAQ Button -->
+            <a class="btn btn-theme d-flex align-items-center" style="height: 38px;" asp-action="AddFaq">
+                <i class="bi bi-plus me-2"></i> Add New FAQ
+            </a>
+        </div>
+    </div>
+
+    <!-- FAQ Details -->
+    <div id="faqDetails" class="card p-3 mb-3 d-none">
+        <h5 class="fw-semibold mb-2">FAQ Details</h5>
+        <div id="detailsContent"></div>
+    </div>
+
+    <!-- FAQ Table -->
+    <div class="table-responsive shadow-sm rounded-4 mt-3">
+        <table class="table table-hover align-middle mb-0" id="faqTable">
+            <thead class="cashier-thead">
+                <tr>
+                    <th>FAQ ID</th>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="small">
+                @foreach (var faq in Model)
+                {
+                    <tr>
+                        <td>@faq.FaqId</td>
+                        <td>@faq.Question</td>
+                        <td>@(faq.Answer.Length > 50 ? faq.Answer.Substring(0, 50) + "..." : faq.Answer)</td>
+                        <td class="text-center">
+                            <a asp-controller="Admin" asp-action="EditFaq" asp-route-id="@faq.FaqId" class="btn btn-sm btn-theme-warning me-1">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <a asp-controller="Admin" asp-action="FaqDetails" asp-route-id="@faq.FaqId" class="btn btn-sm btn-theme me-1">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <button type="button"
+                                    class="btn btn-sm btn-theme-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-id="@faq.FaqId"
+                                    data-title="@faq.Question">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete FAQ: <b id="faqTitle"></b>?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="deleteForm" method="post">
+                            <input type="hidden" name="id" id="faqId" />
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-theme-danger">Yes, Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedRow = null;
+
+        // Expand FAQ details
+        document.querySelectorAll("#faqTable tbody tr").forEach(row => {
+            row.addEventListener("click", function (e) {
+                if (e.target.closest("a, button")) return;
+
+                const detailsCard = document.getElementById("faqDetails");
+                const detailsContent = document.getElementById("detailsContent");
+
+                if (selectedRow === this) {
+                    detailsCard.classList.add("d-none");
+                    selectedRow = null;
+                } else {
+                    const cells = this.querySelectorAll("td");
+                    detailsContent.innerHTML = `
+                        <div>
+                            <p><strong>FAQ ID:</strong> ${cells[0].innerText}</p>
+                            <p><strong>Question:</strong> ${cells[1].innerText}</p>
+                            <p><strong>Answer:</strong> ${cells[2].innerText}</p>
+                        </div>
+                    `;
+                    detailsCard.classList.remove("d-none");
+                    selectedRow = this;
+                }
+            });
+        });
+
+        // Delete modal
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var faqId = button.getAttribute('data-id');
+            var faqTitle = button.getAttribute('data-title');
+
+            document.getElementById('faqTitle').textContent = faqTitle;
+            document.getElementById('faqId').value = faqId;
+            document.getElementById('deleteForm').action = '/Admin/DeleteFaq';
+        });
+
+        // Search
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const searchValue = this.value.toLowerCase();
+
+            document.querySelectorAll("#faqTable tbody tr").forEach(row => {
+                const question = row.cells[1].innerText.toLowerCase();
+                const answer = row.cells[2].innerText.toLowerCase();
+
+                const matchesSearch = question.includes(searchValue) || answer.includes(searchValue);
+
+                row.style.display = matchesSearch ? "" : "none";
+            });
+        });
+    </script>
+}
