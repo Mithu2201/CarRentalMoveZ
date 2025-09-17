@@ -33,6 +33,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IDriverRepository, DriverRepository>();
             builder.Services.AddScoped<IOfferRepository, OfferRepository>();
             builder.Services.AddScoped<IDashboardRepository,DashboardRepository>();
+            builder.Services.AddScoped<IFaqRepository,FaqRepository>();
            
 
 
@@ -50,6 +51,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<IOfferService, OfferService>();
             builder.Services.AddScoped<IDashboardService,DashboardService>();
+            builder.Services.AddScoped<IFaqService,FaqService>();
             builder.Services.AddHostedService<DriverStatusBackgroundService>();
             // Register EmailService as singleton (or scoped)
             builder.Services.AddSingleton<EmailService>();

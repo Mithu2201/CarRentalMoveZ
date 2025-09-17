@@ -6,6 +6,8 @@ using CarRentalMoveZ.Services.Interfaces;
 using CarRentalMoveZ.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace CarRentalMoveZ.Controllers
 {
@@ -18,8 +20,9 @@ namespace CarRentalMoveZ.Controllers
         private readonly IPaymentService _paymentService;
         private readonly IDriverService _driverService;
         private readonly IOfferService _offerService;
+        private readonly IFaqService _faqService;    
 
-        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService,IDriverService driverService,IOfferService offerService)
+        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService,IDriverService driverService,IOfferService offerService,IFaqService faqService)
         {
             _userService = userService;
             _carService = carService;
@@ -28,6 +31,7 @@ namespace CarRentalMoveZ.Controllers
             _paymentService = paymentService;
             _driverService = driverService;
             _offerService = offerService;
+            _faqService = faqService;
         }
 
         public IActionResult Home()
@@ -331,6 +335,14 @@ namespace CarRentalMoveZ.Controllers
 
             return Json(car); // return CarViewModel as JSON
         }
+
+
+        public async Task<IActionResult> Faqs()
+        {
+            var faqs = await _faqService.GetAllAsync(); // Await the result
+            return View(faqs);
+        }
+
 
     }
 }
