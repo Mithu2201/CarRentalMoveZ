@@ -65,7 +65,7 @@
         <div class="row align-items-stretch">
             <!-- Image -->
             <div class="col-md-6 mb-4 mb-md-0 d-flex">
-                <img src="~/Img/Contact/ContactTaxi.jfif"
+                <img src="~/Img/Contact/GirlCustomer.jpg"
                      class="img-fluid rounded shadow w-100 h-100 object-fit-cover"
                      alt="Taxi Driver" />
             </div>
@@ -77,15 +77,15 @@
                         <h4 class="fw-bold mb-4 text-dark-custom">Get In Touch</h4>
                         <form id="contactForm" class="h-100 d-flex flex-column">
                             <div class="mb-3">
-                                <input type="email" class="form-control border-0 shadow-sm"
+                                <input type="email" id="email" class="form-control border-0 shadow-sm"
                                        placeholder="Your Email" required />
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control border-0 shadow-sm"
-                                       placeholder="Phone" required />
+                                <input type="text" id="phone" class="form-control border-0 shadow-sm"
+                                       placeholder="Phone (10 digits)" maxlength="10" required />
                             </div>
                             <div class="mb-3 flex-grow-1">
-                                <textarea class="form-control border-0 shadow-sm h-100"
+                                <textarea id="message" class="form-control border-0 shadow-sm h-100"
                                           rows="6" placeholder="Message" required></textarea>
                             </div>
                             <button type="submit"
@@ -96,6 +96,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -103,9 +104,9 @@
     <div class="mb-5">
         <h4 class="fw-bold text-center mb-3">Google Map</h4>
         <div class="ratio ratio-16x9 shadow-sm">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0869371816905!2d-122.420679084681!3d37.77492977975964!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064e2c3b9d9%3A0x4f2b43a4a73e0f!2sSan%20Francisco!5e0!3m2!1sen!2sus!4v1617294714470!5m2!1sen!2sus"
-                    style="border:0; height:600px" allowfullscreen="" loading="lazy">
-            </iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3932.979599392388!2d80.03306494657339!3d9.682781863547186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe543ea3ece255%3A0xe0d9d747cd652087!2s12%20Temple%20Rd%2C%20Jaffna!5e0!3m2!1sen!2slk!4v1757954259648!5m2!1sen!2slk" 
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            
         </div>
     </div>
 </div>
@@ -179,11 +180,46 @@
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        // Simple JS form handler
         document.getElementById("contactForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            alert("Your message has been sent successfully!");
+            e.preventDefault(); // prevent actual form submit
+
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const message = document.getElementById("message").value.trim();
+
+            if (!email || !phone || !message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill in all fields before submitting.'
+                });
+                return;
+            }
+
+                 // Phone validation: must be exactly 10 digits
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phone)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Phone Number',
+                    text: 'Phone number must be exactly 10 digits.'
+                });
+                return;
+            }
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Inquiry Submitted!',
+                text: 'We will reply soon. Thanks for contacting us.',
+                confirmButtonColor: '#1E56A0'
+            });
+
+            // Optional: reset form
+            this.reset();
         });
     </script>
 }

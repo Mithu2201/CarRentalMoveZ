@@ -47,5 +47,48 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.SaveChanges();
         }
 
+        public void UpdateDriverStatusBasedOnLastBooking()
+        {
+            // Get all drivers
+            var drivers = _context.Drivers.ToList();
+
+            foreach (var driver in drivers)
+            {
+                // Get the latest assigned booking for this driver
+                var lastBooking = _context.Bookings
+                .Where(b => b.DriverId == driver.DriverId && b.Status == "Assigned")
+                .OrderByDescending(b => b.StatusUpdatedAt ?? b.StartDate)
+                .FirstOrDefault();
+
+
+                if (lastBooking != null)
+                {
+                    // Check if the booking has already ended
+                    bool bookingEnded = lastBooking.EndDate <= DateTime.Now;
+
+                    // Special condition for "car-only" bookings:
+                    // 1. Booking does not require a driver for the ride
+                    // 2. Car needs to be delivered somewhere other than the office
+                    // 3. The delivery/start time has already passed
+                    bool specialCondition = lastBooking.DriverStatus == "Without Driver"
+                                            && lastBooking.Location != "Office"
+                                            && lastBooking.StartDate < DateTime.Now;
+
+                    // Check if booking has ended
+                    if (lastBooking.EndDate <= DateTime.Now || (lastBooking.DriverStatus== "Without Driver" && lastBooking.Location!="Office" && lastBooking.StartDate< DateTime.Now))
+                    {
+                        // Update driver status to "Active" if not already
+                        if (driver.Status != "Active")
+                        {
+                            driver.Status = "Active";
+                        }
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+        }
+
+
     }
 }

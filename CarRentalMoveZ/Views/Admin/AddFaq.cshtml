@@ -1,0 +1,68 @@
+﻿@model CarRentalMoveZ.ViewModels.FaqViewModel
+
+@{
+    ViewData["Title"] = "Add FAQ";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header" style="background-color: #1E56A0; color: white;">
+                    <h4 class="mb-0">Add New FAQ</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- Error Message -->
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger mb-3">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="AddFaq" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Question -->
+                        <div class="mb-3">
+                            <label asp-for="Question" class="form-label fw-semibold"></label>
+                            <input asp-for="Question" class="form-control" placeholder="Enter FAQ question" />
+                            <span asp-validation-for="Question" class="text-danger"></span>
+                        </div>
+
+                        <!-- Answer -->
+                        <div class="mb-3">
+                            <label asp-for="Answer" class="form-label fw-semibold"></label>
+                            <textarea asp-for="Answer" class="form-control" rows="4" placeholder="Enter FAQ answer"></textarea>
+                            <span asp-validation-for="Answer" class="text-danger"></span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <a asp-action="ManageFaq" class="btn btn-secondary px-4 me-2">Back</a>
+                            <button type="submit" class="btn px-4" style="background-color: #1E56A0; color: white;">
+                                Add FAQ
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- Success Message -->
+                    @* @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success mt-3">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    } *@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

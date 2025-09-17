@@ -42,6 +42,23 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.SaveChanges();
         }
 
+        public void Delete(int id)
+        {
+            var staff = _context.Staffs.Include(s => s.User).FirstOrDefault(s => s.StaffId == id);
+            if (staff != null)
+            {
+                // First remove the Staff entity
+                _context.Staffs.Remove(staff);
+                // Then remove the associated User entity
+                if (staff.User != null)
+                {
+                    _context.Users.Remove(staff.User);
+                }
+                _context.SaveChanges();
+            }
+
+
+        }
 
     }
 }

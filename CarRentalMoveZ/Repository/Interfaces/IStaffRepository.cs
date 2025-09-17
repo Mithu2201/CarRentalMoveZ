@@ -11,5 +11,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
         Staff GetById(int id);
 
         void Update(User user, Staff staff);
+
+        void Delete(int id);
     }
 }

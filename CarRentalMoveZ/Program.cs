@@ -1,9 +1,12 @@
-using CarRentalMoveZ.Data;
+﻿using CarRentalMoveZ.Data;
 using CarRentalMoveZ.Repository.Implementations;
 using CarRentalMoveZ.Repository.Interfaces;
+using CarRentalMoveZ.Services;
 using CarRentalMoveZ.Services.Implementations;
 using CarRentalMoveZ.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace CarRentalMoveZ
 {
@@ -30,6 +33,7 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IDriverRepository, DriverRepository>();
             builder.Services.AddScoped<IOfferRepository, OfferRepository>();
             builder.Services.AddScoped<IDashboardRepository,DashboardRepository>();
+            builder.Services.AddScoped<IFaqRepository,FaqRepository>();
            
 
 
@@ -47,11 +51,32 @@ namespace CarRentalMoveZ
             builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<IOfferService, OfferService>();
             builder.Services.AddScoped<IDashboardService,DashboardService>();
+            builder.Services.AddScoped<IFaqService,FaqService>();
+            builder.Services.AddHostedService<DriverStatusBackgroundService>();
+            // Register EmailService as singleton (or scoped)
+            builder.Services.AddSingleton<EmailService>();
 
 
 
 
             builder.Services.AddSession();
+
+            // ✅ Google Authentication
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddGoogle(options =>
+            {
+                options.ClientId = "732717088288-vrbfddmegpr076h0e9f7lear2ibdldhr.apps.googleusercontent.com";
+                options.ClientSecret = "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";
+                options.CallbackPath = "/signin-google"; // Must match Google Console
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
+            });
+
             var app = builder.Build();
             app.UseSession();
 
@@ -67,6 +92,9 @@ namespace CarRentalMoveZ
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            // ✅ Add Authentication middleware BEFORE Authorization
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

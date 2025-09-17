@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/HomePanel.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/SubHome.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/About.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CarRentalFrontEnd.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -17,6 +19,8 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts for Signature -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -32,11 +36,7 @@
         <!-- Modern Compact Header/Nav -->
         <div class="d-flex align-items-center gap-2 p-1 rounded-3" style="background-color: #1E56A0;">
 
-            <!-- Bell Icon with Compact Notification Badge -->
-            <a class="text-white flex-shrink-0 position-relative p-1 border border-white border-1 rounded-circle hover-shadow" href="#">
-                <i class="bi bi-bell fs-6"></i> <!-- Reduced icon size -->
- 
-            </a>
+            
 
             <!-- Compact Account Dropdown -->
             <div class="dropdown flex-shrink-1">
@@ -181,7 +181,7 @@
                         <li class="mb-2"><a asp-controller="Home" asp-action="About" class="text-secondary text-decoration-none">>> About Us</a></li>
                         <li class="mb-2"><a asp-controller="Home" asp-action="Service" class="text-secondary text-decoration-none">>> Our Services</a></li>
                         <li class="mb-2"><a asp-controller="Home" asp-action="BrowseCar" class="text-secondary text-decoration-none">>> Our Cars</a></li>
-                        <li class="mb-2"><a asp-controller="Home" asp-action="About" class="text-secondary text-decoration-none">>> FAQs</a></li>
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Faq" class="text-secondary text-decoration-none">>> FAQs</a></li>
                         <li class="mb-2"><a asp-controller="Home" asp-action="Contact" class="text-secondary text-decoration-none">>> Contact Us</a></li>
                     </ul>
                 </div>
@@ -190,6 +190,8 @@
                 <div class="col-md-3 mb-4">
                     <h5 class="fw-bold mb-3">Recent Posts</h5>
                     <div class="d-flex mb-3">
+
+
                         <img src="~/Img/icon2.jpg" alt="Post 1" class="me-2 rounded" style="width:50px;height:50px;object-fit:cover;" />
                         <div>
                             <small class="text-secondary d-block">04 May, 25</small>

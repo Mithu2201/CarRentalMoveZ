@@ -17,6 +17,7 @@ namespace CarRentalMoveZ.Data
 
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Driver> Drivers { get; set; }
+        public DbSet<Faq> Faqs { get; set; }
 
 
 

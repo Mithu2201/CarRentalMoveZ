@@ -1,0 +1,110 @@
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.FaqDTO>
+
+@{
+    ViewData["Title"] = "Frequently Asked Questions";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<h2 class="faq-title">@ViewData["Title"]</h2>
+
+<div class="faq-container">
+    @foreach (var faq in Model)
+    {
+        <div class="faq-item">
+            <div class="faq-question">
+                @faq.Question
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>@faq.Answer</p>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .faq-container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #F6F6F6;
+        border-radius: 12px;
+    }
+
+    .faq-title {
+        text-align: center;
+        font-size: 2rem;
+        color: #1E56A0;
+        margin-top: 30px;
+        margin-bottom: 0px;
+        font-weight: 700;
+    }
+
+    .faq-item {
+        background-color: #D6E4F0;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        overflow: hidden;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .faq-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+    .faq-question {
+        padding: 18px 20px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #163172;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-toggle {
+        font-size: 1.5rem;
+        transition: transform 0.3s;
+    }
+
+    .faq-answer {
+        height: 0;
+        padding: 0 20px;
+        font-size: 0.95rem;
+        color: #163172;
+        line-height: 1.6;
+        overflow: hidden;
+        transition: height 0.35s ease, padding 0.35s ease;
+        box-sizing: border-box;
+    }
+
+        .faq-answer p {
+            margin: 0;
+        }
+</style>
+
+<script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+        item.addEventListener('click', () => {
+            const answer = item.nextElementSibling;
+            const toggle = item.querySelector('.faq-toggle');
+
+            if(answer.style.height && answer.style.height !== '0px') {
+                // Close
+                answer.style.height = '0';
+                answer.style.paddingTop = '0';
+                answer.style.paddingBottom = '0';
+                toggle.innerText = '+';
+            } else {
+                // Open
+                answer.style.height = answer.scrollHeight + 'px';
+                answer.style.paddingTop = '1px';
+                answer.style.paddingBottom = '45px';
+                toggle.innerText = '−';
+            }
+        });
+    });
+</script>

@@ -6,6 +6,8 @@ using CarRentalMoveZ.Services.Interfaces;
 using CarRentalMoveZ.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace CarRentalMoveZ.Controllers
 {
@@ -16,14 +18,20 @@ namespace CarRentalMoveZ.Controllers
         private readonly IBookingService _bookingService;
         private readonly ICustomerService _customerService;
         private readonly IPaymentService _paymentService;
+        private readonly IDriverService _driverService;
+        private readonly IOfferService _offerService;
+        private readonly IFaqService _faqService;    
 
-        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService)
+        public CustomerController(IUserService userService, ICarService carService, IBookingService bookingService,ICustomerService customerService, IPaymentService paymentService,IDriverService driverService,IOfferService offerService,IFaqService faqService)
         {
             _userService = userService;
             _carService = carService;
             _bookingService = bookingService;
             _customerService = customerService;
             _paymentService = paymentService;
+            _driverService = driverService;
+            _offerService = offerService;
+            _faqService = faqService;
         }
 
         public IActionResult Home()
@@ -187,7 +195,7 @@ namespace CarRentalMoveZ.Controllers
         }
 
         [HttpGet]
-        public IActionResult Payment()
+        public async Task<IActionResult> Payment()
         {
             if (TempData["BookingId"] == null || TempData["Amount"] == null)
             {
@@ -210,12 +218,16 @@ namespace CarRentalMoveZ.Controllers
                 Amount = amount
             };
 
+            // ✅ Await service method
+            var activeOffers = await _offerService.GetActiveOffersAsync();
+            ViewBag.ActiveOffers = activeOffers;
+
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Payment(PaymentViewModel model)
+        public async Task<IActionResult> Payment(PaymentViewModel model)
         {
             if (TempData["BookingId"] == null || TempData["Amount"] == null)
             {
@@ -227,11 +239,17 @@ namespace CarRentalMoveZ.Controllers
                 ViewBag.BookingID = TempData["BookingId"].ToString();
                 TempData.Keep("BookingId");
                 TempData.Keep("Amount");
+                // ✅ Await service method
+                var activeOffers = await _offerService.GetActiveOffersAsync();
+                ViewBag.ActiveOffers = activeOffers;
                 return View(model);
+
+              
             }
             // Process payment (mock)
             // In real scenario, integrate with payment gateway here
             // Update booking status to Confirmed
+         
             _paymentService.addPayment(model);
             return RedirectToAction("Car");
         }
@@ -252,7 +270,13 @@ namespace CarRentalMoveZ.Controllers
         {
             try
             {
+                var booking = _bookingService.GetBookingById(id);
                 _bookingService.CancelBooking(id);
+                
+                if (booking.DriverId.HasValue)
+                {
+                    _driverService.SetDriverOffDuty(booking.DriverId.Value);
+                }
                 return Json(new { success = true, message = "Booking cancelled successfully." });
             }
             catch (InvalidOperationException ex)
@@ -291,6 +315,34 @@ namespace CarRentalMoveZ.Controllers
 
             return View();
         }
+
+
+        [HttpGet]
+        public IActionResult Comparison()
+        {
+            var model = new CarComparisonViewModel
+            {
+                AvailableCars = _carService.GetAll().ToList()
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult GetCarDetails(int carId)
+        {
+            var car = _carService.GetCarById(carId);
+            if (car == null) return NotFound();
+
+            return Json(car); // return CarViewModel as JSON
+        }
+
+
+        public async Task<IActionResult> Faqs()
+        {
+            var faqs = await _faqService.GetAllAsync(); // Await the result
+            return View(faqs);
+        }
+
 
     }
 }

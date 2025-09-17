@@ -10,7 +10,7 @@
 
 <div class="container py-3">
 
-    <h4 class="mb-3">Recent Booking Requests (Last 5)</h4>
+    <h4 class="mb-3">Recent Booking Requests</h4>
     @if (bookings == null || !bookings.Any())
     {
         <div class="alert alert-info">No new booking requests.</div>
@@ -29,7 +29,6 @@
         }
     }
 
-    <h4 class="mb-3 mt-4">Recent Paid Payments (Last 5)</h4>
     @if (payments == null || !payments.Any())
     {
         <div class="alert alert-info">No recent paid payments.</div>

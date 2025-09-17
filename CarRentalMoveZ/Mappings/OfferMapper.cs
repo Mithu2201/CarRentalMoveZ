@@ -51,5 +51,20 @@ namespace CarRentalMoveZ.Mappings
                     Status = CalculateStatus(o.StartDate, o.EndDate) // same helper from mapper
                 });
         }
+
+        public static OfferDTO ToDTO(this Offer entity)
+        {
+            return new OfferDTO
+            {
+                OfferId = entity.OfferId,
+                PromoCode = entity.PromoCode,
+                Title = entity.Title,
+                Description = entity.Description,
+                DiscountPercentage = entity.DiscountPercentage,
+                StartDate = entity.StartDate,
+                EndDate = entity.EndDate,
+                Status = entity.Status
+            };
+        }
     }
 }
