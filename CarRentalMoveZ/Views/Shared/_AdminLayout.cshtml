@@ -121,6 +121,14 @@
                     <i class="bi bi-gift"></i> <span>Offers</span>
                 </a>
             }
+            <!-- FAQs: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "ManageFaq" ? "active" : "")"
+                   asp-controller="Admin" asp-action="ManageFaq">
+                    <i class="bi bi-question-circle"></i> <span>FAQs</span>
+                </a>
+            }
 
             <!-- Reports: Admin + Staff -->
             @if (role == "Admin" || role == "Staff")
