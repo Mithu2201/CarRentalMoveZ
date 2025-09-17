@@ -61,7 +61,8 @@ namespace CarRentalMoveZ.Mappings
                     Payment = b.Amount,
                     CustomerName = b.Customer.Name,
                     CarModel = b.Car.Model,
-                    DriverStatus = b.DriverStatus
+                    DriverStatus = b.DriverStatus,
+                    Image = b.Car.ImgURL // <-- get image from Car entity
                 });
         }
 
