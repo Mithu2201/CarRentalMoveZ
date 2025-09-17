@@ -13,13 +13,14 @@ namespace CarRentalMoveZ.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone number is required")]
-        [Phone(ErrorMessage = "Invalid phone number")]
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Phone number must be 10 digits")]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+        ErrorMessage = "Password must be at least 8 characters, include upper/lowercase, number, and special character.")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Confirm Password is required")]

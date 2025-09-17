@@ -25,6 +25,8 @@
                     </span>
                 </div>
 
+
+
                 <hr />
 
                 <!-- Select Brand -->
@@ -65,12 +67,27 @@
                 <input type="range" id="maxPrice" min="0" max="500" step="10" value="500" class="form-range mb-2" />
                 <p class="small">Price: <span id="priceLabel" style="color:#1E56A0;">$0 - $500</span></p>
 
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-link p-0" onclick="resetFilters()" style="color:#163172;">Clear</button>
-                    <button type="button" class="btn px-4 fw-semibold"
-                            style="background:#1E56A0; color:#fff;"
-                            onclick="applyFilters()">Apply</button>
-                </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <button type="button" class="btn btn-link p-0" onclick="resetFilters()" style="color:#163172;">Clear</button>
+
+                        <button type="button" class="btn px-4 fw-semibold"
+                                style="background:#1E56A0; color:#fff;"
+                                onclick="applyFilters()">
+                            Apply
+                        </button>
+
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <label type="button" class="btn p-0" style="color:#163172;">Choice</label>
+                        <!-- Compare -->
+                        <div>
+                            <a asp-controller="Customer" asp-action="Comparison" class="btn" style="background-color:#1E56A0; color:white;">
+                                <i class="bi me-1"></i> Compare
+                            </a>
+                        </div>
+
+                    </div>
+
             </div>
         </div>
 
@@ -93,8 +110,9 @@
                             <!-- Price -->
                             <div class="position-absolute top-0 end-0 m-3 px-3 py-1 rounded-pill shadow-sm"
                                  style="background:#D6E4F0; color:#1E56A0; font-weight:600;">
-                                $@car.PricePerDay<span style="font-size:0.8rem; font-weight:400;">/Day</span>
+                                Rs.@car.PricePerDay<span style="font-size:0.8rem; font-weight:400;">/Day</span>
                             </div>
+                                
 
                             <!-- Card Body -->
                             <div class="card-body pb-4" style="background:#1E56A0; color:#fff;">

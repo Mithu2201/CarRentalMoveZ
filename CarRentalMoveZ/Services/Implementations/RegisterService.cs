@@ -30,6 +30,14 @@ namespace CarRentalMoveZ.Services.Implementations
 
         public void Register(RegisterViewModel model)
         {
+
+            var existingUser = _userRepo.GetByEmail(model.Email);
+            if (existingUser != null)
+            {
+                throw new Exception("Email is already registered.");
+            }
+
+
             var user = RegisterMapper.ToUserEntity(model, null);
 
             // Hash password with Identity PasswordHasher
