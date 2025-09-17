@@ -1,0 +1,155 @@
+﻿@model CarRentalMoveZ.ViewModels.CarComparisonViewModel
+@{
+    ViewData["Title"] = "Compare Cars";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+@section Comparison {
+
+<div class="container-fluid py-4" style="background-color:#F6F6F6; min-height:100vh;">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h2 class="fw-bold display-6">Compare Cars</h2>
+        <a asp-controller="Customer" asp-action="Car" class="btn btn-lg" style="background-color:#1E56A0; color:white;">
+            <i class="bi bi-arrow-left me-2"></i> Back to Cars
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Car 1 -->
+        <div class="col-lg-4 mb-3">
+            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius:14px; background-color:white;">
+                <h5 class="fw-bold mb-3"><i class="bi bi-car-front me-2 text-primary"></i>Car 1</h5>
+                <select id="car1Select" class="form-select form-select-lg mb-3">
+                    <option value="">-- Select Car --</option>
+                    @foreach (var car in Model.AvailableCars)
+                    {
+                        <option value="@car.CarId">@car.Brand @car.CarName</option>
+                    }
+                </select>
+                <div id="car1Details" class="text-muted text-center fs-6">Please select a car.</div>
+            </div>
+        </div>
+
+        <!-- Car 2 -->
+        <div class="col-lg-4 mb-3">
+            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius:14px; background-color:white;">
+                <h5 class="fw-bold mb-3"><i class="bi bi-car-front-fill me-2 text-success"></i>Car 2</h5>
+                <select id="car2Select" class="form-select form-select-lg mb-3">
+                    <option value="">-- Select Car --</option>
+                    @foreach (var car in Model.AvailableCars)
+                    {
+                        <option value="@car.CarId">@car.Brand @car.CarName</option>
+                    }
+                </select>
+                <div id="car2Details" class="text-muted text-center fs-6">Please select a car.</div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="col-lg-4 mb-3">
+            <div class="card border-0 shadow-sm p-4 h-100" style="border-radius:14px; background-color:#D6E4F0;">
+                <h5 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow me-2 text-dark"></i>Summary</h5>
+                <table class="table table-bordered table-hover align-middle mb-0 fs-6" id="summaryTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Feature</th>
+                            <th>Better Car</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><i class="bi bi-cash-stack me-2 text-success"></i>Price</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-people-fill me-2 text-info"></i>Seats</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-speedometer2 me-2 text-danger"></i>Top Speed</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-gear-fill me-2 text-secondary"></i>Transmission</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-fuel-pump-diesel-fill me-2 text-warning"></i>Fuel Type</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-shield-check me-2 text-primary"></i>Safety</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-geo-alt-fill me-2 text-danger"></i>GPS</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-snow me-2 text-info"></i>Air Conditioning</td><td>-</td></tr>
+                        <tr><td><i class="bi bi-bluetooth me-2 text-primary"></i>Bluetooth</td><td>-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+}
+
+@section Scripts {
+<script>
+    let car1Data = null;
+    let car2Data = null;
+
+    function renderCarDetails(car, containerId) {
+        const container = document.getElementById(containerId);
+        if (!car) {
+            container.innerHTML = "<p class='text-muted fs-6'>No car selected</p>";
+            return;
+        }
+        container.innerHTML = `
+            <img src="${car.imgURL}" class="img-fluid rounded mb-3 shadow-sm" style="max-height:250px; object-fit:cover;" />
+            <h5 class="fw-bold fs-5">${car.brand} ${car.carName}</h5>
+            <p class="text-muted mb-2 fs-6">${car.year} | ${car.model}</p>
+            <ul class="list-unstyled fs-6 text-start">
+                <li><i class="bi bi-cash me-2 text-success"></i><strong>Price/Day:</strong> $${car.pricePerDay}</li>
+                <li><i class="bi bi-people me-2 text-info"></i><strong>Seats:</strong> ${car.seats}</li>
+                <li><i class="bi bi-fuel-pump me-2 text-warning"></i><strong>Fuel:</strong> ${car.fuel}</li>
+                <li><i class="bi bi-gear me-2 text-secondary"></i><strong>Transmission:</strong> ${car.transmission}</li>
+                <li><i class="bi bi-speedometer2 me-2 text-danger"></i><strong>Top Speed:</strong> ${car.topSpeed} mph</li>
+                <li><i class="bi bi-snow me-2 text-info"></i><strong>Air Conditioning:</strong> Yes</li>
+                <li><i class="bi bi-bluetooth me-2 text-primary"></i><strong>Bluetooth:</strong> Yes</li>
+                <li><i class="bi bi-geo-alt me-2 text-danger"></i><strong>GPS Navigation:</strong> Yes</li>
+                <li><i class="bi bi-shield-check me-2 text-primary"></i><strong>Safety (Airbags & ABS):</strong> Yes</li>
+            </ul>`;
+    }
+
+    function highlightBetter(value1, value2, car1Name, car2Name, higherIsBetter = true) {
+        if (value1 === value2) return `<span class="text-secondary">Equal</span>`;
+        const better = higherIsBetter
+            ? (value1 > value2 ? car1Name : car2Name)
+            : (value1 < value2 ? car1Name : car2Name);
+        return `<span class="fw-bold text-success">${better}</span>`;
+    }
+
+    function updateSummary() {
+        if (!car1Data || !car2Data) return;
+
+        const summary = document.querySelector("#summaryTable tbody");
+        summary.innerHTML = `
+            <tr><td><i class="bi bi-cash-stack me-2 text-success"></i>Price</td><td>${highlightBetter(car1Data.pricePerDay, car2Data.pricePerDay, car1Data.carName, car2Data.carName, false)}</td></tr>
+            <tr><td><i class="bi bi-people-fill me-2 text-info"></i>Seats</td><td>${highlightBetter(car1Data.seats, car2Data.seats, car1Data.carName, car2Data.carName)}</td></tr>
+            <tr><td><i class="bi bi-speedometer2 me-2 text-danger"></i>Top Speed</td><td>${highlightBetter(car1Data.topSpeed, car2Data.topSpeed, car1Data.carName, car2Data.carName)}</td></tr>
+            <tr><td><i class="bi bi-gear-fill me-2 text-secondary"></i>Transmission</td><td>${car1Data.transmission === car2Data.transmission ? "Equal" : "Depends"}</td></tr>
+            <tr><td><i class="bi bi-fuel-pump-diesel-fill me-2 text-warning"></i>Fuel Type</td><td>${car1Data.fuel === car2Data.fuel ? "Equal" : car1Data.fuel + " vs " + car2Data.fuel}</td></tr>
+            <tr><td><i class="bi bi-shield-check me-2 text-primary"></i>Safety</td><td><span class="fw-bold text-success">Both</span></td></tr>
+            <tr><td><i class="bi bi-geo-alt-fill me-2 text-danger"></i>GPS</td><td><span class="fw-bold text-success">Both</span></td></tr>
+            <tr><td><i class="bi bi-snow me-2 text-info"></i>Air Conditioning</td><td><span class="fw-bold text-success">Both</span></td></tr>
+            <tr><td><i class="bi bi-bluetooth me-2 text-primary"></i>Bluetooth</td><td><span class="fw-bold text-success">Both</span></td></tr>
+        `;
+    }
+
+    async function fetchCar(carId, target) {
+        if (!carId) {
+            if (target === "car1") car1Data = null;
+            else car2Data = null;
+            renderCarDetails(null, target + "Details");
+            updateSummary();
+            return;
+        }
+
+        const response = await fetch(`/Customer/GetCarDetails?carId=${carId}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (target === "car1") car1Data = data;
+            else car2Data = data;
+            renderCarDetails(data, target + "Details");
+            updateSummary();
+        }
+    }
+
+    document.getElementById("car1Select")?.addEventListener("change", e => fetchCar(e.target.value, "car1"));
+    document.getElementById("car2Select")?.addEventListener("change", e => fetchCar(e.target.value, "car2"));
+</script>
+
+}

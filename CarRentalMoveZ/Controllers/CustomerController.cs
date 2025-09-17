@@ -312,5 +312,25 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public IActionResult Comparison()
+        {
+            var model = new CarComparisonViewModel
+            {
+                AvailableCars = _carService.GetAll().ToList()
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult GetCarDetails(int carId)
+        {
+            var car = _carService.GetCarById(carId);
+            if (car == null) return NotFound();
+
+            return Json(car); // return CarViewModel as JSON
+        }
+
     }
 }
