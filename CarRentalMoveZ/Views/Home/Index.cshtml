@@ -695,6 +695,16 @@
             clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
         }
 
+        /* Hide .taxi-image on mobile */
+        @@media (max-width: 768px) {
+            .taxi-image
+
+        {
+            display: none;
+        }
+
+        }
+
         .services-section {
             padding: 20px 0;
             background: linear-gradient(to bottom, var(--dark-bg) 65%, #fff 60%);
