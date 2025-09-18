@@ -2,6 +2,7 @@
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Repository.Interfaces;
 using CarRentalMoveZ.Services.Interfaces;
+using CarRentalMoveZ.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +27,19 @@ namespace CarRentalMoveZ.Services.Implementations
                 Question = f.Question,
                 Answer = f.Answer
             });
+        }
+
+        public async Task<FaqViewModel?> GetFaqForEditAsync(int id)
+        {
+            var faq = await _faqRepository.GetByIdAsync(id);
+            if (faq == null) return null;
+
+            return new FaqViewModel
+            {
+                FaqId = faq.FaqId,
+                Question = faq.Question,
+                Answer = faq.Answer
+            };
         }
 
         public async Task<FaqDTO?> GetByIdAsync(int id)

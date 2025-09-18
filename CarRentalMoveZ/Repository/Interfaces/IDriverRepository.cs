@@ -16,5 +16,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         void UpdateDriverStatusBasedOnLastBooking();
 
+        void Delete(int id);
+
     }
 }

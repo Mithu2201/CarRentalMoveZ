@@ -11,5 +11,11 @@ namespace CarRentalMoveZ.Services.Interfaces
         IEnumerable<OfferDTO> GetAll();
 
         Task<List<OfferDTO>> GetActiveOffersAsync();
+
+        OfferViewModel GetById(int id);
+
+        void Update(OfferViewModel offer);
+
+        void Delete(int id);
     }
 }
