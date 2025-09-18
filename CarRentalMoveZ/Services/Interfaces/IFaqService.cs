@@ -1,4 +1,5 @@
 ﻿using CarRentalMoveZ.DTOs;
+using CarRentalMoveZ.ViewModels;
 
 namespace CarRentalMoveZ.Services.Interfaces
 {
@@ -9,5 +10,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         Task AddAsync(FaqDTO faqDto);
         Task UpdateAsync(FaqDTO faqDto);
         Task DeleteAsync(int id);
+
+        Task<FaqViewModel?> GetFaqForEditAsync(int id);
     }
 }

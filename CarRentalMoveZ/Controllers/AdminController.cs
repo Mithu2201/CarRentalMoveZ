@@ -27,7 +27,7 @@ namespace CarRentalMoveZ.Controllers
         private readonly IDashboardService _dashboardService;
         private readonly IFaqService _faqService;
 
-        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService,IDashboardService dashboardService, IFaqService faqService)
+        public AdminController(ICarService carService, IStaffService staffService, IRegisterService registerService, ICustomerService customerService, IBookingService bookingService, IPaymentService paymentService, IUserService userService, IDriverService driverService, IOfferService offerService, IDashboardService dashboardService, IFaqService faqService)
         {
             _carService = carService;
             _staffService = staffService;
@@ -113,7 +113,7 @@ namespace CarRentalMoveZ.Controllers
             return View(car);
         }
 
-        
+
         public IActionResult ManageBookings() => View(_bookingService.GetAllBookings());
 
 
@@ -140,11 +140,11 @@ namespace CarRentalMoveZ.Controllers
             }
 
             // Update ViewModel properties
-          
-            
+
+
             model.BookingStatus = "Assigned"; // update status in ViewModel
             model.StatusUpdatedAt = DateTime.Now; // set status update time
-            
+
 
 
             // Update booking in database
@@ -170,7 +170,7 @@ namespace CarRentalMoveZ.Controllers
             return View();
         }
 
-        
+
         public IActionResult ManageCustomer() => View(_customerService.GetAllCustomer());
 
 
@@ -289,7 +289,7 @@ namespace CarRentalMoveZ.Controllers
         }
 
 
-       
+
 
         public IActionResult ManageDriver() => View(_driverService.GetAllDriver());
 
@@ -331,8 +331,8 @@ namespace CarRentalMoveZ.Controllers
         [HttpGet]
         public IActionResult EditDriver(int id)
         {
-            var driver = _driverService.GetDriverViewModelById(id); 
-            
+            var driver = _driverService.GetDriverViewModelById(id);
+
             ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
             return View(driver);
 
@@ -381,7 +381,7 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult Cashier()
         {
-           return View(_bookingService.GetAllBookingsDetail());
+            return View(_bookingService.GetAllBookingsDetail());
         }
 
         [HttpGet]
@@ -390,14 +390,14 @@ namespace CarRentalMoveZ.Controllers
             var booking = _bookingService.GetBookingById(id);
             var customer = _customerService.GetCustomerById(booking.CustomerId);
             booking.CustomerName = customer.Name;
-            booking.PhoneNumber = customer.PhoneNumber; 
-            booking.CustomerEmail= customer.Email;
+            booking.PhoneNumber = customer.PhoneNumber;
+            booking.CustomerEmail = customer.Email;
             if (booking == null)
             {
                 return NotFound();
             }
             return View(booking);
-           
+
         }
 
         [HttpPost]
@@ -427,7 +427,7 @@ namespace CarRentalMoveZ.Controllers
             {
                 return View(model);
             }
-            
+
             model.PaymentStatus = "Paid";
             model.IsPaid = true;
             model.PaymentDate = DateTime.Now;
@@ -515,5 +515,62 @@ namespace CarRentalMoveZ.Controllers
             return RedirectToAction("ManageFaq");
         }
 
+
+        public async Task<IActionResult> DeleteFaq(int id)
+        {
+            await _faqService.DeleteAsync(id);
+            // Redirect to the FAQ list after deletion
+            return RedirectToAction("ManageFaq"); // or whatever your FAQ list action is called
+        }
+
+        // GET: Admin/EditFaq/5
+        public async Task<IActionResult> EditFaq(int id)
+        {
+            var faq = await _faqService.GetFaqForEditAsync(id);
+            if (faq == null)
+            {
+                return NotFound();
+            }
+            return View(faq); // Pass FaqVM to the view
+        }
+
+        // POST: Admin/EditFaq/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditFaq(FaqDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model); // Return view with validation errors
+            }
+
+            await _faqService.UpdateAsync(model);
+            return RedirectToAction("ManageFaq"); // Redirect to FAQ list after edit
+        }
+
+        [HttpGet]
+        public IActionResult EditOffer(int id)
+        {
+            var offer = _offerService.GetById(id);
+            return View(offer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditOffer(OfferViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            _offerService.Update(model);
+            return RedirectToAction("ManageOffer");
+        }
+
+        public IActionResult DeleteOffer(int id)
+        {
+            _offerService.Delete(id);
+            return RedirectToAction("ManageOffer");
+        }
     }
 }
