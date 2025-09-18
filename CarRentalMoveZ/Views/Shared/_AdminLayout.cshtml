@@ -113,8 +113,8 @@
                 </a>
             }
 
-            <!-- Offers: Admin + Staff -->
-            @if (role == "Admin" || role == "Staff")
+            <!-- Offers: Admin -->
+            @if (role == "Admin" )
             {
                 <a class="side-link @(currentController == "Admin" && currentAction == "ManageOffer" ? "active" : "")"
                    asp-controller="Admin" asp-action="ManageOffer">
