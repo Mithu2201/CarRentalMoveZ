@@ -284,7 +284,7 @@ namespace CarRentalMoveZ.Controllers
 
         public IActionResult DeleteStaff(int id)
         {
-            //_staffService.Delete(id);
+            _staffService.Delete(id);
             return RedirectToAction("ManageStaff");
         }
 
@@ -326,6 +326,36 @@ namespace CarRentalMoveZ.Controllers
                 ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public IActionResult EditDriver(int id)
+        {
+            var driver = _driverService.GetDriverViewModelById(id); 
+            
+            ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
+            return View(driver);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditDriver(DriverViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.GenderList = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>());
+                return View(model);
+            }
+
+            _driverService.Update(model);
+            return RedirectToAction("ManageDriver");
+        }
+
+        public IActionResult DeleteDriver(int id)
+        {
+            _driverService.Delete(id);
+            return RedirectToAction("ManageDriver");
         }
 
         public IActionResult ManageOffer() => View(_offerService.GetAll());

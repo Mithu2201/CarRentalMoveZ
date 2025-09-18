@@ -1,5 +1,6 @@
 ﻿using CarRentalMoveZ.DTOs;
 using CarRentalMoveZ.Models;
+using CarRentalMoveZ.ViewModels;
 
 namespace CarRentalMoveZ.Services.Interfaces
 {
@@ -15,5 +16,11 @@ namespace CarRentalMoveZ.Services.Interfaces
         void SetDriverOnDuty(int driverId);
 
         public void SetDriverOffDuty(int driverId);
+
+        public void Update(DriverViewModel vm);
+
+        void Delete(int driverId);
+
+        DriverViewModel GetDriverViewModelById(int id);
     }
 }

@@ -92,7 +92,7 @@ namespace CarRentalMoveZ.Mappings
                 PhoneNumber = booking.Customer?.PhoneNumber ?? "",
 
                 IsPaid = payment != null &&
-                (payment.Status == "Paid" || payment.Status == "Pending to refund" || payment.Status=="Refunded"),
+                (payment.Status == "Paid" || payment.Status == "Pending to refund"),
 
                 PaymentDate = payment?.PaymentDate,
                 PaymentMethod = payment?.PaymentMethod,
