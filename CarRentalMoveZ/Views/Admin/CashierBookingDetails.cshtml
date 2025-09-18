@@ -83,7 +83,7 @@
                        @*  <button type="button" class="btn btn-primary mt-2" id="send-refund-otp-btn">Send OTP For Refund</button> *@
                     </form>
                 }
-                else if (!Model.IsPaid)
+                else if (!Model.IsPaid && Model.BookingStatus!="Cancelled")
                 {
                     <!-- Payment flow -->
                     <form id="cashPaymentForm" method="post" asp-action="ConfirmCash" asp-controller="Admin">
@@ -244,7 +244,7 @@
             fetch("/Otp/SendOtp", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: "email=shesanth2005@gmail.com"
+                    body: "email=carrentalmovez@gmail.com"
             })
             .then(res => res.json())
             .then(data => {
