@@ -2,6 +2,7 @@
 using CarRentalMoveZ.Mappings;
 using CarRentalMoveZ.Repository.Interfaces;
 using CarRentalMoveZ.Services.Interfaces;
+using CarRentalMoveZ.ViewModels;
 
 namespace CarRentalMoveZ.Services.Implementations
 {
@@ -30,6 +31,27 @@ namespace CarRentalMoveZ.Services.Implementations
             return DriversMapper.ToDTO(driver);
         }
 
+        public DriverViewModel GetDriverViewModelById(int id)
+        {
+            var driver = driverRepository.Getbyid(id);
+            if (driver == null) return null;
+
+            return new DriverViewModel
+            {
+                DriverId = driver.DriverId,
+                UserId = driver.UserId,
+                Name = driver.Name,
+                PhoneNumber = driver.PhoneNumber,
+                Email = driver.Email,
+                DateOfBirth = driver.DateOfBirth,
+                Gender = driver.Gender,
+                LicenseNo = driver.LicenseNo,
+
+                Role = "Driver" // fixed role
+            };
+        }
+
+
         public void SetDriverOnDuty(int driverId)
         {
             var driver = driverRepository.Getbyid(driverId);
@@ -52,6 +74,32 @@ namespace CarRentalMoveZ.Services.Implementations
             var drivers = driverRepository.GetActiveDrivers();
             return DriversMapper.ToAvailableDTOList(drivers);
         }
+
+        public void Update(DriverViewModel vm)
+        {
+            var driver = driverRepository.Getbyid(vm.DriverId);
+            if (driver == null) return;
+
+            // Update properties
+            driver.Name = vm.Name;
+            driver.PhoneNumber = vm.PhoneNumber;
+            driver.Email = vm.Email;
+            driver.DateOfBirth = vm.DateOfBirth;
+            driver.Gender = vm.Gender;
+            driver.LicenseNo = vm.LicenseNo;
+
+
+            // Role is fixed in entity as [NotMapped], no need to update
+
+            driverRepository.Update(driver);
+        }
+
+        public void Delete(int driverId)
+        {
+            driverRepository.Delete(driverId);
+        }
+
+
 
     }
 }

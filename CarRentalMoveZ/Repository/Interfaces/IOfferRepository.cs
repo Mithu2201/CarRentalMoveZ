@@ -9,5 +9,11 @@ namespace CarRentalMoveZ.Repository.Interfaces
         IEnumerable<Offer> GetAllOffers();
 
         Task<List<Offer>> GetActiveOffersAsync();
+
+        void Update(Offer offer);
+
+        Offer GetById(int id);
+
+        void Delete(Offer offer);
     }
 }

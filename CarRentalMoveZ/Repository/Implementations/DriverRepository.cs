@@ -89,6 +89,26 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.SaveChanges();
         }
 
+        public void Delete(int id)
+        {
+            var driver = _context.Drivers
+                                 .Include(d => d.User)
+                                 .FirstOrDefault(d => d.DriverId == id);
+
+            if (driver != null)
+            {
+                // Remove Driver entity
+                _context.Drivers.Remove(driver);
+
+                // Also remove associated User entity (if exists)
+                if (driver.User != null)
+                {
+                    _context.Users.Remove(driver.User);
+                }
+
+                _context.SaveChanges();
+            }
+        }
 
     }
 }

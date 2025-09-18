@@ -22,6 +22,11 @@ namespace CarRentalMoveZ.Repository.Implementations
             _context.SaveChanges();
         }
 
+        public void Delete(Offer offer)
+        {
+            _context.Offers.Remove(offer);
+            _context.SaveChanges();
+        }
 
         public IEnumerable<Offer> GetAllOffers()
         {
@@ -33,6 +38,17 @@ namespace CarRentalMoveZ.Repository.Implementations
             return await _context.Offers
                 .Where(o => o.Status == "Active" && o.StartDate <= DateTime.Now && o.EndDate >= DateTime.Now)
                 .ToListAsync();
+        }
+
+        public void Update(Offer offer)
+        {
+            _context.Offers.Update(offer);
+            _context.SaveChanges();
+        }
+
+        public Offer GetById(int id)
+        {
+            return _context.Offers.FirstOrDefault(o => o.OfferId == id);
         }
     }
 }

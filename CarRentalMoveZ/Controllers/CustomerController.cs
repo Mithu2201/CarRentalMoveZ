@@ -343,6 +343,19 @@ namespace CarRentalMoveZ.Controllers
             return View(faqs);
         }
 
+        [HttpGet]
+        public IActionResult DetailsofBooking(int id)
+        {
+            var booking = _bookingService.GetBookingById(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            booking.AvailableDrivers = _driverService.GetAvailableDrivers();
+            return View(booking);
+        }
+
 
     }
 }

@@ -1,0 +1,110 @@
+﻿@model CarRentalMoveZ.ViewModels.BookingDetailsViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "My Booking Details";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+
+    var safeImgURL = Model.ImgURL ?? "/images/default-car.png";
+    var safePhone = Model.PhoneNumber ?? "N/A";
+    var safePaymentMethod = Model.PaymentMethod ?? "N/A";
+    var safeDriverStatus = Model.DriverStatus ?? "Without Driver";
+
+    // Function to get badge class for booking status
+    string GetStatusBadgeClass(string status)
+    {
+        if (string.IsNullOrWhiteSpace(status)) return "text-bg-secondary";
+
+        switch (status.Trim().ToLower())
+        {
+            case "pending":
+                return "text-bg-warning";
+            case "Assigned":
+                return "text-bg-success";
+            case "cancelled":
+                return "text-bg-danger";
+            case "completed":
+                return "text-bg-primary";
+            default:
+                return "text-bg-secondary";
+        }
+    }
+
+    // Ensure BookingStatus has a fallback
+    var displayStatus = string.IsNullOrWhiteSpace(Model.BookingStatus) ? "Unknown" : Model.BookingStatus.Trim();
+}
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Booking Details</h3>
+        <a href="@Url.Action("BookingDetails", "Customer")" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-2"></i> Back to My Bookings
+        </a>
+    </div>
+
+    <!-- Booking Card -->
+    <div class="card p-3 p-md-4">
+        <div class="row g-3">
+            <!-- Car Image -->
+            <div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-start">
+                <img src="@safeImgURL" alt="@Model.CarName" class="rounded border img-fluid" style="max-width:100%; height:auto;" />
+            </div>
+
+            <!-- Booking Info -->
+            <div class="col-12 col-md-8">
+                <h5 class="fw-semibold mb-3">Booking #@Model.BookingId</h5>
+
+                <p><strong>Car Model:</strong> @Model.CarName</p>
+                <p><strong>Booking Dates:</strong> @Model.StartDate.ToString("MMM d, yyyy") - @Model.EndDate.ToString("MMM d, yyyy")</p>
+                <p><strong>Location:</strong> @Model.Location</p>
+
+                <p><strong>Total Amount:</strong> @Model.Amount.ToString("C", CultureInfo.CreateSpecificCulture("en-LK"))</p>
+
+                <p>
+                    <strong>Payment Status:</strong>
+                    @if (Model.IsPaid)
+                    {
+                        <span class="text-success">Paid (@safePaymentMethod)</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Pending</span>
+                    }
+                </p>
+
+                <p><strong>Payment Date:</strong> @(Model.PaymentDate.HasValue? Model.PaymentDate.Value.ToString("MMM d, yyyy") : "N/A")</p>
+
+                <p>
+                    <strong>Booking Status:</strong>
+                    <span >
+                        @if(Model.BookingStatus=="Assigned")
+                        {
+                            <span class="text-success">@displayStatus</span>
+                        }
+                        else if(Model.BookingStatus=="Pending")
+                        {
+                            <span class="text-warning">@displayStatus</span>
+                        }
+                        else if(Model.BookingStatus=="Cancelled")
+                        {
+                            <span class="text-danger">@displayStatus</span>
+                        }
+                        else if(Model.BookingStatus=="Completed")
+                        {
+                            <span class="text-primary">@displayStatus</span>
+                        }
+                        else
+                        {
+                            <span class="text-secondary">@displayStatus</span>
+						}
+                      
+                    </span>
+                </p>
+
+                <p><strong>Driver Status:</strong> @safeDriverStatus</p>
+                <p><strong>Driver:</strong> @(Model.DriverId.HasValue? Model.DriverId.ToString() : "Not Assigned")</p>
+            </div>
+        </div>
+    </div>
+</div>
