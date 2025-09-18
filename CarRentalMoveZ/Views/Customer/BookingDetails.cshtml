@@ -52,7 +52,7 @@
                     {
                         <tr data-status="@booking.Status.ToUpper()">
                             <td class="d-flex align-items-center gap-3">
-                                <img src="~/Img/3car.png" alt="@booking.CarModel"
+                                <img src=@booking.Image alt="@booking.CarModel"
                                      class="rounded" width="60" height="40" style="object-fit: cover;">
                                 <div>
                                     <span class="fw-bold">@booking.CarModel</span>
@@ -76,7 +76,7 @@
                                 </span>
                             </td>
                             <td class="booking-actions">
-                                <a asp-controller="Bookings" asp-action="Details" asp-route-id="@booking.BookingId"
+                                <a asp-controller="Customer" asp-action="DetailsofBooking" asp-route-id="@booking.BookingId"
                                    class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-info-circle"></i> Details
                                 </a>

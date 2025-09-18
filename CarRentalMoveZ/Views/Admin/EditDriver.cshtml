@@ -1,7 +1,7 @@
-﻿@model CarRentalMoveZ.ViewModels.RegisterDriverViewModel
+﻿@model CarRentalMoveZ.ViewModels.DriverViewModel
 
 @{
-    ViewData["Title"] = "Register Driver";
+    ViewData["Title"] = "Edit Driver";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -11,7 +11,7 @@
             <!-- Card layout -->
             <div class="card shadow-lg border-0 rounded-3">
                 <div class="card-header" style="background-color: #1E56A0; color: white;">
-                    <h4 class="mb-0">Register Driver</h4>
+                    <h4 class="mb-0">Edit Driver</h4>
                 </div>
                 <div class="card-body p-4">
 
@@ -23,8 +23,9 @@
                         </div>
                     }
 
-                    <form asp-action="AddDriver" method="post">
+                    <form asp-action="EditDriver" method="post">
                         @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="DriverId" />
 
                         <!-- Name -->
                         <div class="mb-3">
@@ -36,7 +37,7 @@
                         <!-- Email -->
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label fw-semibold"></label>
-                            <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Enter email address" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
@@ -45,20 +46,6 @@
                             <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
                             <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label fw-semibold"></label>
-                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-
-                        <!-- Confirm Password -->
-                        <div class="mb-3">
-                            <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
-                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
 
                         <!-- Date of Birth -->
@@ -85,15 +72,15 @@
                         </div>
 
                         <!-- Status -->
-                     @*    <div class="mb-3">
+               @*          <div class="mb-3">
                             <label asp-for="Status" class="form-label fw-semibold"></label>
-                            <select asp-for="Status" asp-items="ViewBag.StatusList" class="form-select">
-                                <option value="" disabled selected>-- Select Status --</option>
+                            <select asp-for="Status" asp-items="ViewBag.DriverStatusList" class="form-select">
+                                <option value="" disabled selected>-- Select Driver Status --</option>
                             </select>
                             <span asp-validation-for="Status" class="text-danger"></span>
                         </div> *@
 
-                        <!-- Role (fixed as Driver) -->
+                        <!-- Role (readonly fixed) -->
                         <div class="mb-3">
                             <label asp-for="Role" class="form-label fw-semibold"></label>
                             <input asp-for="Role" class="form-control" value="Driver" readonly />
@@ -103,7 +90,7 @@
                         <div class="d-flex justify-content-end mt-3">
                             <a asp-action="ManageDriver" class="btn btn-secondary px-4 me-2">Back</a>
                             <button type="submit" class="btn px-4" style="background-color: #1E56A0; color: white;">
-                                Register Driver
+                                Save Changes
                             </button>
                         </div>
                     </form>

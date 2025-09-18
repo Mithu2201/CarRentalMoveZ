@@ -61,7 +61,8 @@ namespace CarRentalMoveZ.Mappings
                     Payment = b.Amount,
                     CustomerName = b.Customer.Name,
                     CarModel = b.Car.Model,
-                    DriverStatus = b.DriverStatus
+                    DriverStatus = b.DriverStatus,
+                    Image = b.Car.ImgURL // <-- get image from Car entity
                 });
         }
 
@@ -91,7 +92,7 @@ namespace CarRentalMoveZ.Mappings
                 PhoneNumber = booking.Customer?.PhoneNumber ?? "",
 
                 IsPaid = payment != null &&
-                (payment.Status == "Paid" || payment.Status == "Pending to refund" || payment.Status=="Refunded"),
+                (payment.Status == "Paid" || payment.Status == "Pending to refund"),
 
                 PaymentDate = payment?.PaymentDate,
                 PaymentMethod = payment?.PaymentMethod,

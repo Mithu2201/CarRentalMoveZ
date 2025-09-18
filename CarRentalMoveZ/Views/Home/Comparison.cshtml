@@ -1,17 +1,16 @@
-﻿
-@model CarRentalMoveZ.ViewModels.CarComparisonViewModel
+﻿@model CarRentalMoveZ.ViewModels.CarComparisonViewModel
 @{
     ViewData["Title"] = "Compare Cars";
-    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
 @section Comparison {
 
 <div class="container-fluid py-4" style="background-color:#F6F6F6; min-height:100vh;">
     <!-- Header -->
-    <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
-            <h2 class="page-heading fw-bold display-6">Compare Cars</h2>
-        <a asp-controller="Customer" asp-action="Car" class="btn btn-lg" style="background-color:#1E56A0; color:white;">
+        <div class="page-heading d-flex align-items-center justify-content-between flex-wrap mb-4">
+        <h2 class="fw-bold display-6">Compare Cars</h2>
+        <a asp-controller="Home" asp-action="BrowseCar" class="btn btn-lg" style="background-color:#1E56A0; color:white;">
             <i class="bi bi-arrow-left me-2"></i> Back to Cars
         </a>
     </div>
