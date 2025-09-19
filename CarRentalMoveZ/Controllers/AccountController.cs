@@ -39,8 +39,17 @@ namespace CarRentalMoveZ.Controllers
                 return View(model);
             }
 
-            _registerService.Register(model);
-            return RedirectToAction("Login", "Account");
+            try
+            {
+                _registerService.Register(model);
+                return RedirectToAction("Login", "Account");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Email", ex.Message);
+                ViewBag.RoleList = new SelectList(Enum.GetValues(typeof(Gender)));
+                return View(model);
+            }
         }
 
 

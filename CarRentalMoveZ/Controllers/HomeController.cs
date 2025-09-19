@@ -1,6 +1,7 @@
 using CarRentalMoveZ.Data;
 using CarRentalMoveZ.Models;
 using CarRentalMoveZ.Services.Interfaces;
+using CarRentalMoveZ.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -66,6 +67,16 @@ namespace CarRentalMoveZ.Controllers
 
             // Redirect to login or home page
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Comparison()
+        {
+            var model = new CarComparisonViewModel
+            {
+                AvailableCars = _carService.GetAll().ToList()
+            };
+            return View(model);
         }
 
     }
