@@ -1,0 +1,55 @@
+﻿@model IEnumerable<CarRentalMoveZ.DTOs.BookingDTO>
+
+@{
+    ViewData["Title"] = "My Assigned Bookings";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; 
+}
+
+<div class="container-fluid py-3">
+    <h3 class="mb-4">My Assigned Bookings</h3>
+
+    <div class="table-responsive">
+        <table class="table table-hover shadow-sm">
+            <thead class="cashier-thead">
+                <tr>
+                    <th>Booking #</th>
+                    <th>Customer</th>
+                    <th>Car</th>
+                    <th>Dates</th>
+                    <th>Location</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Driver Status</th>
+             
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var b in Model)
+                    {
+                        <tr>
+                            <td>@b.BookingId</td>
+                            <td>@b.CustomerName</td>
+                            <td>@b.CarModel</td>
+                            <td>
+                                <strong>Start:</strong> @b.StartDate.ToString("MMM d, yyyy")<br />
+                                <strong>End:</strong> @b.EndDate.ToString("MMM d, yyyy")
+                            </td>
+                            <td>@b.Location</td>
+                            <td>@b.Payment.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-LK"))</td>
+                            <td><span class="pill pill-@b.Status.ToLower()">@b.Status</span></td>
+                            <td><span class="pill pill-@b.DriverStatus.ToLower()">@b.DriverStatus</span></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">No assigned bookings found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

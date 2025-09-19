@@ -59,12 +59,22 @@
                 </a>
             }
 
-            <!-- Bookings: Admin + Staff + Driver -->
-            @if (role == "Admin" || role == "Staff" || role == "Driver")
+            <!-- Bookings: Admin + Staff -->
+            @if (role == "Admin" || role == "Staff")
             {
                 <a class="side-link @(currentController == "Admin" && currentAction == "ManageBookings" ? "active" : "")"
                    asp-controller="Admin" asp-action="ManageBookings">
                     <i class="bi bi-calendar2-week"></i> <span>Bookings</span>
+                </a>
+            }
+
+            <!-- AssignedBooking: Driver -->
+            @if (role == "Driver")
+            {
+                <a class="side-link @(currentController == "Admin" && currentAction == "AssignedBooking" ? "active" : "")"
+                   asp-controller="Admin" asp-action="AssignedBooking">
+                    <i class="bi bi-calendar-check"></i> <span>My Bookings</span>
+
                 </a>
             }
 
@@ -194,7 +204,7 @@
                                 @* <div class="fw-semibold" style="color: #1E56A0;">Abram Schleifer</div> *@
 
                               <div class="fw-semibold" style="color: #1E56A0;">@name</div>
-                                <div class="text-muted">Admin</div>
+                                <div class="text-muted">@role</div>
                             </div>
                             <i class="bi bi-caret-down ms-2 text-muted"></i>
                         </a>

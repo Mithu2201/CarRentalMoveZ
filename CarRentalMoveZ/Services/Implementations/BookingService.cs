@@ -153,5 +153,13 @@ namespace CarRentalMoveZ.Services.Implementations
         {
             return await _bookingRepo.GetLast5BookingsAsync();
         }
+
+        public async Task<IEnumerable<BookingDTO>> GetDriverAssignedBookingsAsync(int driverId)
+        {
+            var bookings = await _bookingRepo.GetByDriverAsync(driverId);
+
+            return BookingMapper.ToDTOList(bookings);
+
+        }
     }
 }

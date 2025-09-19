@@ -572,5 +572,21 @@ namespace CarRentalMoveZ.Controllers
             _offerService.Delete(id);
             return RedirectToAction("ManageOffer");
         }
+
+        public async Task<IActionResult> AssignedBooking()
+        {
+            // ✅ Pull the logged-in driver’s ID from session
+            var userId = HttpContext.Session.GetInt32("UserId");
+            
+            var driver=_driverService.GetbyUserid(userId.Value);
+
+            if (driver.DriverId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var bookings = await _bookingService.GetDriverAssignedBookingsAsync(driver.DriverId);
+            return View(bookings);
+        }
     }
 }
