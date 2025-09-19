@@ -110,5 +110,13 @@ namespace CarRentalMoveZ.Repository.Implementations
             }
         }
 
+        public Driver GetByUserId(int userId)
+        {
+            return _context.Drivers
+                .Include(d => d.User)
+                .FirstOrDefault(d => d.UserId == userId);
+        }
+
+
     }
 }

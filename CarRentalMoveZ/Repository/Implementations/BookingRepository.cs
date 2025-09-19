@@ -111,5 +111,15 @@ namespace CarRentalMoveZ.Repository.Implementations
         }
 
 
+        public async Task<IEnumerable<Booking>> GetByDriverAsync(int driverId)
+        {
+            return await _context.Bookings
+                .Where(b => b.DriverId == driverId && b.Status == "Assigned")
+                .Include(b => b.Customer)
+                .Include(b => b.Car)
+                .ToListAsync();
+        }
+
+
     }
 }

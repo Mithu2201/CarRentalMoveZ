@@ -18,5 +18,7 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         void Delete(int id);
 
+        Driver GetByUserId(int userId);
+
     }
 }
