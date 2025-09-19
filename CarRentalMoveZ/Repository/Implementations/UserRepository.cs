@@ -33,5 +33,6 @@ namespace CarRentalMoveZ.Repository.Implementations
         {
             return _context.Users.FirstOrDefault(u => u.UserId == id);
         }
+
     }
 }

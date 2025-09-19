@@ -21,6 +21,8 @@ namespace CarRentalMoveZ.Repository.Interfaces
 
         Task<List<BookingDTO>> GetLast5BookingsAsync();
 
+        Task<IEnumerable<Booking>> GetByDriverAsync(int driverId);
+
 
 
     }

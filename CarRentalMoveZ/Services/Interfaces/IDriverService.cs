@@ -22,5 +22,7 @@ namespace CarRentalMoveZ.Services.Interfaces
         void Delete(int driverId);
 
         DriverViewModel GetDriverViewModelById(int id);
+
+        DriverDTO GetbyUserid(int id);
     }
 }
